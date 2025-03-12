@@ -1,0 +1,10 @@
+root://cmsxrootd.fnal.gov//store/mc/Run3Summer23NanoAODv12/NMSSM_XtoYHto4B_MX-1800_MY-70_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_v15-v2/2550000/8a8a30dd-ea8a-4412-bc7c-db9085b39026.root
+root://cmsxrootd.fnal.gov//store/mc/Run3Summer23NanoAODv12/NMSSM_XtoYHto4B_MX-1800_MY-70_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_v15-v2/2550000/b1940aa5-b15b-4680-bbb2-2f7f44dc7838.root
+root://cmsxrootd.fnal.gov//store/mc/Run3Summer23NanoAODv12/NMSSM_XtoYHto4B_MX-1800_MY-70_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_v15-v2/2550000/843562dd-3a6d-43ad-960d-23ca1c99cf47.root
+root://cmsxrootd.fnal.gov//store/mc/Run3Summer23NanoAODv12/NMSSM_XtoYHto4B_MX-1800_MY-70_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_v15-v2/2550000/d069b08f-321d-4bec-8bd3-32f8c412e9a3.root
+root://cmsxrootd.fnal.gov//store/mc/Run3Summer23NanoAODv12/NMSSM_XtoYHto4B_MX-1800_MY-70_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_v15-v2/2550000/75d231af-2250-4ea7-aa1d-d13798001fad.root
+root://cmsxrootd.fnal.gov//store/mc/Run3Summer23NanoAODv12/NMSSM_XtoYHto4B_MX-1800_MY-70_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_v15-v2/2550000/05765818-ab3d-4a41-9635-06406139e6dd.root
+root://cmsxrootd.fnal.gov//store/mc/Run3Summer23NanoAODv12/NMSSM_XtoYHto4B_MX-1800_MY-70_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_v15-v2/2550000/9a46b724-456c-436d-aa9e-f48246e871f1.root
+root://cmsxrootd.fnal.gov//store/mc/Run3Summer23NanoAODv12/NMSSM_XtoYHto4B_MX-1800_MY-70_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_v15-v2/2550000/92f3d01b-ae5c-4468-846a-72b744d01f93.root
+root://cmsxrootd.fnal.gov//store/mc/Run3Summer23NanoAODv12/NMSSM_XtoYHto4B_MX-1800_MY-70_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_v15-v2/2550000/d3847081-5fab-442e-9235-3cd47f53f3ff.root
+root://cmsxrootd.fnal.gov//store/mc/Run3Summer23NanoAODv12/NMSSM_XtoYHto4B_MX-1800_MY-70_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_v15-v2/2550000/c4d1195c-e7be-412d-a34d-cf6f143f3476.root

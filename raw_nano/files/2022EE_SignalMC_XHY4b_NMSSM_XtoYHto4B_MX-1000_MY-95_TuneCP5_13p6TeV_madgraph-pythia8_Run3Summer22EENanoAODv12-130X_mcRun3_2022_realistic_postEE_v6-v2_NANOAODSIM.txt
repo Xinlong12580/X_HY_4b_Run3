@@ -1,0 +1,2 @@
+root://cmsxrootd.fnal.gov//store/mc/Run3Summer22EENanoAODv12/NMSSM_XtoYHto4B_MX-1000_MY-95_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/60000/e3ff8e51-a065-4f95-9173-1797d337f3bb.root
+root://cmsxrootd.fnal.gov//store/mc/Run3Summer22EENanoAODv12/NMSSM_XtoYHto4B_MX-1000_MY-95_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/60000/21c93914-c5b8-431e-b8e0-1576a0790170.root

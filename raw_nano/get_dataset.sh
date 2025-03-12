@@ -6,7 +6,11 @@ while getopts "y:d:" opt; do
   esac
 done
 echo $year $dataset
-readarray -t files < <(jq -r .\"$year\".\"$dataset\"[] datasets_XHY4b.json)
+json_file=datasets_XHY4b.json
+if [ $dataset = "SignalMC_XHY4b" ]; then
+    json_file=signal_XHY4b.json
+fi
+readarray -t files < <(jq -r .\"$year\".\"$dataset\"[] $json_file)
 > bad_dataset_"$year"_"$dataset".txt
 for file in ${files[@]}; do
     echo TRYING TO GET DATASET: $file
