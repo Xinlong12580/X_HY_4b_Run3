@@ -17,14 +17,16 @@ for file in ${files[@]}; do
 	Command="file dataset="$file
 	data_name=./files/"$year"_"$dataset""${file//\//_}"
 	#echo $Command
-	#echo dasgoclient -query "$Command"
+	echo dasgoclient -query "$Command"
 	#dasgoclient -query "$Command" | tee "$data_name"_tmp.txt
 	dasgoclient -query "$Command" > "$data_name"_tmp.txt
     statusflag=$(tail -c 26 "$data_name"_tmp.txt)
-    if [ "$statusflag" = "unmatched dataset pattern" ]; then
+    echo X$statusflag
+    if [[ X"$statusflag" == "Xunmatched dataset pattern" || X"$statusflag" == "X" ]]; then
 	    echo "$data_name" >> bad_dataset.txt
-        echo "\e[31mGETTING $file FAILED.\e[0m" 
+        echo -e "\e[31mGETTING $file FAILED.\e[0m" 
     else
+        #sed 's@^@root://cmsxrootd.fnal.gov/@' "$data_name"_tmp.txt | tee -a "$data_name".txt
         sed 's@^@root://cmsxrootd.fnal.gov/@' "$data_name"_tmp.txt > "$data_name".txt
         echo -e "\e[32mGETTING $file SUCCESSFUL.\e[0m" 
 	fi
