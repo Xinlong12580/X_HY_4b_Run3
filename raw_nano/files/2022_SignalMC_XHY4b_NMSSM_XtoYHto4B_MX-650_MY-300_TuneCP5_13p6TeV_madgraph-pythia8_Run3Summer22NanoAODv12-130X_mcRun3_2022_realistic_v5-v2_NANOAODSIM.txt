@@ -1,8 +1,0 @@
-root://cmsxrootd.fnal.gov/ERROR: das exit with code: 2 , error: DBS unable to unmarshal the data into DAS record, api=files_via_dataset, data=&lt;html&gt;
-root://cmsxrootd.fnal.gov/&lt;head&gt;&lt;title&gt;503 Service Temporarily Unavailable&lt;/title&gt;&lt;/head&gt;
-root://cmsxrootd.fnal.gov/&lt;body&gt;
-root://cmsxrootd.fnal.gov/&lt;center&gt;&lt;h1&gt;503 Service Temporarily Unavailable&lt;/h1&gt;&lt;/center&gt;
-root://cmsxrootd.fnal.gov/&lt;hr&gt;&lt;center&gt;nginx&lt;/center&gt;
-root://cmsxrootd.fnal.gov/&lt;/body&gt;
-root://cmsxrootd.fnal.gov/&lt;/html&gt;
-root://cmsxrootd.fnal.gov/, error=invalid character &#39;&lt;&#39; looking for beginning of value
