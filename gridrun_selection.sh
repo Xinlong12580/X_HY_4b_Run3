@@ -62,10 +62,10 @@ pwd | tee -a $root_dir/out.txt
 export X509_CERT_DIR=/cvmfs/grid.cern.ch/etc/grid-security/certificates/
 
 # MAIN FUNCTION
-echo python run_skim.py $* | tee -a $root_dir/out.txt
-python run_skim.py $* | tee -a $root_dir/out.txt
+echo python run_selection.py $* | tee -a $root_dir/out.txt
+python run_selection.py $* | tee -a $root_dir/out.txt
 ls | tee -a $root_dir/out.txt
 # move all snapshots to the EOS (there will only be one)
-eosmkdir -p /store/user/xinlong/XHY4bRun3_2022_skim/
-xrdcp -f *.root root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_2022_skim/
-xrdcp -f $root_dir/out.txt root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3Run3_2022_skim/
+eosmkdir -p /store/user/xinlong/XHY4bRun3_2022_mask/
+xrdcp -f *.root root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_2022_selection/
+xrdcp -f $root_dir/out.txt root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3Run3_2022_selection/

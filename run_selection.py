@@ -13,11 +13,13 @@ args = parser.parse_args()
 
 #dataset="raw_nano/files/2023_SignalMC_XHY4b_NMSSM_XtoYHto4B_MX-900_MY-95_TuneCP5_13p6TeV_madgraph-pythia8_Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v2_NANOAODSIM.txt"
 
-CompileCpp("deltaRMatching.cc")
-CompileCpp("helperFunctions.cc")
 ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job)
-ana.skim()
+ana.selection1()
 file_basename=os.path.basename(args.dataset)
-ana.output = "skimmed_" + file_basename + f"_n-{args.n_files}_i-{args.i_job}.root"
-ana.snapshot()
+ana.output = "selected_" + file_basename
+if "MC" in args.dataset:
+    ana.snapshot(["leadingFatJetPt","leadingFatJetPhi","leadingFatJetEta", "genWeight", "lumiXsecWeight"])
+else:
+    ana.snapshot(["leadingFatJetPt","leadingFatJetPhi","leadingFatJetEta"])
+
 ana.save_fileInfo()
