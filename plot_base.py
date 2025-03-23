@@ -111,8 +111,14 @@ for column in var_columns:
     mplhep.cms.label("Preliminary", data = False, rlabel = r"7.9804 $fb^{-1}$, 2022(13.6 TeV)", ax = ax1)
     ax1.set_yscale("log")
     ax1.set_ylim(1,10000000)
-    ax1.set_ylabel("Event Counts")
-    ax1.set_xlabel(column)
+    if "Pt" in column:
+        ax1.set_ylabel(f"Events/{(bin_centers[column][1] - bin_centers[column][0]):.0f}GeV")
+    else:
+        ax1.set_ylabel(f"Events/{(bin_centers[column][1] - bin_centers[column][0]):.2f}")
+    if "Pt" in column:
+        ax1.set_xlabel(column + "[GeV]")
+    else:
+        ax1.set_xlabel(column)
     ax1.legend()
 
     ax2.errorbar(bin_centers[column], ratio[column], yerr=ratio_error[column], fmt='o', color='black', label='Data')

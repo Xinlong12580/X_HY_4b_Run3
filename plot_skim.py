@@ -11,10 +11,11 @@ with open("test_data.txt") as f:
     lines = f.readlines()
     data_files =[("root://cmsxrootd.fnal.gov//store/user/xinlong/XHY4bRun3_2022_selection/" + line.strip()) for line in lines]
 
+with open("raw_nano/Luminosity.json") as f:
+    lumi_json = json.load(f)
+
 with open("raw_nano/Xsections_background.json") as f:
-    bkg_json = json.load(f)
-
-
+    Xsec_json = json.load(f)
 
 #----------------------------- set bins, variable columns and other configs---------------------------------------------------------------------
 var_columns = ["leadingFatJetPt", "leadingFatJetPhi", "leadingFatJetEta"]
@@ -25,9 +26,11 @@ bins["leadingFatJetPhi"] = np.linspace(-np.pi, np.pi , 21)
 bins["leadingFatJetEta"] = np.linspace(-3, 3, 21)
 for column in var_columns:
     bin_centers[column] = 0.5 * (bins[column][:-1] + bins[column][1:])
-MC_weight = "lumiXsecWeight"
+#MC_weight = "lumiXsecWeight"
+MC_weight = "genWeight"
 mplhep.style.use("CMS")
 
+year = "2022"
 processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"]}
 #------------------------------ making data template ------------------------------------------------------------
 
@@ -68,7 +71,7 @@ for process in processes:
     BKG_totalWeight[process] = {}
     for subprocess in processes[process]:
         if subprocess == "*":
-            for _subprocess in bkg_json[process]:
+            for _subprocess in Xsec_json[process]:
                 BKG_fileWeight[process][_subprocess] = []
                 BKG_idxs[process][_subprocess] = 0
                 BKG_totalWeight[process][_subprocess] = 0
@@ -102,6 +105,9 @@ for process in BKG_fileWeight:
         BKG_totalWeight[process][subprocess] = sum(BKG_fileWeight[process][subprocess])
 
 print("Loading BKG")
+
+lumi = lumi_json[year]
+
 # making templates
 for data_file in data_files:
     for process in h_BKGs:
@@ -109,13 +115,15 @@ for data_file in data_files:
             for subprocess in h_BKGs[process]:
                 if subprocess in data_file:
                     print(data_file)
+                    Xsec = Xsec_json[process][subprocess]
                     rdf = ROOT.RDataFrame("Events", data_file)
                     if rdf.Count().GetValue() < 1:
                         print("Empty File")
                     else:
                         rdf_np = rdf.AsNumpy(var_columns + [MC_weight])
                         for column in var_columns:
-                            h_BKGs[process][subprocess][column].fill(BKG = rdf_np[column], weight = (rdf_np[MC_weight] * BKG_fileWeight[process][subprocess][BKG_idxs[process][subprocess]] / BKG_totalWeight[process][subprocess]) )                
+                            #h_BKGs[process][subprocess][column].fill(BKG = rdf_np[column], weight = (rdf_np[MC_weight] * BKG_fileWeight[process][subprocess][BKG_idxs[process][subprocess]] / BKG_totalWeight[process][subprocess]) )                
+                            h_BKGs[process][subprocess][column].fill(BKG = rdf_np[column], weight = (rdf_np[MC_weight] * lumi * Xsec / BKG_totalWeight[process][subprocess]) )                
                     BKG_idxs[process][subprocess] += 1
 
 with open("hist.pkl", "ab") as f:

@@ -12,9 +12,12 @@ parser.add_argument('-i', type=int, dest='i_job',action='store', required=True)
 args = parser.parse_args()
 
 #dataset="raw_nano/files/2023_SignalMC_XHY4b_NMSSM_XtoYHto4B_MX-900_MY-95_TuneCP5_13p6TeV_madgraph-pythia8_Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v2_NANOAODSIM.txt"
-
-ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job)
-ana.selection1()
+CompileCpp("deltaRMatching.cc")
+CompileCpp("helperFunctions.cc")
+CompileCpp("massMatching.cc")
+CompileCpp("Matching.cc")
+ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job, 1000)
+ana.selection2()
 file_basename=os.path.basename(args.dataset)
 ana.output = "selected_" + file_basename
 if "MC" in args.dataset:

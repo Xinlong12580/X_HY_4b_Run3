@@ -3,137 +3,199 @@
         "MC_QCDJets": {
             "QCD-4Jets_HT-100to200": {
                 "Dataset": "/QCD-4Jets_HT-100to200_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 25220000
+                "Xsection": 25220000,
+                "sumEventCount": 19039024,
+                "sumWeight": 3118452899397770.0
             },
             "QCD-4Jets_HT-200to400": {
                 "Dataset": "/QCD-4Jets_HT-200to400_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 1963000
+                "Xsection": 1963000,
+                "sumEventCount": 20642715,
+                "sumWeight": 355076699237244.0
             },
             "QCD-4Jets_HT-400to600": {
                 "Dataset": "/QCD-4Jets_HT-400to600_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 94870
+                "Xsection": 94870,
+                "sumEventCount": 19602817,
+                "sumWeight": 20499921340038.766
             },
             "QCD-4Jets_HT-600to800": {
                 "Dataset": "/QCD-4Jets_HT-600to800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 13420
+                "Xsection": 13420,
+                "sumEventCount": 19028458,
+                "sumWeight": 3066277298710.22
             },
             "QCD-4Jets_HT-800to1000": {
                 "Dataset": "/QCD-4Jets_HT-800to1000_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 2992
+                "Xsection": 2992,
+                "sumEventCount": 21602068,
+                "sumWeight": 820668718917.0369
             },
             "QCD-4Jets_HT-1000to1200": {
                 "Dataset": "/QCD-4Jets_HT-1000to1200_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 879.1
+                "Xsection": 879.1,
+                "sumEventCount": 19682309,
+                "sumWeight": 225368090785.75104
             },
             "QCD-4Jets_HT-1200to1500": {
                 "Dataset": "/QCD-4Jets_HT-1200to1500_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 384.5
+                "Xsection": 384.5,
+                "sumEventCount": 21112863,
+                "sumWeight": 106724260545.36911
             },
             "QCD-4Jets_HT-1500to2000": {
                 "Dataset": "/QCD-4Jets_HT-1500to2000_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 125.5
+                "Xsection": 125.5,
+                "sumEventCount": 19754826,
+                "sumWeight": 33178163754.07961
             },
             "QCD-4Jets_HT-2000": {
                 "Dataset": "/QCD-4Jets_HT-2000_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 25.78
+                "Xsection": 25.78,
+                "sumEventCount": 18132719,
+                "sumWeight": 6334612666.152112
             }
         },
         "MC_WZJets": {
             "Wto2Q-3Jets_HT-200to400": {
                 "Dataset": "/Wto2Q-3Jets_HT-200to400_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 2723
+                "Xsection": 2723,
+                "sumEventCount": 677535,
+                "sumWeight": 677535.0
             },
             "Wto2Q-3Jets_HT-400to600": {
                 "Dataset": "/Wto2Q-3Jets_HT-400to600_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 299.8
+                "Xsection": 299.8,
+                "sumEventCount": 734917,
+                "sumWeight": 734917.0
             },
             "Wto2Q-3Jets_HT-600to800": {
                 "Dataset": "/Wto2Q-3Jets_HT-600to800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 63.9
+                "Xsection": 63.9,
+                "sumEventCount": 692252,
+                "sumWeight": 692252.0
             },
             "Wto2Q-3Jets_HT-800": {
                 "Dataset": "/Wto2Q-3Jets_HT-800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 31.9
+                "Xsection": 31.9,
+                "sumEventCount": 670274,
+                "sumWeight": 670274.0
             },
             "Zto2Q-4Jets_HT-200to400": {
                 "Dataset": "/Zto2Q-4Jets_HT-200to400_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 1082.0
+                "Xsection": 1082.0,
+                "sumEventCount": 1935541,
+                "sumWeight": 1935541.0
             },
             "Zto2Q-4Jets_HT-400to600": {
                 "Dataset": "/Zto2Q-4Jets_HT-400to600_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 124.1
+                "Xsection": 124.1,
+                "sumEventCount": 1776250,
+                "sumWeight": 1776250.0
             },
             "Zto2Q-4Jets_HT-600to800": {
                 "Dataset": "/Zto2Q-4Jets_HT-600to800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 27.28
+                "Xsection": 27.28,
+                "sumEventCount": 1652228,
+                "sumWeight": 1652228.0
             },
             "Zto2Q-4Jets_HT-800": {
                 "Dataset": "/Zto2Q-4Jets_HT-800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 14.57
+                "Xsection": 14.57,
+                "sumEventCount": 1971573,
+                "sumWeight": 1971573.0
             }
         },
         "MC_TTBarJets": {
             "TTto4Q": {
                 "Dataset": "/TTto4Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 410.89
+                "Xsection": 410.89,
+                "sumEventCount": 53605620,
+                "sumWeight": 18619183212.799995
             },
             "TTtoLNu2Q": {
                 "Dataset": "/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 410.28
+                "Xsection": 410.28,
+                "sumEventCount": 46941630,
+                "sumWeight": 15693342436.536001
             },
             "TTto2L2Nu": {
                 "Dataset": "/TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 102.41
+                "Xsection": 102.41,
+                "sumEventCount": 21654321,
+                "sumWeight": 1742036426.4768996
             }
         },
         "MC_HiggsJets": {
             "GluGluHto2B_M-125": {
                 "Dataset": "/GluGluHto2B_M-125_TuneCP5_13p6TeV_powheg-minlo-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 29.93
+                "Xsection": 29.93,
+                "sumEventCount": 4353624,
+                "sumWeight": 131660118.74600004
             },
             "VBFHto2B_M-125": {
                 "Dataset": "/VBFHto2B_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v3/NANOAODSIM",
-                "Xsection": 2.34
+                "Xsection": 2.34,
+                "sumEventCount": 3330700,
+                "sumWeight": 13919509.949360022
             },
             "WminusH_Hto2B_Wto2Q_M-125": {
                 "Dataset": "/WminusH_Hto2B_Wto2Q_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 0.516
+                "Xsection": 0.516,
+                "sumEventCount": 1147965,
+                "sumWeight": 509617.0257470001
             },
             "WplusH_Hto2B_Wto2Q_M-125": {
                 "Dataset": "/WplusH_Hto2B_Wto2Q_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 0.329
+                "Xsection": 0.329,
+                "sumEventCount": 1199214,
+                "sumWeight": 1339861.784733
             },
             "ZH_Hto2B_Zto2Q_M-125": {
                 "Dataset": "/ZH_Hto2B_Zto2Q_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 0.469
+                "Xsection": 0.469,
+                "sumEventCount": 1144560,
+                "sumWeight": 682084.2912320001
             },
             "ggZH_Hto2B_Zto2Q_M-125": {
                 "Dataset": "/ggZH_Hto2B_Zto2Q_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 0.0544
+                "Xsection": 0.0544,
+                "sumEventCount": 531824,
+                "sumWeight": 25400.392881600008
             },
             "TTH_Hto2B_M-125": {
                 "Dataset": "/TTH_Hto2B_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v3/NANOAODSIM",
-                "Xsection": 0.324
+                "Xsection": 0.324,
+                "sumEventCount": 2989710,
+                "sumWeight": 1714325.3924359998
             }
         },
         "MC_DibosonJets": {
             "WWto4Q": {
                 "Dataset": "/WWto4Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": -1
+                "Xsection": -1,
+                "sumEventCount": 28443500,
+                "sumWeight": 1444640950.1758
             },
             "WZ": {
                 "Dataset": "/WZ_TuneCP5_13p6TeV_pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 54.3
+                "Xsection": 54.3,
+                "sumEventCount": 7299702,
+                "sumWeight": 7299702.0
             },
             "ZZ": {
                 "Dataset": "/ZZ_TuneCP5_13p6TeV_pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": 16.7
+                "Xsection": 16.7,
+                "sumEventCount": 1181750,
+                "sumWeight": 1181750.0
             }
         },
         "MC_SingleTopJets": {
             "TbarBQ_t-channel_4FS": {
                 "Dataset": "/TbarBQ_t-channel_4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/Run3Summer22NanoAODv12-130X_mcRun3_2022_realistic_v5-v2/NANOAODSIM",
-                "Xsection": -1
+                "Xsection": -1,
+                "sumEventCount": 1433215,
+                "sumWeight": 108650617.49421099
             }
         }
     },
@@ -141,137 +203,199 @@
         "MC_QCDJets": {
             "QCD-4Jets_HT-100to200": {
                 "Dataset": "/QCD-4Jets_HT-100to200_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 25220000
+                "Xsection": 25220000,
+                "sumEventCount": 65310206,
+                "sumWeight": 1.069640583274636e+16
             },
             "QCD-4Jets_HT-200to400": {
                 "Dataset": "/QCD-4Jets_HT-200to400_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 1963000
+                "Xsection": 1963000,
+                "sumEventCount": 70275585,
+                "sumWeight": 1208768861093532.0
             },
             "QCD-4Jets_HT-400to600": {
                 "Dataset": "/QCD-4Jets_HT-400to600_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 94870
+                "Xsection": 94870,
+                "sumEventCount": 66491678,
+                "sumWeight": 69532273534964.555
             },
             "QCD-4Jets_HT-600to800": {
                 "Dataset": "/QCD-4Jets_HT-600to800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 13420
+                "Xsection": 13420,
+                "sumEventCount": 63298004,
+                "sumWeight": 10199547397902.227
             },
             "QCD-4Jets_HT-800to1000": {
                 "Dataset": "/QCD-4Jets_HT-800to1000_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 2992
+                "Xsection": 2992,
+                "sumEventCount": 66615474,
+                "sumWeight": 2530723815372.1064
             },
             "QCD-4Jets_HT-1000to1200": {
                 "Dataset": "/QCD-4Jets_HT-1000to1200_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 879.1
+                "Xsection": 879.1,
+                "sumEventCount": 70854616,
+                "sumWeight": 811244844939.0767
             },
             "QCD-4Jets_HT-1200to1500": {
                 "Dataset": "/QCD-4Jets_HT-1200to1500_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 384.5
+                "Xsection": 384.5,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-1500to2000": {
                 "Dataset": "/QCD-4Jets_HT-1500to2000_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 125.5
+                "Xsection": 125.5,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-2000": {
                 "Dataset": "/QCD-4Jets_HT-2000_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 25.78
+                "Xsection": 25.78,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         },
         "MC_WZJets": {
             "Wto2Q-3Jets_HT-200to400": {
                 "Dataset": "/Wto2Q-3Jets_HT-200to400_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 2723
+                "Xsection": 2723,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Wto2Q-3Jets_HT-400to600": {
                 "Dataset": "/Wto2Q-3Jets_HT-400to600_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 299.8
+                "Xsection": 299.8,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Wto2Q-3Jets_HT-600to800": {
                 "Dataset": "/Wto2Q-3Jets_HT-600to800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 63.9
+                "Xsection": 63.9,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Wto2Q-3Jets_HT-800": {
                 "Dataset": "/Wto2Q-3Jets_HT-800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 31.9
+                "Xsection": 31.9,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Zto2Q-4Jets_HT-200to400": {
                 "Dataset": "/Zto2Q-4Jets_HT-200to400_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 1082.0
+                "Xsection": 1082.0,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Zto2Q-4Jets_HT-400to600": {
                 "Dataset": "/Zto2Q-4Jets_HT-400to600_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 124.1
+                "Xsection": 124.1,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Zto2Q-4Jets_HT-600to800": {
                 "Dataset": "/Zto2Q-4Jets_HT-600to800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 27.28
+                "Xsection": 27.28,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Zto2Q-4Jets_HT-800": {
                 "Dataset": "/Zto2Q-4Jets_HT-800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 14.57
+                "Xsection": 14.57,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         },
         "MC_TTBarJets": {
             "TTto4Q": {
                 "Dataset": "/TTto4Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 410.89
+                "Xsection": 410.89,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "TTtoLNu2Q": {
                 "Dataset": "/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 410.28
+                "Xsection": 410.28,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "TTto2L2Nu": {
                 "Dataset": "/TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 102.41
+                "Xsection": 102.41,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         },
         "MC_HiggsJets": {
             "GluGluHto2B_M-125": {
                 "Dataset": "/GluGluHto2B_M-125_TuneCP5_13p6TeV_powheg-minlo-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 29.93
+                "Xsection": 29.93,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "VBFHto2B_M-125": {
                 "Dataset": "/VBFHto2B_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v3/NANOAODSIM",
-                "Xsection": 2.34
+                "Xsection": 2.34,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "WminusH_Hto2B_Wto2Q_M-125": {
                 "Dataset": "/WminusH_Hto2B_Wto2Q_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 0.516
+                "Xsection": 0.516,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "WplusH_Hto2B_Wto2Q_M-125": {
                 "Dataset": "/WplusH_Hto2B_Wto2Q_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 0.329
+                "Xsection": 0.329,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "ZH_Hto2B_Zto2Q_M-125": {
                 "Dataset": "/ZH_Hto2B_Zto2Q_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 0.469
+                "Xsection": 0.469,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "ggZH_Hto2B_Zto2Q_M-125": {
                 "Dataset": "/ggZH_Hto2B_Zto2Q_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 0.0544
+                "Xsection": 0.0544,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "TTH_Hto2B_M-125": {
                 "Dataset": "/TTH_Hto2B_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v3/NANOAODSIM",
-                "Xsection": 0.324
+                "Xsection": 0.324,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         },
         "MC_DibosonJets": {
             "WWto4Q": {
                 "Dataset": "/WWto4Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": -1
+                "Xsection": -1,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "WZ": {
                 "Dataset": "/WZ_TuneCP5_13p6TeV_pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 54.3
+                "Xsection": 54.3,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "ZZ": {
                 "Dataset": "/ZZ_TuneCP5_13p6TeV_pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": 16.7
+                "Xsection": 16.7,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         },
         "MC_SingleTopJets": {
             "TbarBQ_t-channel_4FS": {
                 "Dataset": "/TbarBQ_t-channel_4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/Run3Summer22EENanoAODv12-130X_mcRun3_2022_realistic_postEE_v6-v2/NANOAODSIM",
-                "Xsection": -1
+                "Xsection": -1,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         }
     },
@@ -279,137 +403,199 @@
         "MC_QCDJets": {
             "QCD-4Jets_HT-100to200": {
                 "Dataset": "/QCD-4Jets_HT-100to200_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 25220000
+                "Xsection": 25220000,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-200to400": {
                 "Dataset": "/QCD-4Jets_HT-200to400_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 1963000
+                "Xsection": 1963000,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-400to600": {
                 "Dataset": "/QCD-4Jets_HT-400to600_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v3/NANOAODSIM",
-                "Xsection": 94870
+                "Xsection": 94870,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-600to800": {
                 "Dataset": "/QCD-4Jets_HT-600to800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 13420
+                "Xsection": 13420,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-800to1000": {
                 "Dataset": "/QCD-4Jets_HT-800to1000_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 2992
+                "Xsection": 2992,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-1000to1200": {
                 "Dataset": "/QCD-4Jets_HT-1000to1200_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 879.1
+                "Xsection": 879.1,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-1200to1500": {
                 "Dataset": "/QCD-4Jets_HT-1200to1500_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 384.5
+                "Xsection": 384.5,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-1500to2000": {
                 "Dataset": "/QCD-4Jets_HT-1500to2000_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v3/NANOAODSIM",
-                "Xsection": 125.5
+                "Xsection": 125.5,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-2000": {
                 "Dataset": "/QCD-4Jets_HT-2000_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 25.78
+                "Xsection": 25.78,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         },
         "MC_WZJets": {
             "Wto2Q-3Jets_HT-200to400": {
                 "Dataset": "/Wto2Q-3Jets_HT-200to400_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 2723
+                "Xsection": 2723,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Wto2Q-3Jets_HT-400to600": {
                 "Dataset": "/Wto2Q-3Jets_HT-400to600_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 299.8
+                "Xsection": 299.8,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Wto2Q-3Jets_HT-600to800": {
                 "Dataset": "/Wto2Q-3Jets_HT-600to800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 63.9
+                "Xsection": 63.9,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Wto2Q-3Jets_HT-800": {
                 "Dataset": "/Wto2Q-3Jets_HT-800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 31.9
+                "Xsection": 31.9,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Zto2Q-4Jets_HT-200to400": {
                 "Dataset": "/Zto2Q-4Jets_HT-200to400_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v1/NANOAODSIM",
-                "Xsection": 1082.0
+                "Xsection": 1082.0,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Zto2Q-4Jets_HT-400to600": {
                 "Dataset": "/Zto2Q-4Jets_HT-400to600_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v1/NANOAODSIM",
-                "Xsection": 124.1
+                "Xsection": 124.1,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Zto2Q-4Jets_HT-600to800": {
                 "Dataset": "/Zto2Q-4Jets_HT-600to800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v1/NANOAODSIM",
-                "Xsection": 27.28
+                "Xsection": 27.28,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Zto2Q-4Jets_HT-800": {
                 "Dataset": "/Zto2Q-4Jets_HT-800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v1/NANOAODSIM",
-                "Xsection": 14.57
+                "Xsection": 14.57,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         },
         "MC_TTBarJets": {
             "TTto4Q": {
                 "Dataset": "/TTto4Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 410.89
+                "Xsection": 410.89,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "TTtoLNu2Q": {
                 "Dataset": "/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 410.28
+                "Xsection": 410.28,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "TTto2L2Nu": {
                 "Dataset": "/TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 102.41
+                "Xsection": 102.41,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         },
         "MC_HiggsJets": {
             "GluGluHto2B_M-125": {
                 "Dataset": "/GluGluHto2B_M-125_TuneCP5_13p6TeV_powheg-minlo-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 29.93
+                "Xsection": 29.93,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "VBFHto2B_M-125": {
                 "Dataset": "/VBFHto2B_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v3/NANOAODSIM",
-                "Xsection": 2.34
+                "Xsection": 2.34,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "WminusH_Hto2B_Wto2Q_M-125": {
                 "Dataset": "/WminusH_Hto2B_Wto2Q_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v3/NANOAODSIM",
-                "Xsection": 0.516
+                "Xsection": 0.516,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "WplusH_Hto2B_Wto2Q_M-125": {
                 "Dataset": "/WplusH_Hto2B_Wto2Q_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 0.329
+                "Xsection": 0.329,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "ZH_Hto2B_Zto2Q_M-125": {
                 "Dataset": "/ZH_Hto2B_Zto2Q_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 0.469
+                "Xsection": 0.469,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "ggZH_Hto2B_Zto2Q_M-125": {
                 "Dataset": "/ggZH_Hto2B_Zto2Q_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v3/NANOAODSIM",
-                "Xsection": 0.0544
+                "Xsection": 0.0544,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "TTH_Hto2B_M-125": {
                 "Dataset": "/TTH_Hto2B_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v5-v3/NANOAODSIM",
-                "Xsection": 0.324
+                "Xsection": 0.324,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         },
         "MC_DibosonJets": {
             "WWto4Q": {
                 "Dataset": "/WWto4Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v4/NANOAODSIM",
-                "Xsection": -1
+                "Xsection": -1,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "WZ": {
                 "Dataset": "/WZ_TuneCP5_13p6TeV_pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 54.3
+                "Xsection": 54.3,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "ZZ": {
                 "Dataset": "/ZZ_TuneCP5_13p6TeV_pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v14-v2/NANOAODSIM",
-                "Xsection": 16.7
+                "Xsection": 16.7,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         },
         "MC_SingleTopJets": {
             "TbarBQ_t-channel_4FS": {
                 "Dataset": "/TbarBQ_t-channel_4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v2/NANOAODSIM",
-                "Xsection": -1
+                "Xsection": -1,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         }
     },
@@ -417,137 +603,199 @@
         "MC_QCDJets": {
             "QCD-4Jets_HT-100to200": {
                 "Dataset": "/QCD-4Jets_HT-100to200_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v4/NANOAODSIM",
-                "Xsection": 25220000
+                "Xsection": 25220000,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-200to400": {
                 "Dataset": "/QCD-4Jets_HT-200to400_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v3/NANOAODSIM",
-                "Xsection": 1963000
+                "Xsection": 1963000,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-400to600": {
                 "Dataset": "/QCD-4Jets_HT-400to600_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v4/NANOAODSIM",
-                "Xsection": 94870
+                "Xsection": 94870,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-600to800": {
                 "Dataset": "/QCD-4Jets_HT-600to800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v3/NANOAODSIM",
-                "Xsection": 13420
+                "Xsection": 13420,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-800to1000": {
                 "Dataset": "/QCD-4Jets_HT-800to1000_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v4/NANOAODSIM",
-                "Xsection": 2992
+                "Xsection": 2992,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-1000to1200": {
                 "Dataset": "/QCD-4Jets_HT-1000to1200_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v4/NANOAODSIM",
-                "Xsection": 879.1
+                "Xsection": 879.1,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-1200to1500": {
                 "Dataset": "/QCD-4Jets_HT-1200to1500_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v4/NANOAODSIM",
-                "Xsection": 384.5
+                "Xsection": 384.5,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-1500to2000": {
                 "Dataset": "/QCD-4Jets_HT-1500to2000_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v3/NANOAODSIM",
-                "Xsection": 125.5
+                "Xsection": 125.5,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "QCD-4Jets_HT-2000": {
                 "Dataset": "/QCD-4Jets_HT-2000_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v4/NANOAODSIM",
-                "Xsection": 25.78
+                "Xsection": 25.78,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         },
         "MC_WZJets": {
             "Wto2Q-3Jets_HT-200to400": {
                 "Dataset": "/Wto2Q-3Jets_HT-200to400_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v2/NANOAODSIM",
-                "Xsection": 2723
+                "Xsection": 2723,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Wto2Q-3Jets_HT-400to600": {
                 "Dataset": "/Wto2Q-3Jets_HT-400to600_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v2/NANOAODSIM",
-                "Xsection": 299.8
+                "Xsection": 299.8,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Wto2Q-3Jets_HT-600to800": {
                 "Dataset": "/Wto2Q-3Jets_HT-600to800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v2/NANOAODSIM",
-                "Xsection": 63.9
+                "Xsection": 63.9,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Wto2Q-3Jets_HT-800": {
                 "Dataset": "/Wto2Q-3Jets_HT-800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v2/NANOAODSIM",
-                "Xsection": 31.9
+                "Xsection": 31.9,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Zto2Q-4Jets_HT-200to400": {
                 "Dataset": "/Zto2Q-4Jets_HT-200to400_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v1/NANOAODSIM",
-                "Xsection": 1082.0
+                "Xsection": 1082.0,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Zto2Q-4Jets_HT-400to600": {
                 "Dataset": "/Zto2Q-4Jets_HT-400to600_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v2/NANOAODSIM",
-                "Xsection": 124.1
+                "Xsection": 124.1,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Zto2Q-4Jets_HT-600to800": {
                 "Dataset": "/Zto2Q-4Jets_HT-600to800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v1/NANOAODSIM",
-                "Xsection": 27.28
+                "Xsection": 27.28,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "Zto2Q-4Jets_HT-800": {
                 "Dataset": "/Zto2Q-4Jets_HT-800_TuneCP5_13p6TeV_madgraphMLM-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v1/NANOAODSIM",
-                "Xsection": 14.57
+                "Xsection": 14.57,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         },
         "MC_TTBarJets": {
             "TTto4Q": {
                 "Dataset": "/TTto4Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v3/NANOAODSIM",
-                "Xsection": 410.89
+                "Xsection": 410.89,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "TTtoLNu2Q": {
                 "Dataset": "/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v3/NANOAODSIM",
-                "Xsection": 410.28
+                "Xsection": 410.28,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "TTto2L2Nu": {
                 "Dataset": "/TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v3/NANOAODSIM",
-                "Xsection": 102.41
+                "Xsection": 102.41,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         },
         "MC_HiggsJets": {
             "GluGluHto2B_M-125": {
                 "Dataset": "/GluGluHto2B_M-125_TuneCP5_13p6TeV_powheg-minlo-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v2/NANOAODSIM",
-                "Xsection": 29.93
+                "Xsection": 29.93,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "VBFHto2B_M-125": {
                 "Dataset": "/VBFHto2B_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v3/NANOAODSIM",
-                "Xsection": 2.34
+                "Xsection": 2.34,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "WminusH_Hto2B_Wto2Q_M-125": {
                 "Dataset": "/WminusH_Hto2B_Wto2Q_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v2/NANOAODSIM",
-                "Xsection": 0.516
+                "Xsection": 0.516,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "WplusH_Hto2B_Wto2Q_M-125": {
                 "Dataset": "/WplusH_Hto2B_Wto2Q_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v2/NANOAODSIM",
-                "Xsection": 0.329
+                "Xsection": 0.329,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "ZH_Hto2B_Zto2Q_M-125": {
                 "Dataset": "/ZH_Hto2B_Zto2Q_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v2/NANOAODSIM",
-                "Xsection": 0.469
+                "Xsection": 0.469,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "ggZH_Hto2B_Zto2Q_M-125": {
                 "Dataset": "/ggZH_Hto2B_Zto2Q_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v3/NANOAODSIM",
-                "Xsection": 0.0544
+                "Xsection": 0.0544,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "TTH_Hto2B_M-125": {
                 "Dataset": "/TTH_Hto2B_M-125_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v5-v3/NANOAODSIM",
-                "Xsection": 0.324
+                "Xsection": 0.324,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         },
         "MC_DibosonJets": {
             "WWto4Q": {
                 "Dataset": "/WWto4Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v3/NANOAODSIM",
-                "Xsection": -1
+                "Xsection": -1,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "WZ": {
                 "Dataset": "/WZ_TuneCP5_13p6TeV_pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v2/NANOAODSIM",
-                "Xsection": 54.3
+                "Xsection": 54.3,
+                "sumEventCount": -1,
+                "sumWeight": -1
             },
             "ZZ": {
                 "Dataset": "/ZZ_TuneCP5_13p6TeV_pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v2-v2/NANOAODSIM",
-                "Xsection": 16.7
+                "Xsection": 16.7,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         },
         "MC_SingleTopJets": {
             "TbarBQ_t-channel_4FS": {
                 "Dataset": "/TbarBQ_t-channel_4FS_TuneCP5_13p6TeV_powheg-madspin-pythia8/Run3Summer23BPixNanoAODv12-130X_mcRun3_2023_realistic_postBPix_v6-v2/NANOAODSIM",
-                "Xsection": -1
+                "Xsection": -1,
+                "sumEventCount": -1,
+                "sumWeight": -1
             }
         }
     }

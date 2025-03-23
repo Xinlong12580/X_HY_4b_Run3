@@ -15,9 +15,14 @@ args = parser.parse_args()
 
 CompileCpp("deltaRMatching.cc")
 CompileCpp("helperFunctions.cc")
+CompileCpp("goldenJson_mask.cc")
 ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job)
 ana.skim()
+if "Data" in args.dataset:
+    ana.mask_goldenJson()
 file_basename=os.path.basename(args.dataset)
 ana.output = "skimmed_" + file_basename + f"_n-{args.n_files}_i-{args.i_job}.root"
+if "Data" in args.dataset:
+    ana.output = "masked_skimmed_" + file_basename + f"_n-{args.n_files}_i-{args.i_job}.root"
 ana.snapshot()
 ana.save_fileInfo()

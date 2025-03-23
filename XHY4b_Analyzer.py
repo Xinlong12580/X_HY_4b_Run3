@@ -142,20 +142,54 @@ class XHY4b_Analyzer:
             raise ValueError("Weight can only e applied to MC files") 
    
     def selection1(self):
-        self.analyzer.Cut("TwoFatJetsCut", "nFatJet >= 2")
+        #self.analyzer.Cut("TwoFatJetsCut", "nFatJet >= 2")
+        self.analyzer.Cut("TwoFatJetsCut", "skimmingTwoAK8Jets(nFatJet, FatJet_eta,  FatJet_pt, FatJet_msoftdrop) == 1")
         self.analyzer.Define("leadingFatJetPt", "FatJet_pt[0]")
         self.analyzer.Define("leadingFatJetPhi", "FatJet_phi[0]")
         self.analyzer.Define("leadingFatJetEta", "FatJet_eta[0]")
         
-
+    def selection2(self):
+        self.analyzer.Cut("SkimCut", "SkimFlag == 2 || SkimFlag == 3") # it becones (B and not C) 
+        with open("raw_nano/Trigger.json") as f:
+            triggers = json.load(f)
+        hadron_triggers = triggers["Hadron"][self.year]
+        print(hadron_triggers)
+        triggerCut = self.analyzer.GetTriggerString(hadron_triggers)
+        print(triggerCut)
+        #self.analyzer.Cut("TriggerCut", triggerCut)
+        self.analyzer.Cut("IDCut","FatJet_jetId[0] > 1 && FatJet_jetId[1] > 1")
+        self.analyzer.Define("nEle", "nElectrons(nElectron, Electron_cutBased, 0, Electron_pt,20, Electron_eta)")
+        self.analyzer.Define("nMu", "nMuons(nMuon, Muon_looseId, Muon_pfIsoId, 0, Muon_pt, 20, Muon_eta)")
+        self.analyzer.Cut("LeptonVetoCut", "nMu==0 && nEle==0")
+        self.analyzer.Cut("PtCut", "FatJet_pt[0] > 450 && FatJet_pt[1] > 450")
+        self.analyzer.Cut("MassCut", "FatJet_msoftdrop[0] > 60 && FatJet_msoftdrop[1] > 60")
+        self.analyzer.Cut("DeltaEtaCut", "abs(FatJet_eta[0] - FatJet_eta[1]) < 1.3")
+        #self.analyzer.Define('LeadingVector', 'analyzer::TLvector(FatJet_pt[0], FatJet_eta[0], FatJet_phi[0], FatJet_msoftdrop[0])')
+        #self.analyzer.Define('SubleadingVector',  'analyzer::TLvector(FatJet_pt[1], FatJet_eta[1], FatJet_phi[1], FatJet_msoftdrop[1])')
+        #self.analyzer.Define('MJJ',     'analyzer::invariantMass(LeadingVector, SubleadingVector)')
+        self.analyzer.Define("MJJ", "InvMass_PtEtaPhiM({FatJet_pt[0], FatJet_pt[1]}, {FatJet_eta[0], FatJet_eta[1]}, {FatJet_phi[0], FatJet_phi[1]}, {FatJet_msoftdrop[0], FatJet_msoftdrop[1]})")
+        self.analyzer.Cut("MJJCut", "MJJ > 700")
+        self.analyzer.Define("idxH", "higgsMassMatching(FatJet_msoftdrop[0], FatJet_msoftdrop[0])")
+        self.analyzer.Define("idxY", "1 - idxH")
+        self.analyzer.Cut("HiggsCut", "idxH >= 0") 
+        self.analyzer.Define("leadingFatJetPt", "FatJet_pt[0]")
+        self.analyzer.Define("leadingFatJetPhi", "FatJet_phi[0]")
+        self.analyzer.Define("leadingFatJetEta", "FatJet_eta[0]")
+    
     def snapshot(self, columns = None):
         if columns == None:
             with open("columnBlackList.txt","r") as f:                                 
                 badColumns = f.read().splitlines()       
             columns = []                                
             for c in self.analyzer.DataFrame.GetColumnNames():
-                if(str(c).startswith("HLT_")):
+                if(str(c).startswith("L1_")):
                     continue
+                if(str(c).startswith("Tau_")):
+                    continue
+                if(str(c).startswith("LowPt_")):
+                    continue
+                #if(str(c).startswith("HLT_")):
+                #    pass     
                 elif c in badColumns:                                                      
                     continue                                                               
                 else:                                                                    
