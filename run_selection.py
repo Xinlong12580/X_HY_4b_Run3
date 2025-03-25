@@ -16,13 +16,15 @@ CompileCpp("deltaRMatching.cc")
 CompileCpp("helperFunctions.cc")
 CompileCpp("massMatching.cc")
 CompileCpp("Matching.cc")
-ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job, 1000)
+ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job)
+#ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job, 1000)
 ana.selection2()
 file_basename=os.path.basename(args.dataset)
 ana.output = "selected_" + file_basename
+columns = ["leadingFatJetPt","leadingFatJetPhi","leadingFatJetEta", "leadingFatJetMsoftdrop", "MassLeadingTwoFatJets", "MassHiggsCandidate", "PtHiggsCandidate", "EtaHiggsCandidate", "PhiHiggsCandidate", "MassYCandidate", "PtYCandidate", "EtaYCandidate", "PhiYCandidate"]
 if "MC" in args.dataset:
-    ana.snapshot(["leadingFatJetPt","leadingFatJetPhi","leadingFatJetEta", "genWeight", "lumiXsecWeight"])
+    ana.snapshot(columns + ["genWeight"])
 else:
-    ana.snapshot(["leadingFatJetPt","leadingFatJetPhi","leadingFatJetEta"])
+    ana.snapshot(columns)
 
 ana.save_fileInfo()

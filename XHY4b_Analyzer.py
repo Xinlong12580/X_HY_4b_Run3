@@ -150,48 +150,80 @@ class XHY4b_Analyzer:
         
     def selection2(self):
         self.analyzer.Cut("SkimCut", "SkimFlag == 2 || SkimFlag == 3") # it becones (B and not C) 
+        self.analyzer.Define("nEle", "nElectrons(nElectron, Electron_cutBased, 0, Electron_pt,20, Electron_eta)")
+        self.analyzer.Define("nMu", "nMuons(nMuon, Muon_looseId, Muon_pfIsoId, 0, Muon_pt, 20, Muon_eta)")
+        self.analyzer.Cut("LeptonVetoCut", "nMu==0 && nEle==0")
+        
         with open("raw_nano/Trigger.json") as f:
             triggers = json.load(f)
         hadron_triggers = triggers["Hadron"][self.year]
         print(hadron_triggers)
         triggerCut = self.analyzer.GetTriggerString(hadron_triggers)
         print(triggerCut)
-        #self.analyzer.Cut("TriggerCut", triggerCut)
+        self.analyzer.Cut("TriggerCut", triggerCut)
+        flagFilters = ["Flag_BadPFMuonFilter","Flag_EcalDeadCellTriggerPrimitiveFilter","Flag_HBHENoiseIsoFilter","Flag_HBHENoiseFilter","Flag_globalSuperTightHalo2016Filter","Flag_goodVertices"]
+        flagFilterCut = self.analyzer.GetFlagString(flagFilters)
+        self.analyzer.Cut("FlagCut", flagFilterCut)
+        
         self.analyzer.Cut("IDCut","FatJet_jetId[0] > 1 && FatJet_jetId[1] > 1")
-        self.analyzer.Define("nEle", "nElectrons(nElectron, Electron_cutBased, 0, Electron_pt,20, Electron_eta)")
-        self.analyzer.Define("nMu", "nMuons(nMuon, Muon_looseId, Muon_pfIsoId, 0, Muon_pt, 20, Muon_eta)")
-        self.analyzer.Cut("LeptonVetoCut", "nMu==0 && nEle==0")
         self.analyzer.Cut("PtCut", "FatJet_pt[0] > 450 && FatJet_pt[1] > 450")
         self.analyzer.Cut("MassCut", "FatJet_msoftdrop[0] > 60 && FatJet_msoftdrop[1] > 60")
         self.analyzer.Cut("DeltaEtaCut", "abs(FatJet_eta[0] - FatJet_eta[1]) < 1.3")
         #self.analyzer.Define('LeadingVector', 'analyzer::TLvector(FatJet_pt[0], FatJet_eta[0], FatJet_phi[0], FatJet_msoftdrop[0])')
         #self.analyzer.Define('SubleadingVector',  'analyzer::TLvector(FatJet_pt[1], FatJet_eta[1], FatJet_phi[1], FatJet_msoftdrop[1])')
         #self.analyzer.Define('MJJ',     'analyzer::invariantMass(LeadingVector, SubleadingVector)')
-        self.analyzer.Define("MJJ", "InvMass_PtEtaPhiM({FatJet_pt[0], FatJet_pt[1]}, {FatJet_eta[0], FatJet_eta[1]}, {FatJet_phi[0], FatJet_phi[1]}, {FatJet_msoftdrop[0], FatJet_msoftdrop[1]})")
-        self.analyzer.Cut("MJJCut", "MJJ > 700")
-        self.analyzer.Define("idxH", "higgsMassMatching(FatJet_msoftdrop[0], FatJet_msoftdrop[0])")
+        self.analyzer.Define("MassLeadingTwoFatJets", "InvMass_PtEtaPhiM({FatJet_pt[0], FatJet_pt[1]}, {FatJet_eta[0], FatJet_eta[1]}, {FatJet_phi[0], FatJet_phi[1]}, {FatJet_msoftdrop[0], FatJet_msoftdrop[1]})")
+        self.analyzer.Cut("MJJCut", "MassLeadingTwoFatJets > 700")
+        self.analyzer.Define("idxH", "higgsMassMatching(FatJet_msoftdrop[0], FatJet_msoftdrop[1])")
         self.analyzer.Define("idxY", "1 - idxH")
         self.analyzer.Cut("HiggsCut", "idxH >= 0") 
+        self.analyzer.Define("MassHiggsCandidate", "FatJet_msoftdrop[idxH]")
+        self.analyzer.Define("PtHiggsCandidate", "FatJet_pt[idxH]")
+        self.analyzer.Define("EtaHiggsCandidate", "FatJet_eta[idxH]")
+        self.analyzer.Define("PhiHiggsCandidate", "FatJet_phi[idxH]")
+        
+        self.analyzer.Define("MassYCandidate", "FatJet_msoftdrop[idxY]")
+        self.analyzer.Define("PtYCandidate", "FatJet_pt[idxY]")
+        self.analyzer.Define("EtaYCandidate", "FatJet_eta[idxY]")
+        self.analyzer.Define("PhiYCandidate", "FatJet_phi[idxY]")
+        
         self.analyzer.Define("leadingFatJetPt", "FatJet_pt[0]")
         self.analyzer.Define("leadingFatJetPhi", "FatJet_phi[0]")
         self.analyzer.Define("leadingFatJetEta", "FatJet_eta[0]")
-    
+        self.analyzer.Define("leadingFatJetMsoftdrop", "FatJet_msoftdrop[0]")
+
     def snapshot(self, columns = None):
         if columns == None:
-            with open("columnBlackList.txt","r") as f:                                 
-                badColumns = f.read().splitlines()       
+            with open("raw_nano/columnBlackList.txt","r") as f:                                 
+                badColumns = f.read().splitlines()
+            with open("raw_nano/columnWhiteList.txt","r") as f:                                 
+                goodColumns = f.read().splitlines()
+                   
             columns = []                                
-            for c in self.analyzer.DataFrame.GetColumnNames():
-                if(str(c).startswith("L1_")):
-                    continue
-                if(str(c).startswith("Tau_")):
-                    continue
-                if(str(c).startswith("LowPt_")):
-                    continue
-                #if(str(c).startswith("HLT_")):
-                #    pass     
+            for c in self.analyzer.DataFrame.GetColumnNames(): #defining default saving columns
+                if c in goodColumns: #The column list files have the highest prioroty
+                    columns.append(c)
                 elif c in badColumns:                                                      
                     continue                                                               
+                
+                elif(str(c).startswith("HLT_AK8PF")):
+                    columns.append(c)
+                elif(str(c).startswith("HLT_Ele")):
+                    columns.append(c)
+                elif(str(c).startswith("HLT_IsoMu")):
+                    columns.append(c) 
+                elif(str(c).startswith("Tau_")):
+                    continue
+                elif(str(c).startswith("LowPt_")):
+                    continue
+                elif(str(c).startswith("HLT_")):
+                    continue     
+                elif(str(c).startswith("L1_")):
+                    continue     
+                elif(str(c).startswith("LowPtElectron_")):
+                    continue     
+                elif(str(c).startswith("Photon_")):
+                    continue     
                 else:                                                                    
                     columns.append(c)  
 
