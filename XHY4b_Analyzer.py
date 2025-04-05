@@ -1,5 +1,6 @@
 import ROOT
 import json
+from hist import Hist
 from TIMBER.Analyzer import Correction, CutGroup, ModuleWorker, analyzer, Node
 from TIMBER.Tools.Common import CompileCpp, OpenJSON
 from TIMBER.Tools.AutoPU import ApplyPU, AutoPU
@@ -169,9 +170,6 @@ class XHY4b_Analyzer:
         self.analyzer.Cut("PtCut", "FatJet_pt[0] > 450 && FatJet_pt[1] > 450")
         self.analyzer.Cut("MassCut", "FatJet_msoftdrop[0] > 60 && FatJet_msoftdrop[1] > 60")
         self.analyzer.Cut("DeltaEtaCut", "abs(FatJet_eta[0] - FatJet_eta[1]) < 1.3")
-        #self.analyzer.Define('LeadingVector', 'analyzer::TLvector(FatJet_pt[0], FatJet_eta[0], FatJet_phi[0], FatJet_msoftdrop[0])')
-        #self.analyzer.Define('SubleadingVector',  'analyzer::TLvector(FatJet_pt[1], FatJet_eta[1], FatJet_phi[1], FatJet_msoftdrop[1])')
-        #self.analyzer.Define('MJJ',     'analyzer::invariantMass(LeadingVector, SubleadingVector)')
         self.analyzer.Define("MassLeadingTwoFatJets", "InvMass_PtEtaPhiM({FatJet_pt[0], FatJet_pt[1]}, {FatJet_eta[0], FatJet_eta[1]}, {FatJet_phi[0], FatJet_phi[1]}, {FatJet_msoftdrop[0], FatJet_msoftdrop[1]})")
         self.analyzer.Cut("MJJCut", "MassLeadingTwoFatJets > 700")
         self.analyzer.Define("idxH", "higgsMassMatching(FatJet_msoftdrop[0], FatJet_msoftdrop[1])")
@@ -191,7 +189,35 @@ class XHY4b_Analyzer:
         self.analyzer.Define("leadingFatJetPhi", "FatJet_phi[0]")
         self.analyzer.Define("leadingFatJetEta", "FatJet_eta[0]")
         self.analyzer.Define("leadingFatJetMsoftdrop", "FatJet_msoftdrop[0]")
+        
+        self.analyzer.Define("MJY", "MassYCandidate")
+        self.analyzer.Define("MJJ", "MassLeadingTwoFatJets")
+        
+        print(f"DEBUG: { self.analyzer.GetActiveNode().DataFrame.Count().GetValue()}") 
 
+    def b_tagging(self):
+        #self.analyzer.Define("PNet_H", "FatJet_particleNet_XbbVsQCD[idxH]/ FatJet_particleNet_QCD[idxH]")
+        #self.analyzer.Define("PNet_Y", "FatJet_particleNet_XbbVsQCD[idxY]/ FatJet_particleNet_QCD[idxY]")
+        self.analyzer.Define("PNet_H", "FatJet_particleNet_XbbVsQCD[idxH]")
+        self.analyzer.Define("PNet_Y", "FatJet_particleNet_XbbVsQCD[idxY]")
+        T_score = 0.98
+        L_score = 0.94
+        Aux_score1 = 0.8
+        Aux_score2 = 0.6
+        self.analyzer.Define("Region_SR1", f"PNet_H >= {T_score} && PNet_Y >= {T_score}")
+        self.analyzer.Define("Region_SR2", f"PNet_H >= {L_score} && PNet_Y >= {L_score}")
+        self.analyzer.Define("Region_SB1", f"PNet_H >= {T_score} && PNet_Y < {L_score}")
+        self.analyzer.Define("Region_SB2", f"PNet_H >= {L_score} && PNet_Y < {L_score}")
+        self.analyzer.Define("Region_VS1", f"PNet_H >= {Aux_score1} && PNet_H < {L_score} && PNet_Y >= {T_score}")
+        self.analyzer.Define("Region_VS2", f"PNet_H >= {Aux_score1} && PNet_H < {L_score} && PNet_Y >= {L_score}")
+        self.analyzer.Define("Region_VB1", f"PNet_H >= {Aux_score1} && PNet_H < {L_score} && PNet_Y < {L_score}")
+        self.analyzer.Define("Region_VS3", f"PNet_H >= {Aux_score2} && PNet_H < {Aux_score1} && PNet_Y >= {T_score}")
+        self.analyzer.Define("Region_VS4", f"PNet_H >= {Aux_score2} && PNet_H < {Aux_score1} && PNet_Y >= {L_score}")
+        self.analyzer.Define("Region_VB2", f"PNet_H >= {Aux_score2} && PNet_H < {Aux_score1} && PNet_Y < {L_score}")
+
+    def devide(self, region):
+        self.analyzer.Cut("RegionCut","Region_" + region)
+    
     def snapshot(self, columns = None):
         if columns == None:
             with open("raw_nano/columnBlackList.txt","r") as f:                                 
@@ -228,3 +254,11 @@ class XHY4b_Analyzer:
                     columns.append(c)  
 
         self.analyzer.Snapshot(columns, self.output, "Events")
+    
+        
+        
+        
+
+
+        
+         

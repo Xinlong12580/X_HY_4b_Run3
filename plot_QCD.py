@@ -12,10 +12,28 @@ with open("test_data.txt") as f:
 with open("raw_nano/Xsections_background.json") as f:
     bkg_json = json.load(f)
 
-with open("hists/hist_data_selection2.pkl", "rb") as f:
-    h_data = pickle.load(f)
-with open("hists/hist_BKGs_selection2.pkl", "rb") as f:
-    h_BKGs = pickle.load(f)
+with open("QCD_BE.pkl", "rb") as f:
+    hists = pickle.load(f)
+
+for process in hists:
+    for region in hists[process]:
+        x_edges = hists[process][region].axes[0].edges
+        y_edges = hists[process][region].axes[1].edges
+        z = hists[process][region].values().T  # Transpose so x is horizontal, y is vertical
+        
+        # 4. Plot with pcolormesh
+        fig, ax = plt.subplots(figsize=(8, 6))
+        mesh = ax.pcolormesh(x_edges, y_edges, z, cmap="viridis")
+        
+        # 5. Add CMS label (mplhep) and colorbar
+        mplhep.cms.text("Simulation", ax=ax)  # Optional CMS-style label
+        cbar = fig.colorbar(mesh, ax=ax, label="Entries")
+
+        ax.set_xlabel(hists[process][region].axes[0].label)
+        ax.set_ylabel(hists[process][region].axes[1].label)
+        plt.tight_layout()
+        plt.savefig(f"{process}__{region}.png")
+exit()
 #----------------------------- set bins, variable columns and other configs---------------------------------------------------------------------
 
 var_columns = ["leadingFatJetPt", "leadingFatJetPhi", "leadingFatJetEta", "leadingFatJetMsoftdrop", "MassLeadingTwoFatJets", "MassHiggsCandidate", "PtHiggsCandidate", "EtaHiggsCandidate", "PhiHiggsCandidate", "MassYCandidate", "PtYCandidate", "EtaYCandidate", "PhiYCandidate"]
