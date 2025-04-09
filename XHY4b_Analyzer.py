@@ -90,7 +90,6 @@ class XHY4b_Analyzer:
         run_rdf.Snapshot("Runs", self.output, "", opts)
     
     def skim(self):
-        
         #make skim cut
         nBeforeSkim = self.analyzer.GetActiveNode().DataFrame.Count().GetValue()
         self.analyzer.Define("nBeforeSkim", f"{nBeforeSkim}")
@@ -192,18 +191,16 @@ class XHY4b_Analyzer:
         
         self.analyzer.Define("MJY", "MassYCandidate")
         self.analyzer.Define("MJJ", "MassLeadingTwoFatJets")
+        self.analyzer.Define("PNet_H", "FatJet_particleNet_XbbVsQCD[idxH]")
+        self.analyzer.Define("PNet_Y", "FatJet_particleNet_XbbVsQCD[idxY]")
         
         print(f"DEBUG: { self.analyzer.GetActiveNode().DataFrame.Count().GetValue()}") 
 
     def b_tagging(self):
-        #self.analyzer.Define("PNet_H", "FatJet_particleNet_XbbVsQCD[idxH]/ FatJet_particleNet_QCD[idxH]")
-        #self.analyzer.Define("PNet_Y", "FatJet_particleNet_XbbVsQCD[idxY]/ FatJet_particleNet_QCD[idxY]")
-        self.analyzer.Define("PNet_H", "FatJet_particleNet_XbbVsQCD[idxH]")
-        self.analyzer.Define("PNet_Y", "FatJet_particleNet_XbbVsQCD[idxY]")
-        T_score = 0.98
-        L_score = 0.94
-        Aux_score1 = 0.8
-        Aux_score2 = 0.6
+        T_score = 0.9
+        L_score = 0.8
+        Aux_score1 = 0.55
+        Aux_score2 = 0.3
         self.analyzer.Define("Region_SR1", f"PNet_H >= {T_score} && PNet_Y >= {T_score}")
         self.analyzer.Define("Region_SR2", f"PNet_H >= {L_score} && PNet_Y >= {L_score}")
         self.analyzer.Define("Region_SB1", f"PNet_H >= {T_score} && PNet_Y < {L_score}")
@@ -215,44 +212,41 @@ class XHY4b_Analyzer:
         self.analyzer.Define("Region_VS4", f"PNet_H >= {Aux_score2} && PNet_H < {Aux_score1} && PNet_Y >= {L_score}")
         self.analyzer.Define("Region_VB2", f"PNet_H >= {Aux_score2} && PNet_H < {Aux_score1} && PNet_Y < {L_score}")
 
-    def devide(self, region):
+    def divide(self, region):
         self.analyzer.Cut("RegionCut","Region_" + region)
     
     def snapshot(self, columns = None):
         if columns == None:
             with open("raw_nano/columnBlackList.txt","r") as f:                                 
                 badColumns = f.read().splitlines()
+            with open("raw_nano/columnPrefixBlackList.txt","r") as f:                                 
+                badColumnPrefixs = f.read().splitlines()
             with open("raw_nano/columnWhiteList.txt","r") as f:                                 
                 goodColumns = f.read().splitlines()
+            with open("raw_nano/columnPrefixWhiteList.txt","r") as f:                                 
+                goodColumnPrefixs = f.read().splitlines()
                    
-            columns = []                                
-            for c in self.analyzer.DataFrame.GetColumnNames(): #defining default saving columns
-                if c in goodColumns: #The column list files have the highest prioroty
-                    columns.append(c)
-                elif c in badColumns:                                                      
-                    continue                                                               
+            columns = []                      
+          
+            for c in self.analyzer.DataFrame.GetColumnNames(): #defining default saving columns                
+                passed = 1
+                if c in badColumns:                                                      
+                    passed = 0
+                for bad_prefix in badColumnPrefixs:
+                    if str(c).startswith(bad_prefix):
+                        passed = 0
                 
-                elif(str(c).startswith("HLT_AK8PF")):
-                    columns.append(c)
-                elif(str(c).startswith("HLT_Ele")):
-                    columns.append(c)
-                elif(str(c).startswith("HLT_IsoMu")):
-                    columns.append(c) 
-                elif(str(c).startswith("Tau_")):
-                    continue
-                elif(str(c).startswith("LowPt_")):
-                    continue
-                elif(str(c).startswith("HLT_")):
-                    continue     
-                elif(str(c).startswith("L1_")):
-                    continue     
-                elif(str(c).startswith("LowPtElectron_")):
-                    continue     
-                elif(str(c).startswith("Photon_")):
-                    continue     
-                else:                                                                    
+                if c in goodColumns: #The column list files have the highest prioroty
+                    passed = 1 
+                for good_prefix in goodColumnPrefixs:
+                    if str(c).startswith(good_prefix):
+                        passed = 1
+                
+                if passed == 1:                                                                    
                     columns.append(c)  
-
+        for column in columns:
+            print(column)
+        print(len(columns))
         self.analyzer.Snapshot(columns, self.output, "Events")
     
         
