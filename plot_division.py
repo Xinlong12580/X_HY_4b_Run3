@@ -45,7 +45,7 @@ for year in h_data:
         ax_data.set_xlabel(h_data[year][region].axes[0].label)
         ax_data.set_ylabel(h_data[year][region].axes[1].label)
         fig_data.tight_layout()
-        fig_data.savefig(f"{year}__data__{region}.png")
+        fig_data.savefig(f"plots_division/{year}__data__{region}.png")
 
 
 
@@ -56,7 +56,7 @@ for year in h_data:
         ax_ttbar.set_xlabel(h_data[year][region].axes[0].label)
         ax_ttbar.set_ylabel(h_data[year][region].axes[1].label)
         fig_ttbar.tight_layout()
-        fig_ttbar.savefig(f"{year}__ttbar__{region}.png")
+        fig_ttbar.savefig(f"plots_division/{year}__ttbar__{region}.png")
 
 
 
@@ -67,7 +67,7 @@ for year in h_data:
         ax_netQCD.set_xlabel(h_data[year][region].axes[0].label)
         ax_netQCD.set_ylabel(h_data[year][region].axes[1].label)
         fig_netQCD.tight_layout()
-        fig_netQCD.savefig(f"{year}__netQCD__{region}.png")
+        fig_netQCD.savefig(f"plots_division/{year}__netQCD__{region}.png")
 
 
 
@@ -92,7 +92,7 @@ for region in h_data_all:
     ax.set_xlabel(h_data_all[region].axes[0].label)
     ax.set_ylabel(h_data_all[region].axes[1].label)
     plt.tight_layout()
-    plt.savefig(f"ALL__data__{region}.png")
+    plt.savefig(f"plots_division/ALL__data__{region}.png")
 
 for region in z_netQCD_all:
     print(region)
@@ -109,5 +109,5 @@ for region in z_netQCD_all:
     ax.set_xlabel(h_data_all[region].axes[0].label)
     ax.set_ylabel(h_data_all[region].axes[1].label)
     plt.tight_layout()
-    plt.savefig(f"ALL__netQCD__{region}.png")
+    plt.savefig(f"plots_division/ALL__netQCD__{region}.png")
 exit()

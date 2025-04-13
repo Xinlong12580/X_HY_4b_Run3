@@ -5,117 +5,74 @@ from hist import Hist
 import ROOT
 import json
 import pickle
-
-#-----------------------------------loading files for the templates --------------------------------------------
-with open("selection_output.txt") as f:
+with open("test_data.txt") as f:
     lines = f.readlines()
-    selected_files =[("root://cmsxrootd.fnal.gov//store/user/xinlong/XHY4bRun3_2022_selection2/" + line.strip()) for line in lines]
-
-with open("division_output.txt") as f:
-    lines = f.readlines()
-    divided_files =[("root://cmsxrootd.fnal.gov//store/user/xinlong/XHY4bRun3_2022_division/" + line.strip()) for line in lines]
-
-with open("raw_nano/Luminosity.json") as f:
-    lumi_json = json.load(f)
+    data_files =[("root://cmsxrootd.fnal.gov//store/user/xinlong/XHY4bRun3_2022_selection/" + line.strip()) for line in lines]
 
 with open("raw_nano/Xsections_background.json") as f:
-    Xsec_json = json.load(f)
+    bkg_json = json.load(f)
 
+with open("QCD_BE.pkl", "rb") as f:
+    hists = pickle.load(f)
+
+for year in hists:
+    for process in hists[year]:
+        if process != "Data":
+            continue
+        for region in hists[year][process]:
+            x_edges = hists[year][process][region].axes[0].edges
+            y_edges = hists[year][process][region].axes[1].edges
+            z = hists[year][process][region].values().T  # Transpose so x is horizontal, y is vertical
+        
+            # 4. Plot with pcolormesh
+            fig, ax = plt.subplots(figsize=(8, 6))
+            mesh = ax.pcolormesh(x_edges, y_edges, z, cmap="viridis")
+        
+            # 5. Add CMS label (mplhep) and colorbar
+            mplhep.cms.text("Simulation", ax=ax)  # Optional CMS-style label
+            cbar = fig.colorbar(mesh, ax=ax, label="Entries")
+
+            ax.set_xlabel(hists[year][process][region].axes[0].label)
+            ax.set_ylabel(hists[year][process][region].axes[1].label)
+            plt.tight_layout()
+            plt.savefig(f"{year}__{process}__{region}.png")
+exit()
 #----------------------------- set bins, variable columns and other configs---------------------------------------------------------------------
-Processes = ["MC_QCDJets", "Data"]
-QCD_subprocesses = ["QCD-4Jets_HT-400to600", "QCD-4Jets_HT-600to800", "QCD-4Jets_HT-800to1000", "QCD-4Jets_HT-1000to1200", "QCD-4Jets_HT-1200to1500", "QCD-4Jets_HT-1500to2000", "QCD-4Jets_HT-2000"]
-Regions = ["VS1", "VS2", "VS3", "VS4", "VB1", "VB2"]
-MJY_bins = np.linspace(0, 1000, 41) 
-MJJ_bins = np.linspace(0, 4000, 101) 
-hists = {}
-for process in Processes:
-    hists[process] = {}
-    for region in Regions:
-        hists[process][region] = (
-            Hist.new
-            .Var(MJY_bins, name="MJY", label="MJY")
-            .Var(MJJ_bins, name="MJJ", label="MJJ")
-            .Double()
-        )
 
-    
+var_columns = ["leadingFatJetPt", "leadingFatJetPhi", "leadingFatJetEta", "leadingFatJetMsoftdrop", "MassLeadingTwoFatJets", "MassHiggsCandidate", "PtHiggsCandidate", "EtaHiggsCandidate", "PhiHiggsCandidate", "MassYCandidate", "PtYCandidate", "EtaYCandidate", "PhiYCandidate"]
+bins = {}
+bin_centers = {}
+bins["leadingFatJetPt"] = np.linspace(0, 3000, 101)
+bins["PtHiggsCandidate"] = np.linspace(0, 3000, 101)
+bins["PtYCandidate"] = np.linspace(0, 3000, 101)
+
+bins["leadingFatJetPhi"] = np.linspace(-np.pi, np.pi , 21)
+bins["PhiHiggsCandidate"] = np.linspace(-np.pi, np.pi , 21)
+bins["PhiYCandidate"] = np.linspace(-np.pi, np.pi , 21)
+
+bins["leadingFatJetEta"] = np.linspace(-3, 3, 21)
+bins["EtaHiggsCandidate"] = np.linspace(-3, 3, 21)
+bins["EtaYCandidate"] = np.linspace(-3, 3, 21)
+
+bins["leadingFatJetMsoftdrop"] = np.linspace(0, 1500, 51)
+bins["MassLeadingTwoFatJets"] = np.linspace(0, 5000, 201)
+bins["MassHiggsCandidate"] = np.linspace(0, 1500, 51)
+bins["MassYCandidate"] = np.linspace(0, 1500, 51)
+
+for column in var_columns:
+    bin_centers[column] = 0.5 * (bins[column][:-1] + bins[column][1:])
+#MC_weight = "lumiXsecWeight"
 MC_weight = "genWeight"
 mplhep.style.use("CMS")
 
 year = "2022"
-mass_points = ["MX-3000_MY-300"] 
-#------------------------------ making data template ------------------------------------------------------------
+processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
 
-print("Loading data")
-for data_file in divided_files:
-    if "JetMET" in data_file:
-        for region in Regions:
-            if region in data_file:
-                print(data_file)
-                rdf = ROOT.RDataFrame("Events", data_file)
-                if rdf.Count().GetValue() < 1:
-                    print("Empty File")
-                else:
-                    rdf_np = rdf.AsNumpy(["MJY", "MJJ"])
-                    hists["Data"][region].fill(MJY = rdf_np["MJY"], MJJ = rdf_np["MJJ"])
-print("Loading data successful")
-
-#-----------------making BKG templates -----------------------------------------------------------------
-
-#defining and initiating weight info for scaling
-QCD_fileWeight = {}
-QCD_idxs = {}
-QCD_totalWeight = {}
-
-for subprocess in QCD_subprocesses:
-    QCD_fileWeight[subprocess] = {}
-    QCD_idxs[subprocess] = {}
-    QCD_totalWeight[subprocess] = {}
-    for region in Regions:
-        QCD_fileWeight[subprocess][region] = []
-        QCD_idxs[subprocess][region] = 0
-        QCD_totalWeight[subprocess][region] = 0
-            
-# loading weight info
-print("Loading Weight")
-
-for data_file in divided_files:
-    for subprocess in QCD_fileWeight:
-        if subprocess in data_file:
-            for region in QCD_fileWeight[subprocess]:
-                if region in data_file:
-                    print(data_file)
-                    rdf_np = ROOT.RDataFrame("Runs", data_file).AsNumpy(["genEventSumw"])
-                    QCD_fileWeight[subprocess][region].append(sum(rdf_np["genEventSumw"]))
-for subprocess in QCD_fileWeight:
-    for region in QCD_fileWeight[subprocess]:
-        QCD_totalWeight[subprocess][region] = sum(QCD_fileWeight[subprocess][region])
-
-print("Loading QCD")
-
-lumi = lumi_json[year]
-
-# making templates
-for data_file in divided_files:
-    for subprocess in QCD_fileWeight:
-        if subprocess in data_file:
-            for region in QCD_fileWeight[subprocess]:
-                if region in data_file:
-                    print(data_file)
-                    Xsec = Xsec_json["MC_QCDJets"][subprocess]
-                    rdf = ROOT.RDataFrame("Events", data_file)
-                    if rdf.Count().GetValue() < 1:
-                        print("Empty File")
-                    else:
-                        rdf_np = rdf.AsNumpy(["MJY", "MJJ"] + [MC_weight])
-                        hists["MC_QCDJets"][region].fill(MJY = rdf_np["MJY"], MJJ = rdf_np["MJJ"], weight = (rdf_np[MC_weight] * lumi * Xsec / QCD_totalWeight[subprocess][region]) )                
-
-with open("QCD_BE.pkl", "wb") as f:
-    pickle.dump(hists, f)
-
-print("LOADING QCD SUCCESSFUL")
-
-exit()
+data_binned = {}
+data_binned_error = {}
+for column in var_columns:
+    data_binned[column] = h_data[column].values()
+    data_binned_error[column] = np.sqrt((h_data[column].variances()))  # sqrt(N)
 #--------------------- extracting interested processes-----------------------------------------------
 h_QCD = {}
 h_WZ = {}
@@ -139,6 +96,8 @@ for column in var_columns:
     ratio[column] = []
     ratio_error[column] = []
 for subprocess in h_BKGs["MC_QCDJets"]:
+    if subprocess == "QCD-4Jets_HT-100to200": #This one seems to be buggy, ignore it
+        continue
     for column in var_columns:
         h_QCD[column] += h_BKGs["MC_QCDJets"][subprocess][column]
 
@@ -149,6 +108,8 @@ for subprocess in h_BKGs["MC_WZJets"]:
 
 
 for subprocess in h_BKGs["MC_HiggsJets"]:
+    if subprocess == "WplusH_Hto2B_Wto2Q_M-125": #This one seems to be buggy, ignore it
+        continue
     for column in var_columns:
         h_Higgs[column] += h_BKGs["MC_HiggsJets"][subprocess][column]
 
@@ -190,6 +151,9 @@ for column in var_columns:
         [h_SingleTop[column], h_Diboson[column], h_Higgs[column], h_TTBar[column], h_WZ[column], h_QCD[column] ],
         label = ["SingleTop", "Diboson", "Higgs", "TTBar", "WZ", "QCD"],
         color = ["darkblue", "beige", "red", "lightblue", "green", "orange"],
+        #[h_SingleTop[column], h_Diboson[column], h_Higgs[column], h_TTBar[column], h_WZ[column], h_QCD[column]],
+        #label = ["SingleTop", "Diboson", "Higgs", "TTBar", "WZ", "QCD"],
+        #color = ["darkblue", "beige", "red", "lightblue", "green", "orange"],
         stack = True,
         histtype = "fill",
         ax = ax1,
@@ -216,14 +180,19 @@ for column in var_columns:
     ax2.set_xlabel(column)
 
     fig.tight_layout()
-    fig.savefig(f"test_new_{column}.png")
+    fig.savefig(f"withremoval_stacksignal_{column}.png")
+    ax1.set_yscale("linear")
+    ax1.set_ylim(auto = True)
+    fig.savefig(f"linear_withremoval_stacksignal_{column}.png")
+    #fig.savefig(f"test_new_{column}.png")
+
     
     #----plotting signal------
 
     fig_s, (ax1_s, ax2_s) = plt.subplots(2, 1, figsize=(15, 12), gridspec_kw={"height_ratios": [3, 1]}, sharex=True)
     mplhep.histplot(
         [h_Signal[column] ],
-        label = ["Signal MX-3000_MY-300"],
+        label = ["Signal MX-3000_MY-300 (1 pb)"],
         color = ["purple"],
         stack = True,
         histtype = "fill",
@@ -248,5 +217,8 @@ for column in var_columns:
     ax2_s.set_xlabel(column)
 
     fig_s.tight_layout()
-    fig_s.savefig(f"test_new_signal_{column}.png")
+    fig_s.savefig(f"signal_{column}.png")
+    ax1_s.set_yscale("linear")
+    ax1_s.set_ylim(auto = True)
+    fig_s.savefig(f"linear_signal_{column}.png")
     
