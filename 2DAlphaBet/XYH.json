@@ -1,0 +1,121 @@
+{
+    "NAME": "XYH_test",
+    "GLOBAL": {
+        "FILE": "XYH4b_$process.root",
+        "FILE_UP": "XYH4b_$process_$syst_up.root",
+        "FILE_DOWN": "XYH4b_$process_$syst_down.root",
+        "HIST": "MJJvsMJY_$region__nominal",
+        "HIST_UP": "MJJvsMJY_$region__$syst_up",
+        "HIST_DOWN": "MJJvsMJY_$region__$syst_down",
+        "PATH": "rootfiles",
+        "SIGNAME": [
+            "MX-3000_MY-300"
+        ], 
+        "COMMENT": "NOTE: I am just using the leptonic ttbar as a signal template here. Combine requires at least one signal template in the likelihood, and since no signal templates were available, I just used leptonic ttbar"
+    },
+    "REGIONS": {
+        "VB1": {
+            "PROCESSES": [
+                "data_obs",
+                "SIGNAME_2022",
+                "TTto4Q_2022",
+                "TTtoLNu2Q_2022",
+                "TTto2L2Nu_2022"
+            ],
+            "BINNING": "default"
+        },
+        "VS2": {
+            "PROCESSES": [
+                "data_obs",
+                "SIGNAME_2022",
+                "TTto4Q_2022",
+                "TTtoLNu2Q_2022",
+                "TTto2L2Nu_2022"
+            ],
+            "BINNING": "default"
+        }
+    },
+    "PROCESSES": {
+        "data_obs": {
+            "SYSTEMATICS": [],
+            "SCALE": 1.0,
+            "COLOR": "black",
+            "TYPE": "DATA",
+            "ALIAS": "Data_2022",
+            "TITLE": "Data (2022)",
+            "LOC": "PATH/FILE:HIST"
+        },
+        "SIGNAME_2022": {
+            "SYSTEMATICS": [
+                "lumi_13p6TeV_2022"
+            ],
+            "SCALE": 1.0,
+            "COLOR": "black",
+            "TYPE": "SIGNAL",
+            "TITLE": "NMSSM_XYH",
+            "LOC": "PATH/FILE:HIST"
+        },
+        "TTto4Q_2022": {
+            "SYSTEMATICS": [
+                "lumi_13p6TeV_2022"
+            ],
+            "SCALE": 1.0,
+            "COLOR": "red",
+            "TYPE": "BKG",
+            "TITLE": "t#bar{t} (hadronic)",
+            "LOC": "PATH/FILE:HIST"
+        },
+        "TTtoLNu2Q_2022": {
+            "SYSTEMATICS": [
+                "lumi_13p6TeV_2022"
+            ],
+            "SCALE": 1.0,
+            "COLOR": "blue",
+            "TYPE": "BKG",
+            "TITLE": "t#bar{t} (semi-leptonic)",
+            "LOC": "PATH/FILE:HIST"
+        },
+        "TTto2L2Nu_2022": {
+            "SYSTEMATICS": [
+                "lumi_13p6TeV_2022"
+            ],
+            "SCALE": 1.0,
+            "COLOR": "magenta",
+            "TYPE": "BKG",
+            "TITLE": "t#bar{t} (leptonic)",
+            "LOC": "PATH/FILE:HIST"
+        }
+    },
+    "SYSTEMATICS": {
+        "lumi_13p6TeV_2022": {
+            "VAL": 1.05,
+            "CODE": 0
+        }
+    },
+    "BINNING": {
+        "default": {
+            "X": {
+                "NAME": "M_JY",
+                "TITLE": "M_{J}^{Y}",
+                "BINS": [60,100,140,200,500],
+                "SIGSTART": 140,
+                "SIGEND": 200
+            },
+            "Y": {
+                "NAME": "M_JJ",
+                "TITLE": "M_{JJ}",
+                "BINS": [960,1000,1040,1080,1120,1160,1200,1240,1280,1320,1360,1400,1440,1480,1520,4000]
+            }
+        }
+    },
+    "OPTIONS": {
+        "blindedPlots": [],
+        "blindedFit": [],
+        "plotPrefitSigInFitB": true,
+        "plotUncerts": true,
+        "plotEvtsPerUnit": true,
+        "plotTitles": false,
+        "plotTemplateComparisons": true,
+        "year": 2
+    }
+}

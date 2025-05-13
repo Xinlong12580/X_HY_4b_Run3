@@ -21,9 +21,10 @@ with open("raw_nano/Datasets_signal.json") as f:
     signal_json=json.load(f)
 #----------------------------- set bins, variable columns and other configs---------------------------------------------------------------------
 years = ["2022", "2022EE", "2023", "2023BPix"]
-processes = {"MC_QCDJets": ["QCD-4Jets_HT-400to600", "QCD-4Jets_HT-600to800", "QCD-4Jets_HT-800to1000", "QCD-4Jets_HT-1000to1200", "QCD-4Jets_HT-1200to1500", "QCD-4Jets_HT-1500to2000", "QCD-4Jets_HT-2000"], "MC_TTBarJets": ["TTto4Q"]}
+processes = {"MC_QCDJets": ["QCD-4Jets_HT-400to600", "QCD-4Jets_HT-600to800", "QCD-4Jets_HT-800to1000", "QCD-4Jets_HT-1000to1200", "QCD-4Jets_HT-1200to1500", "QCD-4Jets_HT-1500to2000", "QCD-4Jets_HT-2000"], "MC_TTBarJets": ["TTto4Q", "TTtoLNu2Q", "TTto2L2Nu"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
 regions = ["VS1", "VS2", "VS3", "VS4", "VB1", "VB2"]
-MJY_bins = array.array("d", np.linspace(0, 1000, 41) )
+MJY_bins = array.array("d", np.linspace(0, 600, 7) )
+MJY_bins = array.array("d", np.array([ 60, 100, 140, 200, 300, 500]) )
 MJJ_bins = array.array("d", np.linspace(0, 4000, 101) )
  
 h_BKG = {}
@@ -53,7 +54,7 @@ for data_file in data_files:
                         if rdf.Count().GetValue() < 1:
                             print("Empty File")
                         else:
-                            th2 = rdf.Histo2D(("Mass", "MJJ vs MJY", len(MJY_bins) - 1, MJY_bins, len(MJJ_bins) - 1, MJJ_bins), "MJY", "MJJ")
+                            th2 = rdf.Histo2D((f"Mass_{data_file}", "MJJ vs MJY", len(MJY_bins) - 1, MJY_bins, len(MJJ_bins) - 1, MJJ_bins), "MJY", "MJJ")
                             h_data[year][region].Add(th2.GetValue())
 with open("hist_data.pkl", "wb") as f:
     pickle.dump(h_data, f)
@@ -79,25 +80,31 @@ for year in years:
             if subprocess == "*":
                 if "SignalMC_" in process:
                     for _subprocess in signal_json[year][process]:
-                        BKG_fileWeight[year][process][_subprocess] = []
-                        BKG_totalWeight[year][process][_subprocess] = 0
+                        BKG_fileWeight[year][process][_subprocess] = {}
+                        BKG_totalWeight[year][process][_subprocess] = {}
                         h_BKGs[year][process][_subprocess] = {}
                         for region in regions:
+                            BKG_fileWeight[year][process][_subprocess][region] = []
+                            BKG_totalWeight[year][process][_subprocess][region] = 0
                             h_BKGs[year][process][_subprocess][region] = h_base.Clone(f"2DMass_MC_{year}_{process}_{_subprocess}_{region}")
                     break
                 elif "MC_" in process:
                     for _subprocess in Xsec_json[process]:
-                        BKG_fileWeight[year][process][_subprocess] = []
-                        BKG_totalWeight[year][process][_subprocess] = 0
+                        BKG_fileWeight[year][process][_subprocess] = {}
+                        BKG_totalWeight[year][process][_subprocess] = {}
                         h_BKGs[year][process][_subprocess] = {}
                         for region in regions:
+                            BKG_fileWeight[year][process][_subprocess][region] = []
+                            BKG_totalWeight[year][process][_subprocess][region] = 0
                             h_BKGs[year][process][_subprocess][region] = h_base.Clone(f"2DMass_MC_{year}_{process}_{_subprocess}_{region}")
                     break
             else:
-                BKG_fileWeight[year][process][subprocess] = []
-                BKG_totalWeight[year][process][subprocess] = 0
+                BKG_fileWeight[year][process][subprocess] = {}
+                BKG_totalWeight[year][process][subprocess] = {}
                 h_BKGs[year][process][subprocess] = {}
                 for region in regions:
+                    BKG_fileWeight[year][process][subprocess][region] = []
+                    BKG_totalWeight[year][process][subprocess][region] = 0
                     h_BKGs[year][process][subprocess][region] = h_base.Clone(f"2DMass_MC_{year}_{process}_{subprocess}_{region}")
             
 print(BKG_totalWeight)
@@ -111,13 +118,16 @@ for data_file in data_files:
                 if process in data_file:
                     for subprocess in BKG_fileWeight[year][process]:
                         if subprocess in data_file:
-                            print(data_file)
-                            rdf_np = ROOT.RDataFrame("Runs", data_file).AsNumpy(["genEventSumw"])
-                            BKG_fileWeight[year][process][subprocess].append(sum(rdf_np["genEventSumw"]))
+                            for region in BKG_fileWeight[year][process][subprocess]:
+                                if region in data_file:
+                                    print(data_file)
+                                    rdf_np = ROOT.RDataFrame("Runs", data_file).AsNumpy(["genEventSumw"])
+                                    BKG_fileWeight[year][process][subprocess][region].append(sum(rdf_np["genEventSumw"]))
 for year in BKG_fileWeight:
     for process in BKG_fileWeight[year]:
         for subprocess in BKG_fileWeight[year][process]:
-            BKG_totalWeight[year][process][subprocess] = sum(BKG_fileWeight[year][process][subprocess])
+            for region in BKG_fileWeight[year][process][subprocess]:
+                BKG_totalWeight[year][process][subprocess][region] = sum(BKG_fileWeight[year][process][subprocess][region])
 
 print("Loading BKG")
 
@@ -142,8 +152,8 @@ for data_file in data_files:
                                     if rdf.Count().GetValue() <= 0 or len(rdf.GetColumnNames()) < 1:
                                         print("Empty File")
                                     else:
-                                        rdf = rdf.Define("NormalizedWeight", f"{lumi * Xsec / BKG_totalWeight[year][process][subprocess]} * {MC_weight}")
-                                        th2 = rdf.Histo2D(("Mass", "MJJ vs MJY", len(MJY_bins) - 1, MJY_bins, len(MJJ_bins) - 1, MJJ_bins), "MJY", "MJJ", "NormalizedWeight")
+                                        rdf = rdf.Define("NormalizedWeight", f"{lumi * Xsec / BKG_totalWeight[year][process][subprocess][region]} * {MC_weight}")
+                                        th2 = rdf.Histo2D((f"Mass_{data_file}", "MJJ vs MJY", len(MJY_bins) - 1, MJY_bins, len(MJJ_bins) - 1, MJJ_bins), "MJY", "MJJ", "NormalizedWeight")
                                         h_BKGs[year][process][subprocess][region].Add(th2.GetValue())
 h_All = {"data" : h_data, "BKGs" : h_BKGs}
 with open("hists_division_TH.pkl", "wb") as f:

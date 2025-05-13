@@ -15,13 +15,13 @@ args = parser.parse_args()
 CompileCpp("cpp_modules/deltaRMatching.cc")
 CompileCpp("cpp_modules/helperFunctions.cc")
 CompileCpp("cpp_modules/massMatching.cc")
-CompileCpp("cpp_modules/Matching.cc")
+CompileCpp("cpp_modules/selection_functions.cc")
 ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job)
 #ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job, 10000)
-ana.selection2()
+ana.selection_2p1()
 file_basename=os.path.basename(args.dataset)
 ana.output = "tagged_selected_" + file_basename
-columns = ["leadingFatJetPt","leadingFatJetPhi","leadingFatJetEta", "leadingFatJetMsoftdrop", "MassLeadingTwoFatJets", "MassHiggsCandidate", "PtHiggsCandidate", "EtaHiggsCandidate", "PhiHiggsCandidate", "MassYCandidate", "PtYCandidate", "EtaYCandidate", "PhiYCandidate", "MJJ", "MJY", "PNet_H", "PNet_Y"]
+columns = [ "PtJY0", "PtJY1", "EtaJY0", "EtaJY1", "PhiJY0", "PhiJY1", "MassJY0", "MassJY1", "MassJJH", "MassHiggsCandidate", "PtHiggsCandidate", "EtaHiggsCandidate", "PhiHiggsCandidate", "MassYCandidate", "MJJH", "MJY", "PNet_H", "PNet_Y"]
 if "MC" in args.dataset:
     ana.snapshot(columns + ["genWeight"])
 else:

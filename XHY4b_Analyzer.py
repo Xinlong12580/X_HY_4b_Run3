@@ -1,6 +1,7 @@
 import ROOT
 import json
 from hist import Hist
+import array
 from TIMBER.Analyzer import Correction, CutGroup, ModuleWorker, analyzer, Node
 from TIMBER.Tools.Common import CompileCpp, OpenJSON
 from TIMBER.Tools.AutoPU import ApplyPU, AutoPU
@@ -26,6 +27,7 @@ class XHY4b_Analyzer:
             self.files = None
             self.output = None
             self.analyzer = None
+            self.totalWeight = {}
             return
 
         if "Data" in self.dataset:
@@ -38,6 +40,7 @@ class XHY4b_Analyzer:
         self.output = f"output_{self.n_files}_{self.i_job}.root"
         
         
+        self.totalWeight = {}
         #extract input files and make analyzer
         if ".root" in self.dataset:
             self.files=[self.dataset]
@@ -83,20 +86,79 @@ class XHY4b_Analyzer:
     def make_analyzer(self):
         self.analyzer = analyzer(self.files)
     
+    def register_weight(self, var, weight = "genWeight"):
+        if self.isData:
+            self.totalWeight[var] = self.analyzer.GetActiveNode().DataFrame.Count().GetValue()
+        else:
+            self.totalWeight[var] = self.analyzer.GetActiveNode().DataFrame.Sum(weight).GetValue()
+    
     def save_fileInfo(self):
         run_rdf = ROOT.RDataFrame("Runs", self.files)
         opts = ROOT.RDF.RSnapshotOptions()
         opts.fMode = "UPDATE"
         run_rdf.Snapshot("Runs", self.output, "", opts)
     
+    def save_cutflowInfo(self):     
+        in_file = ROOT.TFile.Open(self.files[0],"READ")    
+        cutflow_tree = in_file.Get("Cutflow")
+        new_tree =  (not (cutflow_tree and isinstance(cutflow_tree, ROOT.TTree) and cutflow_tree.GetEntries() == 1))
+        squashing = cutflow_tree and isinstance(cutflow_tree, ROOT.TTree)
+        in_file.Close()
+        if new_tree:
+            if squashing:
+                rdf_tmp = ROOT.RDataFrame("Cutflow", self.files)
+                branches = rdf_tmp.GetColumnNames()
+                sums = {branch: 0.0 for branch in branches}
+                for branch in branches:
+                    sums[branch] = rdf_tmp.Sum(branch).GetValue()
+                for key in sums:
+                    print(key, sums[key])
+                #return
+                tmp_file = ROOT.TFile.Open("tmp.root","RECREATE")    
+                squashed_tree = ROOT.TTree("Cutflow", "Cutflow")
+                out_vars = {}
+                for branch in branches:
+                    print(sums[branch])
+                    vec = array.array('f', [sums[branch]])
+                    out_vars[branch] = vec
+                    
+                    squashed_tree.Branch(f"{branch}", vec, f"{branch}/F")    
+                    out_vars[branch][0] = sums[branch]
+                squashed_tree.Fill()
+                squashed_tree.SetDirectory(tmp_file)
+                squashed_tree.Write()
+                tmp_file.Close()
+            else:
+                tmp_file = ROOT.TFile.Open("tmp.root","RECREATE")    
+                cutflow_tree = ROOT.TTree("Cutflow", "Cutflow")
+                n_files = array.array('f', [len(self.files)])  
+                cutflow_tree.Branch("n_files", n_files, "n_files/F")
+                cutflow_tree.Fill()
+                cutflow_tree.SetDirectory(tmp_file)
+                cutflow_tree.Write()
+                tmp_file.Close()
+        if new_tree:
+            cutflow_rdf = ROOT.RDataFrame("Cutflow", "tmp.root")
+        else:
+            cutflow_rdf = ROOT.RDataFrame("Cutflow", self.files)
+        for w_name in self.totalWeight:
+            cutflow_rdf = cutflow_rdf.Define(w_name, f"{self.totalWeight[w_name]}")
+        opts = ROOT.RDF.RSnapshotOptions()
+        opts.fMode = "UPDATE"
+        cutflow_rdf.Snapshot("Cutflow", self.output, "", opts)
+         
+
+
+ 
     def skim(self):
         #make skim cut
-        nBeforeSkim = self.analyzer.GetActiveNode().DataFrame.Count().GetValue()
-        self.analyzer.Define("nBeforeSkim", f"{nBeforeSkim}")
-        self.analyzer.Define("SkimFlag","skimFlag(nFatJet,FatJet_eta,FatJet_pt,FatJet_msoftdrop,nJet,Jet_eta,Jet_pt,nElectron,Electron_cutBased,nMuon,Muon_looseId,Muon_pfIsoId,Muon_miniIsoId)")
+        self.register_weight("BeforeSkim")
+        self.analyzer.Define("SkimFlag","skimFlag(nFatJet,FatJet_pt, FatJet_eta,FatJet_msoftdrop,nJet,Jet_pt, Jet_eta, nElectron,Electron_cutBased,nMuon,Muon_looseId,Muon_pfIsoId,Muon_miniIsoId)")
         self.analyzer.Cut("SkimFlagCut","SkimFlag>0")
-        nAfterSkim = self.analyzer.GetActiveNode().DataFrame.Count().GetValue()
-        self.analyzer.Define("nAfterSkim", f"{nAfterSkim}")
+        self.register_weight("Skim")
+
+
+
 
     def mask_goldenJson(self):
         if self.isData == 1:
@@ -109,37 +171,9 @@ class XHY4b_Analyzer:
             self.analyzer.Cut("goldenJsonCut", "goldenJsonMask == 1")
         else:
             raise ValueError("Golden json files can only e applied to data files") 
+        self.register_weight("GoldenJson")
          
 
-    def lumiXsecWeight(self):
-        if self.isData == 0:
-            luminosity = -1
-            for year in self.luminosity_json:
-                if (year + "__") in self.dataset:
-                    luminosity = self.luminosity_json[year]
-                    break
-            if luminosity < 0:
-                raise ValueError("Loading luminosity failed") 
-                
-            Xsection = -1
-            for process in self.Xsection_json:
-                if (process + "__") in self.dataset:
-                    for subprocess in self.Xsection_json[process]:
-                        print(subprocess)
-                        if ((subprocess) in self.dataset):
-                            Xsection = self.Xsection_json[process][subprocess]
-                            break
-                if Xsection >= 0:
-                    break
-            if Xsection < 0:
-                raise ValueError("Loading Xsection failed")
-              
-            weightSum = ROOT.RDataFrame("Runs", self.files).Sum("genEventSumw").GetValue()
-             
-            print(f"reweightng MC samples {self.dataset} with luminosity {luminosity} and Xsection {Xsection}")
-            self.analyzer.Define("lumiXsecWeight", f"lumiXsecWeight({luminosity}, {Xsection}, {weightSum}, genWeight)")
-        else:
-            raise ValueError("Weight can only e applied to MC files") 
    
     def selection1(self):
         #self.analyzer.Cut("TwoFatJetsCut", "nFatJet >= 2")
@@ -149,10 +183,12 @@ class XHY4b_Analyzer:
         self.analyzer.Define("leadingFatJetEta", "FatJet_eta[0]")
         
     def selection2(self):
-        self.analyzer.Cut("SkimCut", "SkimFlag == 2 || SkimFlag == 3") # it becones (B and not C) 
+        self.analyzer.Cut("SkimCut", "SkimFlag == 1 || SkimFlag == 3") # it becones (B and not C) 
+        self.register_weight("SkimOf1p1")
         self.analyzer.Define("nEle", "nElectrons(nElectron, Electron_cutBased, 0, Electron_pt,20, Electron_eta)")
         self.analyzer.Define("nMu", "nMuons(nMuon, Muon_looseId, Muon_pfIsoId, 0, Muon_pt, 20, Muon_eta)")
         self.analyzer.Cut("LeptonVetoCut", "nMu==0 && nEle==0")
+        self.register_weight("LeptonVeto")
         
         with open("raw_nano/Trigger.json") as f:
             triggers = json.load(f)
@@ -161,19 +197,27 @@ class XHY4b_Analyzer:
         triggerCut = self.analyzer.GetTriggerString(hadron_triggers)
         print(triggerCut)
         self.analyzer.Cut("TriggerCut", triggerCut)
+        self.register_weight("TriggerCut")
         flagFilters = ["Flag_BadPFMuonFilter","Flag_EcalDeadCellTriggerPrimitiveFilter","Flag_HBHENoiseIsoFilter","Flag_HBHENoiseFilter","Flag_globalSuperTightHalo2016Filter","Flag_goodVertices"]
         flagFilterCut = self.analyzer.GetFlagString(flagFilters)
         self.analyzer.Cut("FlagCut", flagFilterCut)
+        self.register_weight("FlagCut")
         
         self.analyzer.Cut("IDCut","FatJet_jetId[0] > 1 && FatJet_jetId[1] > 1")
+        self.register_weight("FatJetID")
         self.analyzer.Cut("PtCut", "FatJet_pt[0] > 450 && FatJet_pt[1] > 450")
+        self.register_weight("FatJetPt")
         self.analyzer.Cut("MassCut", "FatJet_msoftdrop[0] > 60 && FatJet_msoftdrop[1] > 60")
+        self.register_weight("FatJetMass")
         self.analyzer.Cut("DeltaEtaCut", "abs(FatJet_eta[0] - FatJet_eta[1]) < 1.3")
+        self.register_weight("DeltaEta")
         self.analyzer.Define("MassLeadingTwoFatJets", "InvMass_PtEtaPhiM({FatJet_pt[0], FatJet_pt[1]}, {FatJet_eta[0], FatJet_eta[1]}, {FatJet_phi[0], FatJet_phi[1]}, {FatJet_msoftdrop[0], FatJet_msoftdrop[1]})")
         self.analyzer.Cut("MJJCut", "MassLeadingTwoFatJets > 700")
+        self.register_weight("MassJJ")
         self.analyzer.Define("idxH", "higgsMassMatching(FatJet_msoftdrop[0], FatJet_msoftdrop[1])")
         self.analyzer.Define("idxY", "1 - idxH")
         self.analyzer.Cut("HiggsCut", "idxH >= 0") 
+        self.register_weight("HiggsMatch")
         self.analyzer.Define("MassHiggsCandidate", "FatJet_msoftdrop[idxH]")
         self.analyzer.Define("PtHiggsCandidate", "FatJet_pt[idxH]")
         self.analyzer.Define("EtaHiggsCandidate", "FatJet_eta[idxH]")
@@ -195,6 +239,75 @@ class XHY4b_Analyzer:
         self.analyzer.Define("PNet_Y", "FatJet_particleNet_XbbVsQCD[idxY]")
         
         print(f"DEBUG: { self.analyzer.GetActiveNode().DataFrame.Count().GetValue()}") 
+        
+    def selection_2p1(self):
+        self.analyzer.Cut("SkimCut", "SkimFlag == 2 || SkimFlag == 3")
+        self.register_weight("SkimOf2p1")
+        self.analyzer.Define("nEle", "nElectrons(nElectron, Electron_cutBased, 0, Electron_pt,20, Electron_eta)")
+        self.analyzer.Define("nMu", "nMuons(nMuon, Muon_looseId, Muon_pfIsoId, 0, Muon_pt, 20, Muon_eta)")
+        self.analyzer.Cut("LeptonVetoCut", "nMu==0 && nEle==0")
+        self.register_weight("LeptonVeto")
+        
+        with open("raw_nano/Trigger.json") as f:
+            triggers = json.load(f)
+        hadron_triggers = triggers["Hadron"][self.year]
+        print(hadron_triggers)
+        triggerCut = self.analyzer.GetTriggerString(hadron_triggers)
+        print(triggerCut)
+        self.analyzer.Cut("TriggerCut", triggerCut)
+        self.register_weight("TriggerCut")
+        flagFilters = ["Flag_BadPFMuonFilter","Flag_EcalDeadCellTriggerPrimitiveFilter","Flag_HBHENoiseIsoFilter","Flag_HBHENoiseFilter","Flag_globalSuperTightHalo2016Filter","Flag_goodVertices"]
+        flagFilterCut = self.analyzer.GetFlagString(flagFilters)
+        self.analyzer.Cut("FlagCut", flagFilterCut)
+        self.register_weight("FlagCut")
+        
+        self.analyzer.Cut("IDCut","FatJet_jetId[0] > 1 ")
+        self.register_weight("FatJetID")
+        self.analyzer.Cut("PtCut", "FatJet_pt[0] > 450")
+        self.register_weight("FatJetPt")
+        self.analyzer.Cut("HiggsMassCut", "FatJet_msoftdrop[0] > 100 && FatJet_msoftdrop[0] < 150")
+        self.register_weight("HiggsMatch")
+
+        self.analyzer.Define("DeltaR_HJ", "DeltaR(Jet_eta, Jet_phi, FatJet_eta[0], FatJet_phi[0])")
+        self.analyzer.Define("idxJY", "FindIdxJY(DeltaR_HJ, 1.2)")
+        self.analyzer.Cut("IdxJYCut", "idxJY[0] >= 0 && idxJY[1] >= 0")
+        self.register_weight("JYMatch")
+        self.analyzer.Define("idxJY0", "idxJY[0]")
+        self.analyzer.Define("idxJY1", "idxJY[1]")
+        self.analyzer.Define("PtJY0", "Jet_pt[idxJY0]")
+        self.analyzer.Define("PtJY1", "Jet_pt[idxJY1]")
+        self.analyzer.Define("EtaJY0", "Jet_eta[idxJY0]")
+        self.analyzer.Define("EtaJY1", "Jet_eta[idxJY1]")
+        self.analyzer.Define("PhiJY0", "Jet_phi[idxJY0]")
+        self.analyzer.Define("PhiJY1", "Jet_phi[idxJY1]")
+        self.analyzer.Define("MassJY0", "Jet_mass[idxJY0]")
+        self.analyzer.Define("MassJY1", "Jet_mass[idxJY1]")
+        self.analyzer.Cut("JYPtCut", "PtJY0 > 100 && PtJY1 > 100")
+        self.register_weight("JYPt")
+        
+        self.analyzer.Define("DeltaR_JJ", "DeltaR({EtaJY0, EtaJY1 }, {PhiJY0, PhiJY1 })")
+        self.analyzer.Cut("DeltaRCut", "DeltaR_JJ > 0.4")
+        self.register_weight("JYJYDeltaR")
+        
+        
+        self.analyzer.Define("MassJJH", "InvMass_PtEtaPhiM({FatJet_pt[0], PtJY0, PtJY1}, {FatJet_eta[0], EtaJY0, EtaJY1}, {FatJet_phi[0], PhiJY0, PhiJY1}, {FatJet_msoftdrop[0], MassJY0, MassJY1})")
+        self.analyzer.Cut("MJJCut", "MassJJH > 700")
+        self.register_weight("MassJJH")
+        self.analyzer.Define("MassHiggsCandidate", "FatJet_msoftdrop[0]")
+        self.analyzer.Define("PtHiggsCandidate", "FatJet_pt[0]")
+        self.analyzer.Define("EtaHiggsCandidate", "FatJet_eta[0]")
+        self.analyzer.Define("PhiHiggsCandidate", "FatJet_phi[0]")
+        
+        self.analyzer.Define("MassYCandidate", "InvMass_PtEtaPhiM({PtJY0, PtJY1}, {EtaJY0, EtaJY1}, {PhiJY0, PhiJY1}, {MassJY0, MassJY1} )" )
+        
+        
+        self.analyzer.Define("MJY", "MassYCandidate")
+        self.analyzer.Define("MJJH", "MassJJH")
+        self.analyzer.Define("PNet_H", "FatJet_particleNet_XbbVsQCD[0]")
+        self.analyzer.Define("PNet_Y0", "Jet_btagPNetB[idxJY0]")
+        self.analyzer.Define("PNet_Y1", "Jet_btagPNetB[idxJY1]")
+        
+        print(f"DEBUG: { self.analyzer.GetActiveNode().DataFrame.Count().GetValue()}") 
 
     def b_tagging(self):
         T_score = 0.9
@@ -212,8 +325,26 @@ class XHY4b_Analyzer:
         self.analyzer.Define("Region_VS4", f"PNet_H >= {Aux_score2} && PNet_H < {Aux_score1} && PNet_Y >= {L_score}")
         self.analyzer.Define("Region_VB2", f"PNet_H >= {Aux_score2} && PNet_H < {Aux_score1} && PNet_Y < {L_score}")
 
+    def b_tagging_2p1(self):
+        T_score = 0.9
+        L_score = 0.8
+        Aux_score1 = 0.55
+        Aux_score2 = 0.3
+        self.analyzer.Define("PNet_Y", "std::min(PNet_Y0, PNet_Y1)")
+        self.analyzer.Define("Region_SR1", f"PNet_H >= {T_score} && PNet_Y >= {T_score}")
+        self.analyzer.Define("Region_SR2", f"PNet_H >= {L_score} && PNet_Y >= {L_score}")
+        self.analyzer.Define("Region_SB1", f"PNet_H >= {T_score} && PNet_Y < {L_score}")
+        self.analyzer.Define("Region_SB2", f"PNet_H >= {L_score} && PNet_Y < {L_score}")
+        self.analyzer.Define("Region_VS1", f"PNet_H >= {Aux_score1} && PNet_H < {L_score} && PNet_Y >= {T_score}")
+        self.analyzer.Define("Region_VS2", f"PNet_H >= {Aux_score1} && PNet_H < {L_score} && PNet_Y >= {L_score}")
+        self.analyzer.Define("Region_VB1", f"PNet_H >= {Aux_score1} && PNet_H < {L_score} && PNet_Y < {L_score}")
+        self.analyzer.Define("Region_VS3", f"PNet_H >= {Aux_score2} && PNet_H < {Aux_score1} && PNet_Y >= {T_score}")
+        self.analyzer.Define("Region_VS4", f"PNet_H >= {Aux_score2} && PNet_H < {Aux_score1} && PNet_Y >= {L_score}")
+        self.analyzer.Define("Region_VB2", f"PNet_H >= {Aux_score2} && PNet_H < {Aux_score1} && PNet_Y < {L_score}")
+
     def divide(self, region):
         self.analyzer.Cut("RegionCut","Region_" + region)
+        self.register_weight("Region_"+region)
     
     def snapshot(self, columns = None):
         if columns == None:
@@ -249,8 +380,51 @@ class XHY4b_Analyzer:
         print(len(columns))
         self.analyzer.Snapshot(columns, self.output, "Events")
     
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
         
-        
+    def lumiXsecWeight(self): #This function is depricated
+        if self.isData == 0:
+            luminosity = -1
+            for year in self.luminosity_json:
+                if (year + "__") in self.dataset:
+                    luminosity = self.luminosity_json[year]
+                    break
+            if luminosity < 0:
+                raise ValueError("Loading luminosity failed") 
+                
+            Xsection = -1
+            for process in self.Xsection_json:
+                if (process + "__") in self.dataset:
+                    for subprocess in self.Xsection_json[process]:
+                        print(subprocess)
+                        if ((subprocess) in self.dataset):
+                            Xsection = self.Xsection_json[process][subprocess]
+                            break
+                if Xsection >= 0:
+                    break
+            if Xsection < 0:
+                raise ValueError("Loading Xsection failed")
+              
+            weightSum = ROOT.RDataFrame("Runs", self.files).Sum("genEventSumw").GetValue()
+             
+            print(f"reweightng MC samples {self.dataset} with luminosity {luminosity} and Xsection {Xsection}")
+            self.analyzer.Define("lumiXsecWeight", f"lumiXsecWeight({luminosity}, {Xsection}, {weightSum}, genWeight)")
+        else:
+            raise ValueError("Weight can only e applied to MC files") 
         
 
 
