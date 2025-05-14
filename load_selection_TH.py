@@ -46,8 +46,11 @@ for column in var_columns:
 MC_weight = "genWeight"
 mplhep.style.use("CMS")
 
-year = "2022"
 processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
+save_name = "hists_selection_TH.pkl" 
+
+
+
 #------------------------------ making data template ------------------------------------------------------------
 
 print("Loading data")
@@ -159,7 +162,7 @@ for data_file in data_files:
                                     h_BKGs[year][process][subprocess][column].Add(th1.GetValue())
 
 h_All = {"data" : h_data, "BKGs" : h_BKGs}
-with open("hists_selection_TH.pkl", "wb") as f:
+with open(save_name, "wb") as f:
     pickle.dump(h_All, f)
 
 print("LOADING BKG SUCCESSFUL")

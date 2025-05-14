@@ -49,7 +49,6 @@ for column in var_columns:
 MC_weight = "genWeight"
 mplhep.style.use("CMS")
 
-year = "2022"
 processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
 #------------------------------ making data template ------------------------------------------------------------
 
@@ -157,6 +156,8 @@ for data_file in data_files:
                             if rdf.Count().GetValue() <= 0 or len(rdf.GetColumnNames()) < 1:
                                 print("Empty File")
                             else:
+                                print(lumi, BKG_totalWeight[year][process][subprocess])
+                        
                                 rdf = rdf.Define("ScaledWeight_selection", f"{lumi * Xsec / BKG_totalWeight[year][process][subprocess]} * {MC_weight}")
                                 for column in var_columns:
                                     th1 = rdf.Histo1D((f"selection_MC_{data_file}", f"{column}", len(bins[column]) - 1, bins[column]), column, "ScaledWeight_selection")

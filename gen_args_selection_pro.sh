@@ -11,9 +11,13 @@ output=selection_args.txt
 #for file in ${skim_files_MC[@]}; do
 #    ./gen_args_selection.sh $basedir_MC$file 2022 $output
 #done
-skim_files=$(eosls /store/user/xinlong/XHY4bRun3_2022_skim)
-basedir='root://cmsxrootd.fnal.gov//store/user/xinlong/XHY4bRun3_2022_skim/'
+skim_files=$(eosls /store/user/xinlong/XHY4bRun3_2022_skim_tmp)
+basedir='root://cmsxrootd.fnal.gov//store/user/xinlong/XHY4bRun3_2022_skim_tmp/'
 for file in ${skim_files[@]}; do
+    if [[ "$file" != *"Data"* ]]; then
+        continue
+    fi
+    
     if [[ "$file" == *"2022__"* ]]; then
         ./gen_args_selection.sh $basedir$file 2022 $output
     elif [[ "$file" == *"2022EE__"* ]]; then

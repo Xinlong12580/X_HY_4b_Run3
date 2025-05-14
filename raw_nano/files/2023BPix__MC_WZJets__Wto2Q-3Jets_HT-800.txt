@@ -1,3 +1,0 @@
-root://cmsxrootd.fnal.gov//store/mc/Run3Summer23BPixNanoAODv12/Wto2Q-3Jets_HT-800_TuneCP5_13p6TeV_madgraphMLM-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_postBPix_v2-v2/30000/cc6b61d7-7c89-45e0-85fb-f6f6579e936b.root
-root://cmsxrootd.fnal.gov//store/mc/Run3Summer23BPixNanoAODv12/Wto2Q-3Jets_HT-800_TuneCP5_13p6TeV_madgraphMLM-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_postBPix_v2-v2/30000/846fb81a-6e4f-4ef4-9f28-ecdba1e492e3.root
-root://cmsxrootd.fnal.gov//store/mc/Run3Summer23BPixNanoAODv12/Wto2Q-3Jets_HT-800_TuneCP5_13p6TeV_madgraphMLM-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_postBPix_v2-v2/30000/850b082a-37d8-4681-8e14-8643bece1b71.root

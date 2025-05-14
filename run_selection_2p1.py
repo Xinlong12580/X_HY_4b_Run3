@@ -21,10 +21,11 @@ ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job)
 ana.selection_2p1()
 file_basename=os.path.basename(args.dataset)
 ana.output = "tagged_selected_" + file_basename
-columns = [ "PtJY0", "PtJY1", "EtaJY0", "EtaJY1", "PhiJY0", "PhiJY1", "MassJY0", "MassJY1", "MassJJH", "MassHiggsCandidate", "PtHiggsCandidate", "EtaHiggsCandidate", "PhiHiggsCandidate", "MassYCandidate", "MJJH", "MJY", "PNet_H", "PNet_Y"]
+columns = [ "PtJY0", "PtJY1", "EtaJY0", "EtaJY1", "PhiJY0", "PhiJY1", "MassJY0", "MassJY1", "MassJJH", "MassHiggsCandidate", "PtHiggsCandidate", "EtaHiggsCandidate", "PhiHiggsCandidate", "MassYCandidate", "MJJH", "MJY", "PNet_H", "PNet_Y0", "PNet_Y1"]
 if "MC" in args.dataset:
     ana.snapshot(columns + ["genWeight"])
 else:
     ana.snapshot(columns)
 
 ana.save_fileInfo()
+ana.save_cutflowInfo()

@@ -15,14 +15,16 @@ args = parser.parse_args()
 
 CompileCpp("cpp_modules/skim_function.cc")
 CompileCpp("cpp_modules/goldenJson_mask.cc")
-ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job)
-#ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job, 1000)
+#ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job)
+ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job, 10000)
 ana.skim()
 if "Data" in args.dataset:
     ana.mask_goldenJson()
+    ana.cut_goldenJson()
 file_basename=os.path.basename(args.dataset)
 ana.output = "skimmed_" + file_basename + f"_n-{args.n_files}_i-{args.i_job}.root"
 if "Data" in args.dataset:
     ana.output = "masked_skimmed_" + file_basename + f"_n-{args.n_files}_i-{args.i_job}.root"
 ana.snapshot()
 ana.save_fileInfo()
+ana.save_cutflowInfo()

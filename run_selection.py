@@ -28,3 +28,4 @@ else:
     ana.snapshot(columns)
 
 ana.save_fileInfo()
+ana.save_cutflowInfo()

@@ -1,0 +1,9 @@
+	out_histname	binning
+0	data_obs_VB1_FULL	default
+7	data_obs_VS2_FULL	default
+2	TTto2L2Nu_2022_VB1_FULL	default
+9	TTto2L2Nu_2022_VS2_FULL	default
+4	TTto4Q_2022_VB1_FULL	default
+11	TTto4Q_2022_VS2_FULL	default
+6	TTtoLNu2Q_2022_VB1_FULL	default
+13	TTtoLNu2Q_2022_VS2_FULL	default

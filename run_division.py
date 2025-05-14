@@ -26,3 +26,4 @@ else:
     ana.snapshot()
 
 ana.save_fileInfo()
+ana.save_cutflowInfo()

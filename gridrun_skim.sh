@@ -68,4 +68,4 @@ ls | tee -a $root_dir/out.txt
 # move all snapshots to the EOS (there will only be one)
 #xrdcp -f *.root root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_2022_skim/
 xrdcp -f *.root root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_2022_skim_tmp/
-xrdcp -f $root_dir/out.txt root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3Run3_2022_skim/
+xrdcp -f $root_dir/out.txt root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_2022_skim_tmp/

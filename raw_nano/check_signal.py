@@ -32,7 +32,7 @@ with open("GoodMassPoints.txt", "w") as f:
         f.write(f"{MXs[i]} {MYs[i]}\n")
 
         
-'''
+
 fig = plt.figure(dpi=100, figsize = (10, 8))
 ax = fig.add_subplot(1, 1, 1)
 ax.scatter(MXs, MYs, marker='*')
@@ -43,4 +43,4 @@ ax.set_xscale("log")
 ax.set_yscale("log")
 ax.set_xlabel("MX(GeV)")
 ax.set_ylabel("MY(GeV)")
-'''
+plt.savefig("signal_mass_points.png")

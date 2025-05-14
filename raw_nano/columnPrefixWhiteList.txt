@@ -1,0 +1,4 @@
+HLT_AK8PF
+HLT_PFJet
+HLT_Ele32
+HLT_IsoMu27
