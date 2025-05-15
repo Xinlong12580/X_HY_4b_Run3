@@ -29,7 +29,7 @@ def rebin_TH1(h, bins, name = "default"):
         up_index = bins_map[i + 1]
         for j in range(low_index, up_index):
             value += h.GetBinContent(j + 1)
-            sigma += np.sqrt(sigma**2 + h.GetBinError(j + 1)**2)
+            sigma = np.sqrt(sigma**2 + h.GetBinError(j + 1)**2)
         h_merged.SetBinContent(i + 1, value)
         h_merged.SetBinError(i + 1, sigma)
     return h_merged
@@ -84,7 +84,7 @@ def rebin_TH2(h, xbins, ybins, name = "default"):
             for m in range(low_index_x, up_index_x):
                 for n in range(low_index_y, up_index_y):
                     value += h.GetBinContent(m + 1, n + 1)
-                    sigma += np.sqrt(sigma**2 + h.GetBinError(m + 1, n + 1)**2)
+                    sigma = np.sqrt(sigma**2 + h.GetBinError(m + 1, n + 1)**2)
             h_merged.SetBinContent(i + 1, j + 1, value)
             h_merged.SetBinError(i + 1, j + 1, sigma)
     return h_merged
