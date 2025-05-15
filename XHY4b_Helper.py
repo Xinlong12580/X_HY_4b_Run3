@@ -21,8 +21,7 @@ def rebin_TH1(h, bins, name = "default"):
     if name == "default":
         name = h.GetName() + "_merged"
     title = h.GetTitle() 
-    abins = array.array("d", bins)
-    h_merged = ROOT.TH1D(name, title, len(abins) - 1, abins)
+    h_merged = ROOT.TH1D(name, title, len(bins) - 1, bins)
     for i in range(len(bins) - 1):
         value = 0
         sigma = 0
@@ -39,7 +38,7 @@ def rebin_TH1(h, bins, name = "default"):
     
     
     
-def rebin_TH2(h, xbins, ybins, name = "New"):
+def rebin_TH2(h, xbins, ybins, name = "default"):
     nbins_ori_x = h.GetNbinsX()
     nbins_ori_y = h.GetNbinsY()
     
@@ -53,34 +52,35 @@ def rebin_TH2(h, xbins, ybins, name = "New"):
         bin_edge_x = xbins[i]
         for j in range(len(bins_ori_x)):
             bin_edge_ori_x = bins_ori_x[j]
-            if abs(bin_edge_ori_x - bin_edge_x) < (1e-6 * xbins[1] - xbins[0] ):
+            
+            if abs(bin_edge_ori_x - bin_edge_x) < (1e-6 * (xbins[1] - xbins[0]) ):
                 bins_map_x[i] = j
                 break
         if bins_map_x[i] == -1:
-           print(f"XBins of the input TH1:", bins_ori_x)
-           raise ValueError(f"XBin edge {bin_edge_x} not found in the input TH1") 
+           print(f"XBins of the input TH2:", bins_ori_x)
+           raise ValueError(f"XBin edge {bin_edge_x} not found in the input TH2") 
     for i in range(len(ybins)):
         bin_edge_y = ybins[i]
         for j in range(len(bins_ori_y)):
             bin_edge_ori_y = bins_ori_y[j]
-            if abs(bin_edge_ori_y - bin_edge_y) < (1e-6 * ybins[1] - ybins[0] ):
+            if abs(bin_edge_ori_y - bin_edge_y) < (1e-6 * (ybins[1] - ybins[0]) ):
                 bins_map_y[i] = j
                 break
         if bins_map_y[i] == -1:
-           print(f"XBins of the input TH1:", bins_ori_x)
-           raise ValueError(f"XBin edge {bin_edge_x} not found in the input TH1") 
+           print(f"YBins of the input TH2:", bins_ori_x)
+           raise ValueError(f"YBin edge {bin_edge_y} not found in the input TH2") 
     title = h.GetTitle() 
     if name == "default":
         name = h.GetName() + "_merged"
-    h_merged = ROOT.TH2D(name, title, len(xbins) - 1, array.array("d", xbins), len(ybins) - 1,  array.array("d", ybins))
+    h_merged = ROOT.TH2D(name, title, len(xbins) - 1, xbins, len(ybins) - 1, ybins)
     for i in range(len(xbins) - 1):
         for j in range(len(ybins) - 1):
             value = 0
             sigma = 0
             low_index_x = bins_map_x[i]
             up_index_x = bins_map_x[i + 1]
-            low_index_y = bins_map_y[i]
-            up_index_y = bins_map_y[i + 1]
+            low_index_y = bins_map_y[j]
+            up_index_y = bins_map_y[j + 1]
             for m in range(low_index_x, up_index_x):
                 for n in range(low_index_y, up_index_y):
                     value += h.GetBinContent(m + 1, n + 1)

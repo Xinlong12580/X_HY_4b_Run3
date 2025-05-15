@@ -7,7 +7,7 @@ import json
 import pickle
 
 #-----------------------------------loading files for the templates --------------------------------------------
-with open("division_output.txt") as f:
+with open("outputList/output_division.txt") as f:
     lines = f.readlines()
     data_files =[("root://cmsxrootd.fnal.gov//store/user/xinlong/XHY4bRun3_2022_division/" + line.strip()) for line in lines]
 
@@ -23,7 +23,7 @@ with open("raw_nano/Datasets_signal.json") as f:
 years = ["2022", "2022EE", "2023", "2023BPix"]
 processes = {"MC_QCDJets": ["QCD-4Jets_HT-400to600", "QCD-4Jets_HT-600to800", "QCD-4Jets_HT-800to1000", "QCD-4Jets_HT-1000to1200", "QCD-4Jets_HT-1200to1500", "QCD-4Jets_HT-1500to2000", "QCD-4Jets_HT-2000"], "MC_TTBarJets": ["TTto4Q", "TTtoLNu2Q", "TTto2L2Nu"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
 regions = ["VS1", "VS2", "VS3", "VS4", "VB1", "VB2"]
-MJY_bins = array.array("d", np.linspace(0, 400, 41) )
+MJY_bins = array.array("d", np.linspace(0, 2000, 201) )
 MJJ_bins = array.array("d", np.linspace(0, 4000, 401) )
  
 h_BKG = {}
@@ -33,6 +33,7 @@ MC_weight = "genWeight"
 mplhep.style.use("CMS")
 
 h_base = ROOT.TH2D("BaseMass", "MJJ vs MJY", len(MJY_bins) - 1, MJY_bins, len(MJJ_bins) - 1, MJJ_bins) 
+save_name = "pkls/hists_division_TH.pkl"
 #------------------------------ making data template ------------------------------------------------------------
 
 print("Loading data")
@@ -55,8 +56,6 @@ for data_file in data_files:
                         else:
                             th2 = rdf.Histo2D((f"Mass_{data_file}", "MJJ vs MJY", len(MJY_bins) - 1, MJY_bins, len(MJJ_bins) - 1, MJJ_bins), "MJY", "MJJ")
                             h_data[year][region].Add(th2.GetValue())
-with open("hist_data.pkl", "wb") as f:
-    pickle.dump(h_data, f)
 
 print("Loading data successful")
 
@@ -155,7 +154,7 @@ for data_file in data_files:
                                         th2 = rdf.Histo2D((f"Mass_{data_file}", "MJJ vs MJY", len(MJY_bins) - 1, MJY_bins, len(MJJ_bins) - 1, MJJ_bins), "MJY", "MJJ", "NormalizedWeight")
                                         h_BKGs[year][process][subprocess][region].Add(th2.GetValue())
 h_All = {"data" : h_data, "BKGs" : h_BKGs}
-with open("hists_division_TH.pkl", "wb") as f:
+with open(save_name, "wb") as f:
     pickle.dump(h_All, f)
 
 print("LOADING BKG SUCCESSFUL")

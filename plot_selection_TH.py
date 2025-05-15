@@ -6,8 +6,8 @@ import ROOT
 import array
 import json
 import pickle
-
-with open("hists_selection_TH.pkl", "rb") as f:
+from XHY4b_Helper import *
+with open("pkls/hists_selection_TH.pkl", "rb") as f:
     hists = pickle.load(f)
 h_data = hists["data"]
 h_BKGs = hists["BKGs"]
@@ -29,7 +29,7 @@ bins["EtaHiggsCandidate"] = array.array("d", np.linspace(-3, 3, 21) )
 bins["EtaYCandidate"] = array.array("d", np.linspace(-3, 3, 21) )
 
 bins["leadingFatJetMsoftdrop"] = array.array("d", np.linspace(0, 1500, 51) )
-bins["MassLeadingTwoFatJets"] = array.array("d", np.linspace(0, 5000, 201) )
+bins["MassLeadingTwoFatJets"] = array.array("d", np.linspace(0, 5000, 101) )
 bins["MassHiggsCandidate"] = array.array("d", np.linspace(0, 1500, 51) )
 bins["MassYCandidate"] = array.array("d", np.linspace(0, 1500, 51) )
 for column in var_columns:
@@ -39,6 +39,22 @@ MC_weight = "genWeight"
 mplhep.style.use("CMS")
 years = ["2022", "2022EE", "2023", "2023BPix"]
 processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
+#-------------------------------------rebinning -----------------------------------------
+rebinned_h_data = {}
+rebinned_h_BKGs = {}
+for year in h_data:
+    rebinned_h_data[year] = {}
+    for column in h_data[year]:
+        rebinned_h_data[year][column] = rebin_TH1(h_data[year][column], bins[column])
+
+for year in h_BKGs:
+    rebinned_h_BKGs[year] = {}
+    for process in h_BKGs[year]:
+        rebinned_h_BKGs[year][process] = {}
+        for subprocess in h_BKGs[year][process]:
+            rebinned_h_BKGs[year][process][subprocess] = {}
+            for column in h_BKGs[year][process][subprocess]:
+                rebinned_h_BKGs[year][process][subprocess][column] = rebin_TH1(h_BKGs[year][process][subprocess][column], bins[column])
 
 #--------------------- extracting interested processes-----------------------------------------------
 data_binned = {}
@@ -47,8 +63,8 @@ for year in years:
     data_binned[year] = {}
     data_binned_error[year] = {}
     for column in var_columns:
-        data_binned[year][column] = [h_data[year][column].GetBinContent(i) for i in range(1, h_data[year][column].GetNbinsX() + 1)]
-        data_binned_error[year][column] = [h_data[year][column].GetBinError(i) for i in range(1, h_data[year][column].GetNbinsX() + 1)]
+        data_binned[year][column] = [rebinned_h_data[year][column].GetBinContent(i) for i in range(1, rebinned_h_data[year][column].GetNbinsX() + 1)]
+        data_binned_error[year][column] = [rebinned_h_data[year][column].GetBinError(i) for i in range(1, rebinned_h_data[year][column].GetNbinsX() + 1)]
 
 h_QCD = {}
 h_WZ = {}
@@ -88,33 +104,33 @@ for year in years:
         if subprocess == "QCD-4Jets_HT-100to200": #This one seems to be buggy, ignore it
             continue
         for column in var_columns:
-            h_QCD[year][column].Add(h_BKGs[year]["MC_QCDJets"][subprocess][column])
+            h_QCD[year][column].Add(rebinned_h_BKGs[year]["MC_QCDJets"][subprocess][column])
 
     for subprocess in h_BKGs[year]["MC_WZJets"]:
         for column in var_columns:
-            h_WZ[year][column].Add(h_BKGs[year]["MC_WZJets"][subprocess][column])
+            h_WZ[year][column].Add(rebinned_h_BKGs[year]["MC_WZJets"][subprocess][column])
 
     for subprocess in h_BKGs[year]["MC_HiggsJets"]:
         #if subprocess == "WplusH_Hto2B_Wto2Q_M-125": #This one seems to be buggy, ignore it
         #    continue
         for column in var_columns:
-            h_Higgs[year][column].Add(h_BKGs[year]["MC_HiggsJets"][subprocess][column])
+            h_Higgs[year][column].Add(rebinned_h_BKGs[year]["MC_HiggsJets"][subprocess][column])
 
     for subprocess in h_BKGs[year]["MC_TTBarJets"]:
         for column in var_columns:
-            h_TTBar[year][column].Add(h_BKGs[year]["MC_TTBarJets"][subprocess][column])
+            h_TTBar[year][column].Add(rebinned_h_BKGs[year]["MC_TTBarJets"][subprocess][column])
 
     for subprocess in h_BKGs[year]["MC_DibosonJets"]:
         for column in var_columns:
-            h_Diboson[year][column].Add(h_BKGs[year]["MC_DibosonJets"][subprocess][column])
+            h_Diboson[year][column].Add(rebinned_h_BKGs[year]["MC_DibosonJets"][subprocess][column])
 
     for subprocess in h_BKGs[year]["MC_SingleTopJets"]:
         for column in var_columns:
-            h_SingleTop[year][column].Add(h_BKGs[year]["MC_SingleTopJets"][subprocess][column])
+            h_SingleTop[year][column].Add(rebinned_h_BKGs[year]["MC_SingleTopJets"][subprocess][column])
 
     for subprocess in h_BKGs[year]["SignalMC_XHY4b"]:
         for column in var_columns:
-            h_Signal[year][column].Add(h_BKGs[year]["SignalMC_XHY4b"][subprocess][column])
+            h_Signal[year][column].Add(rebinned_h_BKGs[year]["SignalMC_XHY4b"][subprocess][column])
 
     for column in var_columns:
         for hist in [h_QCD[year][column], h_WZ[year][column], h_TTBar[year][column], h_Higgs[year][column], h_Diboson[year][column], h_SingleTop[year][column]]:
@@ -164,10 +180,10 @@ for year in years:
         fig.tight_layout()
         ax1.set_yscale("linear")
         ax1.set_ylim(auto = True)
-        fig.savefig(f"plots_selection/linear_stack_{year}_{column}.png")
+        fig.savefig(f"plots/plots_selection/linear_stack_{year}_{column}.png")
         ax1.set_yscale("log")
         ax1.set_ylim(1,10000000)
-        fig.savefig(f"plots_selection/stack_{year}_{column}.png")
+        fig.savefig(f"plots/plots_selection/stack_{year}_{column}.png")
 
     
         #----plotting signal------
@@ -200,8 +216,8 @@ for year in years:
         fig_s.tight_layout()
         ax1_s.set_yscale("linear")
         ax1_s.set_ylim(auto = True)
-        fig_s.savefig(f"plots_selection/linear_signal_{year}_{column}.png")
+        fig_s.savefig(f"plots/plots_selection/linear_signal_{year}_{column}.png")
         ax1_s.set_yscale("log")
         ax1_s.set_ylim(1,10000000)
-        fig_s.savefig(f"plots_selection/signal_{year}_{column}.png")
+        fig_s.savefig(f"plots/plots_selection/signal_{year}_{column}.png")
     

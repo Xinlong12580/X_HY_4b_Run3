@@ -25,9 +25,9 @@ years = ["2022", "2022EE", "2023", "2023BPix"]
 var_columns = ["PtJY0", "PtJY1", "EtaJY0", "EtaJY1", "PhiJY0", "PhiJY1", "MassJY0", "MassJY1", "MassJJH", "MassHiggsCandidate", "PtHiggsCandidate", "EtaHiggsCandidate", "PhiHiggsCandidate", "MassYCandidate", "MJJH", "MJY"]
 bins = {}
 bin_centers = {}
-bins["PtJY0"] = array.array("d", np.linspace(0, 3000, 101))
-bins["PtJY1"] =array.array("d", np.linspace(0, 3000, 101) )
-bins["PtHiggsCandidate"] =array.array("d", np.linspace(0, 3000, 101) )
+bins["PtJY0"] = array.array("d", np.linspace(0, 3000, 301))
+bins["PtJY1"] =array.array("d", np.linspace(0, 3000, 301) )
+bins["PtHiggsCandidate"] =array.array("d", np.linspace(0, 3000, 301) )
 
 bins["PhiJY0"] = array.array("d", np.linspace(-np.pi, np.pi , 21) )
 bins["PhiJY1"] = array.array("d", np.linspace(-np.pi, np.pi , 21) )
@@ -37,13 +37,13 @@ bins["EtaJY0"] = array.array("d", np.linspace(-3, 3, 21) )
 bins["EtaJY1"] = array.array("d", np.linspace(-3, 3, 21) )
 bins["EtaHiggsCandidate"] = array.array("d", np.linspace(-3, 3, 21) )
 
-bins["MassJY0"] = array.array("d", np.linspace(0, 1500, 51) )
-bins["MassJY1"] = array.array("d", np.linspace(0, 5000, 201) )
-bins["MassHiggsCandidate"] = array.array("d", np.linspace(0, 1500, 51) )
-bins["MassYCandidate"] = array.array("d", np.linspace(0, 1500, 51) )
-bins["MassJJH"] = array.array("d", np.linspace(1000, 4000, 51) )
-bins["MJJH"] = array.array("d", np.linspace(1000, 4000, 51) )
-bins["MJY"] = array.array("d", np.linspace(0, 1500, 51) )
+bins["MassJY0"] = array.array("d", np.linspace(0, 2000, 201) )
+bins["MassJY1"] = array.array("d", np.linspace(0, 5000, 501) )
+bins["MassHiggsCandidate"] = array.array("d", np.linspace(0, 2000, 201) )
+bins["MassYCandidate"] = array.array("d", np.linspace(0, 2000, 201) )
+bins["MassJJH"] = array.array("d", np.linspace(0, 4000, 401) )
+bins["MJJH"] = array.array("d", np.linspace(0, 4000, 401) )
+bins["MJY"] = array.array("d", np.linspace(0, 2000, 201) )
 for column in var_columns:
     bin_centers[column] = 0.5 * (np.array(bins[column])[:-1] + np.array(bins[column])[1:])
 MC_weight = "genWeight"

@@ -8,7 +8,7 @@ import json
 import pickle
 print("TEST")
 #-----------------------------------loading files for the templates --------------------------------------------
-with open("selection_output.txt") as f:
+with open("outputList/output_selection.txt") as f:
     lines = f.readlines()
     data_files =[("root://cmsxrootd.fnal.gov//store/user/xinlong/XHY4bRun3_2022_selection2_hadded/" + line.strip()) for line in lines]
 
@@ -25,9 +25,9 @@ years = ["2022", "2022EE", "2023", "2023BPix"]
 var_columns = ["leadingFatJetPt", "leadingFatJetPhi", "leadingFatJetEta", "leadingFatJetMsoftdrop", "MassLeadingTwoFatJets", "MassHiggsCandidate", "PtHiggsCandidate", "EtaHiggsCandidate", "PhiHiggsCandidate", "MassYCandidate", "PtYCandidate", "EtaYCandidate", "PhiYCandidate"]
 bins = {}
 bin_centers = {}
-bins["leadingFatJetPt"] = array.array("d", np.linspace(0, 3000, 101))
-bins["PtHiggsCandidate"] =array.array("d", np.linspace(0, 3000, 101) )
-bins["PtYCandidate"] =array.array("d", np.linspace(0, 3000, 101) )
+bins["leadingFatJetPt"] = array.array("d", np.linspace(0, 3000, 301))
+bins["PtHiggsCandidate"] =array.array("d", np.linspace(0, 3000, 301) )
+bins["PtYCandidate"] =array.array("d", np.linspace(0, 3000, 301) )
 
 bins["leadingFatJetPhi"] = array.array("d", np.linspace(-np.pi, np.pi , 21) )
 bins["PhiHiggsCandidate"] = array.array("d", np.linspace(-np.pi, np.pi , 21) )
@@ -37,17 +37,17 @@ bins["leadingFatJetEta"] = array.array("d", np.linspace(-3, 3, 21) )
 bins["EtaHiggsCandidate"] = array.array("d", np.linspace(-3, 3, 21) )
 bins["EtaYCandidate"] = array.array("d", np.linspace(-3, 3, 21) )
 
-bins["leadingFatJetMsoftdrop"] = array.array("d", np.linspace(0, 1500, 51) )
-bins["MassLeadingTwoFatJets"] = array.array("d", np.linspace(0, 5000, 201) )
-bins["MassHiggsCandidate"] = array.array("d", np.linspace(0, 1500, 51) )
-bins["MassYCandidate"] = array.array("d", np.linspace(0, 1500, 51) )
+bins["leadingFatJetMsoftdrop"] = array.array("d", np.linspace(0, 3000, 301) )
+bins["MassLeadingTwoFatJets"] = array.array("d", np.linspace(0, 5000, 501) )
+bins["MassHiggsCandidate"] = array.array("d", np.linspace(0, 3000, 301) )
+bins["MassYCandidate"] = array.array("d", np.linspace(0, 3000, 301) )
 for column in var_columns:
     bin_centers[column] = 0.5 * (np.array(bins[column])[:-1] + np.array(bins[column])[1:])
 MC_weight = "genWeight"
 mplhep.style.use("CMS")
 
 processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
-save_name = "hists_selection_TH.pkl" 
+save_name = "pkls/hists_selection_TH.pkl" 
 
 
 
