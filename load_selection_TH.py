@@ -10,7 +10,7 @@ print("TEST")
 #-----------------------------------loading files for the templates --------------------------------------------
 with open("outputList/output_selection.txt") as f:
     lines = f.readlines()
-    data_files =[("root://cmsxrootd.fnal.gov//store/user/xinlong/XHY4bRun3_2022_selection2_hadded/" + line.strip()) for line in lines]
+    data_files =[ line.strip() for line in lines]
 
 with open("raw_nano/Luminosity.json") as f:
     lumi_json = json.load(f)

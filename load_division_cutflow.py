@@ -8,9 +8,9 @@ import json
 import pickle
 print("TEST")
 #-----------------------------------loading files for the templates --------------------------------------------
-with open("division_output.txt") as f:
+with open("outputList/output_division.txt") as f:
     lines = f.readlines()
-    data_files =[("root://cmsxrootd.fnal.gov//store/user/xinlong/XHY4bRun3_2022_division/" + line.strip()) for line in lines]
+    data_files =[line.strip() for line in lines]
 
 with open("raw_nano/Luminosity.json") as f:
     lumi_json = json.load(f)
@@ -32,6 +32,7 @@ MC_weight = "genWeight"
 mplhep.style.use("CMS")
 
 processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
+save_name = "pkls/hists_selection_cutflow.pkl"
 #------------------------------ making data template ------------------------------------------------------------
 
 print("Loading data")
@@ -153,7 +154,7 @@ for data_file in data_files:
                                         cutflows[cut][year][process][subprocess] += sum(rdf_np[cut]) * (lumi * Xsec / BKG_totalWeight[year][process][subprocess])
         
 
-with open("hists_selection_cutflow.pkl", "wb") as f:
+with open(save_name, "wb") as f:
     pickle.dump(cutflows, f)
 
 print("LOADING BKG SUCCESSFUL")

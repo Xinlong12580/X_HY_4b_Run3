@@ -12,6 +12,8 @@ with open("pkls/hists_division_TH.pkl", "rb") as f:
 
 MJY_bins = array.array("d", np.linspace(0, 1000, 51) )
 MJJ_bins = array.array("d", np.linspace(0, 3000, 101) )
+MJY_bins = array.array("d", np.linspace(0, 2000, 101) )
+MJJ_bins = array.array("d", np.linspace(0, 4000, 401) )
 h_base = ROOT.TH2D("Mass", "MJJ vs MJY", len(MJY_bins) - 1, MJY_bins, len(MJJ_bins) - 1, MJJ_bins) 
 h_base_projx = h_base.ProjectionX("MassJY")
 h_base_projy = h_base.ProjectionY("MassJJ")

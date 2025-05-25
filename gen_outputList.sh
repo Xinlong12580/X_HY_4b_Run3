@@ -1,8 +1,21 @@
 mkdir -p outputList
-eosls /store/user/xinlong/XHY4bRun3_2022_skim_tmp > outputList/output_skim.txt
-eosls /store/user/xinlong/XHY4bRun3_2022_skim_tmp_1 > outputList/output_skim_1.txt
-eosls /store/user/xinlong/XHY4bRun3_2022_selection2_hadded > outputList/output_selection.txt
-eosls /store/user/xinlong/XHY4bRun3_2022_selection2_2p1_hadded > outputList/output_selection_2p1.txt
-#eosls /store/user/xinlong/XHY4bRun3_2022_division/VB2* > outputList/output_selection.txt
-eosls /store/user/xinlong/XHY4bRun3_2022_division > outputList/output_division.txt
-eosls /store/user/xinlong/XHY4bRun3_2022_division_2p1 > outputList/output_division_2p1.txt
+classify_files(){
+    input_dir=$1
+    output_prefix=$2
+    files=$( eosls $input_dir )
+    prefix=$eosprefix$input_dir/
+    declare -A classified_files
+    for file in ${files[@]}; do
+        file_base="${file%%.txt*}"
+        classified_files["$file_base"]="${classified_files["$file_base"]} $prefix$file"
+    done
+    
+    for file_base in ${!classified_files[@]}; do
+        echo Generating outputList/"$output_prefix"_"$file_base".txt
+        
+        echo "${classified_files[$file_base]}" | sed 's/^ *//' | tr ' ' '\n' > outputList/"$output_prefix"_"$file_base".txt
+    done
+}
+classify_files "/store/user/xinlong/XHY4bRun3_2022_skim" "SKIM" 
+classify_files "/store/user/xinlong/XHY4bRun3_2022_selection2_1p1" "SELECTION" 
+classify_files "/store/user/xinlong/XHY4bRun3_2022_division" "DIVISION" 
