@@ -16,17 +16,19 @@ CompileCpp("cpp_modules/deltaRMatching.cc")
 CompileCpp("cpp_modules/helperFunctions.cc")
 CompileCpp("cpp_modules/massMatching.cc")
 CompileCpp("cpp_modules/Matching.cc")
-ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job)
-#ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job, 10000)
-ana.selection_1p1()
-file_basename=os.path.basename(args.dataset).removesuffix(".txt")
-ana.output = "tagged_selected_" + file_basename + f"_n-{args.n_files}_i-{args.i_job}.root"
-columns = ["leadingFatJetPt","leadingFatJetPhi","leadingFatJetEta", "leadingFatJetMsoftdrop", "MassLeadingTwoFatJets", "MassHiggsCandidate", "PtHiggsCandidate", "EtaHiggsCandidate", "PhiHiggsCandidate", "MassYCandidate", "PtYCandidate", "EtaYCandidate", "PhiYCandidate", "MJJ", "MJY", "PNet_H", "PNet_Y", "weight.*"]
+columns = ["leadingFatJetPt","leadingFatJetPhi","leadingFatJetEta", "leadingFatJetMsoftdrop", "MassLeadingTwoFatJets", "MassHiggsCandidate", "PtHiggsCandidate", "EtaHiggsCandidate", "PhiHiggsCandidate", "MassYCandidate", "PtYCandidate", "EtaYCandidate", "PhiYCandidate", "MJJ", "MJY", "PNet_H", "PNet_Y", "weight.*",  "FatJet_pt_JER__up", "PileUp_Corr__nom", "PileUp_Corr__up", "PileUp_Corr__down"]
+file_basename = os.path.basename(args.dataset).removesuffix(".txt")
 
-if "MC" in args.dataset:
-    ana.snapshot(columns + ["genWeight"])
-else:
-    ana.snapshot(columns)
-ana.save_cutflowInfo()
+JME_systs = ["nom", "JES__up", "JES__down", "JER__up", "JER__down"]
+for JME_syst in JME_systs:
+    ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job)
+    ana.selection_1p1(JME_syst)
+    ana.output = JME_syst + "_tagged_selected_" + file_basename + f"_n-{args.n_files}_i-{args.i_job}.root"
+
+    if "MC" in args.dataset:
+        ana.snapshot(columns + ["genWeight"])
+    else:
+        ana.snapshot(columns)
+    ana.save_cutflowInfo()
 
 

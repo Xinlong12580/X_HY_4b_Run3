@@ -17,6 +17,12 @@ ana.b_tagging_1p1()
 regions = ["VS1", "VS2", "VS3", "VS4", "VB1", "VB2"]
 
 file_basename=os.path.basename(args.dataset).replace(".txt", ".root")
+JME_systs = ["nom", "JES__up", "JES__down", "JER__up", "JER__down"]
+for ele in JME_systs:
+    if ele in file_basename:
+        JME_syst = ele
+        break
+
 #base_output_template = file_basename.partition("_202")[1] + file_basename.partition("_202")[2]
 base_node = ana.analyzer.GetActiveNode()
 f = ROOT.TFile.Open("Templates_" + file_basename, "RECREATE")
@@ -27,7 +33,7 @@ for region in regions:
     print(ana.output)
     ana.snapshot()
     ana.save_cutflowInfo()
-    ana.dumpTemplates_1p1(region, f) 
+    ana.dumpTemplates_1p1(region, f, JME_syst) 
 f.Close()
 
 
