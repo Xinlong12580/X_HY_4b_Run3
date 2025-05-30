@@ -12,7 +12,6 @@ parser.add_argument('-i', type=int, dest='i_job',action='store', required=True)
 args = parser.parse_args()
 
 ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job)
-
 ana.b_tagging_1p1()
 regions = ["VS1", "VS2", "VS3", "VS4", "VB1", "VB2"]
 

@@ -22,7 +22,7 @@ file_basename = os.path.basename(args.dataset).removesuffix(".txt")
 
 
 ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job)
-ana.selection_1p1(args.JME_syst)
+ana.selection_1p1_test(args.JME_syst)
 ana.output = args.JME_syst + "_tagged_selected_" + file_basename + f"_n-{args.n_files}_i-{args.i_job}.root"
 
 if "MC" in args.dataset:

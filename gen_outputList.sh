@@ -6,7 +6,12 @@ classify_files(){
     prefix=$eosprefix$input_dir/
     declare -A classified_files
     for file in ${files[@]}; do
-        file_base="${file%%.txt*}"
+        if [[ $file = *.txt* ]]; then
+            file_base="${file%%.txt*}"
+        else
+            file_base="${file%%.root*}"
+        fi
+        
         classified_files["$file_base"]="${classified_files["$file_base"]} $prefix$file"
     done
     
@@ -17,5 +22,5 @@ classify_files(){
     done
 }
 classify_files "/store/user/xinlong/XHY4bRun3_2022_skim" "SKIM" 
-classify_files "/store/user/xinlong/XHY4bRun3_2022_selection2_1p1" "SELECTION" 
+classify_files "/store/user/xinlong/XHY4bRun3_2022_selection_1p1_hadded" "SELECTION" 
 classify_files "/store/user/xinlong/XHY4bRun3_2022_division" "DIVISION" 

@@ -209,6 +209,7 @@ class XHY4b_Analyzer:
         
     def selection_1p1(self, JME_syst = "nom"):
         AutoJME.AutoJME(self.analyzer, "FatJet", self.corr_year, self.data_era, True)
+        print(self.isData)
         if not (self.isData == 1):
             genW    = Correction('genW',"cpp_modules/genW.cc",corrtype='corr')
             evalargs = {
@@ -235,7 +236,8 @@ class XHY4b_Analyzer:
         print(triggerCut)
         self.analyzer.Cut("TriggerCut", triggerCut)
         self.register_weight("TriggerCut")
-        flagFilters = ["Flag_BadPFMuonFilter","Flag_EcalDeadCellTriggerPrimitiveFilter","Flag_HBHENoiseIsoFilter","Flag_HBHENoiseFilter","Flag_globalSuperTightHalo2016Filter","Flag_goodVertices"]
+        #flagFilters = ["Flag_BadPFMuonFilter","Flag_EcalDeadCellTriggerPrimitiveFilter","Flag_HBHENoiseIsoFilter","Flag_HBHENoiseFilter","Flag_globalSuperTightHalo2016Filter","Flag_goodVertices"]
+        flagFilters = ["Flag_goodVertices", "Flag_globalSuperTightHalo2016Filter", "Flag_EcalDeadCellTriggerPrimitiveFilter", " Flag_BadPFMuonFilter", "Flag_BadPFMuonDzFilter", "Flag_hfNoisyHitsFilter", "Flag_eeBadScFilter"]
         flagFilterCut = self.analyzer.GetFlagString(flagFilters)
         self.analyzer.Cut("FlagCut", flagFilterCut)
         self.register_weight("FlagCut")
@@ -296,6 +298,17 @@ class XHY4b_Analyzer:
         self.analyzer.Define("Region_VS3", f"PNet_H >= {Aux_score2} && PNet_H < {Aux_score1} && PNet_Y >= {T_score}")
         self.analyzer.Define("Region_VS4", f"PNet_H >= {Aux_score2} && PNet_H < {Aux_score1} && PNet_Y >= {L_score}")
         self.analyzer.Define("Region_VB2", f"PNet_H >= {Aux_score2} && PNet_H < {Aux_score1} && PNet_Y < {L_score}")
+
+
+    def optimize_b_wp(self, wp_min, wp_max, wp_step):
+        for i in range(int(np.ceil((wp_max - wp_min) / wp_step)) + 1):
+            wp = wp_min + i * wp_step
+            self.analyzer.Cut(f"SRCut_wp_{wp:.4f}".replace(".", "p"), f"PNet_H >= {wp} && PNet_Y >= {wp}")
+            self.register_weight(f"SRCut_wp_{wp:.4f}".replace(".", "p"))
+        
+        
+        
+
 
 
 
@@ -444,6 +457,40 @@ class XHY4b_Analyzer:
         self.analyzer.Snapshot(columns, self.output, "Events", saveRunChain = saveRunChain)
     
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -632,3 +679,63 @@ class XHY4b_Analyzer:
         
         print(f"DEBUG: { self.analyzer.GetActiveNode().DataFrame.Count().GetValue()}") 
 
+    def selection_1p1_test(self, JME_syst = "nom"):
+        AutoJME.AutoJME(self.analyzer, "FatJet", self.corr_year, self.data_era, True)
+        if not (self.isData == 1):
+            genW    = Correction('genW',"cpp_modules/genW.cc",corrtype='corr')
+            evalargs = {
+                    "genWeight": "genWeight",
+                    "lumi": f"{self.lumi}",
+                    "Xsec": f"{self.Xsec}",
+                    "sumW": f"{self.sumW}"
+            }
+            self.analyzer.AddCorrection(genW, evalargs)
+
+            AutoPU.AutoPU(self.analyzer, self.corr_year)
+            #AutoBTagging.AutoBTagging(self.analyzer, self.corr_year, ijets = [0, 1])
+        self.register_weight("Corrections")
+        self.register_weight("SkimOf1p1")
+        self.analyzer.Define("nEle", "nElectrons(nElectron, Electron_cutBased, 0, Electron_pt,20, Electron_eta)")
+        self.analyzer.Define("nMu", "nMuons(nMuon, Muon_looseId, Muon_pfIsoId, 0, Muon_pt, 20, Muon_eta)")
+        self.register_weight("LeptonVeto")
+        
+        hadron_triggers = self.triggers
+        print(hadron_triggers)
+        triggerCut = self.analyzer.GetTriggerString(hadron_triggers)
+        print(triggerCut)
+        self.register_weight("TriggerCut")
+        #flagFilters = ["Flag_BadPFMuonFilter","Flag_EcalDeadCellTriggerPrimitiveFilter","Flag_HBHENoiseIsoFilter","Flag_HBHENoiseFilter","Flag_globalSuperTightHalo2016Filter","Flag_goodVertices"]
+        flagFilters = ["Flag_goodVertices", "Flag_globalSuperTightHalo2016Filter", "Flag_EcalDeadCellTriggerPrimitiveFilter", " Flag_BadPFMuonFilter", "Flag_BadPFMuonDzFilter", "Flag_hfNoisyHitsFilter", "Flag_eeBadScFilter"]
+        flagFilterCut = self.analyzer.GetFlagString(flagFilters)
+        self.register_weight("FlagCut")
+        
+        self.register_weight("FatJetID")
+        self.register_weight("FatJetPt")
+
+        self.register_weight("FatJetMass")
+        self.register_weight("DeltaEta")
+        self.analyzer.Define(f"MassLeadingTwoFatJets", "InvMass_PtEtaPhiM({FatJet_pt_" + JME_syst + "[0], FatJet_pt_" + JME_syst + "[1]}, {FatJet_eta[0], FatJet_eta[1]}, {FatJet_phi[0], FatJet_phi[1]}, {FatJet_msoftdrop_" + JME_syst + "[0], FatJet_msoftdrop_" + JME_syst + "[1]})")
+        self.register_weight("MassJJ")
+        self.analyzer.Define("idxH", f"higgsMassMatching(FatJet_msoftdrop_{JME_syst}[0], FatJet_msoftdrop_{JME_syst}[1])")
+        self.analyzer.Define("idxY", "1 - idxH")
+        self.register_weight("HiggsMatch")
+
+        self.analyzer.Define("MassHiggsCandidate",f"FatJet_msoftdrop_{JME_syst}[idxH]")
+        self.analyzer.Define("PtHiggsCandidate", f"FatJet_pt_{JME_syst}[idxH]")
+        self.analyzer.Define("EtaHiggsCandidate", "FatJet_eta[idxH]")
+        self.analyzer.Define("PhiHiggsCandidate", "FatJet_phi[idxH]")
+        
+        self.analyzer.Define("MassYCandidate", f"FatJet_msoftdrop_{JME_syst}[idxY]")
+        self.analyzer.Define("PtYCandidate", f"FatJet_pt_{JME_syst}[idxY]")
+        self.analyzer.Define("EtaYCandidate", "FatJet_eta[idxY]")
+        self.analyzer.Define("PhiYCandidate", "FatJet_phi[idxY]")
+        
+        self.analyzer.Define("leadingFatJetPt", f"FatJet_pt_{JME_syst}[0]")
+        self.analyzer.Define("leadingFatJetPhi", "FatJet_phi[0]")
+        self.analyzer.Define("leadingFatJetEta", "FatJet_eta[0]")
+        self.analyzer.Define("leadingFatJetMsoftdrop", f"FatJet_msoftdrop_{JME_syst}[0]")
+        
+        self.analyzer.Define("MJY", "MassYCandidate")
+        self.analyzer.Define("MJJ", "MassLeadingTwoFatJets")
+        self.analyzer.Define("PNet_H", "FatJet_particleNet_XbbVsQCD[idxH]")
+        self.analyzer.Define("PNet_Y", "FatJet_particleNet_XbbVsQCD[idxY]")
