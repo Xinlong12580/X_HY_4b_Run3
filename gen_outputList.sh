@@ -21,6 +21,6 @@ classify_files(){
         echo "${classified_files[$file_base]}" | sed 's/^ *//' | tr ' ' '\n' > outputList/"$output_prefix"_"$file_base".txt
     done
 }
-classify_files "/store/user/xinlong/XHY4bRun3_2022_skim" "SKIM" 
-classify_files "/store/user/xinlong/XHY4bRun3_2022_selection_1p1_hadded" "SELECTION" 
-classify_files "/store/user/xinlong/XHY4bRun3_2022_division" "DIVISION" 
+classify_files "/store/user/xinlong/XHY4bRun3_skim" "SKIM" 
+classify_files "/store/user/xinlong/XHY4bRun3_selection_1p1_hadded" "SELECTION" 
+classify_files "/store/user/xinlong/XHY4bRun3_division" "DIVISION" 

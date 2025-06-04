@@ -24,7 +24,6 @@ for ele in JME_systs:
 
 #base_output_template = file_basename.partition("_202")[1] + file_basename.partition("_202")[2]
 base_node = ana.analyzer.GetActiveNode()
-f = ROOT.TFile.Open("Templates_" + file_basename, "RECREATE")
 for region in regions:
     ana.analyzer.SetActiveNode(base_node)
     ana.divide(region)
@@ -32,7 +31,8 @@ for region in regions:
     print(ana.output)
     ana.snapshot()
     ana.save_cutflowInfo()
+    f = ROOT.TFile.Open("Templates_" + ana.output, "RECREATE")
     ana.dumpTemplates_1p1(region, f, JME_syst) 
-f.Close()
+    f.Close()
 
 

@@ -22,39 +22,7 @@ file_basename = os.path.basename(args.dataset).removesuffix(".txt")
 
 
 ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job)
-ana.selection_1p1(args.JME_syst)
 ana.output = args.JME_syst + "_tagged_selected_" + file_basename + f"_n-{args.n_files}_i-{args.i_job}.root"
-
-if "MC" in args.dataset:
-    ana.snapshot(columns + ["genWeight"])
-else:
-    ana.snapshot(columns)
-ana.save_cutflowInfo()
-
-if args.JME_syst != "nom":
-    exit()
-bins = {}
-
-bins["leadingFatJetPt"] = array.array("d", np.linspace(0, 3000, 301))
-bins["PtHiggsCandidate"] =array.array("d", np.linspace(0, 3000, 301) )
-bins["PtYCandidate"] =array.array("d", np.linspace(0, 3000, 301) )
-
-bins["leadingFatJetPhi"] = array.array("d", np.linspace(-np.pi, np.pi , 21) )
-bins["PhiHiggsCandidate"] = array.array("d", np.linspace(-np.pi, np.pi , 21) )
-bins["PhiYCandidate"] = array.array("d", np.linspace(-np.pi, np.pi , 21) )
-
-bins["leadingFatJetEta"] = array.array("d", np.linspace(-3, 3, 21) )
-bins["EtaHiggsCandidate"] = array.array("d", np.linspace(-3, 3, 21) )
-bins["EtaYCandidate"] = array.array("d", np.linspace(-3, 3, 21) )
-
-bins["leadingFatJetMsoftdrop"] = array.array("d", np.linspace(0, 3000, 301) )
-bins["MassLeadingTwoFatJets"] = array.array("d", np.linspace(0, 5000, 501) )
-bins["MassHiggsCandidate"] = array.array("d", np.linspace(0, 3000, 301) )
-bins["MassYCandidate"] = array.array("d", np.linspace(0, 3000, 301) )
-
-f = ROOT.TFile("Templates_" + ana.output, "RECREATE")
-if "MC" in ana.dataset:
-    ana.make_TH1(bins, ["weight_All__nominal"], f)
-else:
-    ana.make_TH1(bins, [], f)
+f = ROOT.TFile("Templates_Nminus1_" + ana.output, "RECREATE")
+ana.Nminus1_1p1(args.JME_syst, f)
 f.Close()

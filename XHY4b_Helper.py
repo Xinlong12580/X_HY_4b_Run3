@@ -92,4 +92,47 @@ def rebin_TH2(h, xbins, ybins, name = "default"):
   
     
     
+def load_weight(data_files, years, processes, signal_json, Xsec_json ):
     
+    BKG_fileWeight = {}
+    BKG_totalWeight = {}
+
+    for year in years:
+        BKG_fileWeight[year] = {}
+        BKG_totalWeight[year] = {}
+        for process in processes:
+            BKG_fileWeight[year][process] = {}
+            BKG_totalWeight[year][process] = {}
+            for subprocess in processes[process]:
+                if subprocess == "*":
+                    if "SignalMC_" in process:
+                        for _subprocess in signal_json[year][process]:
+                            BKG_fileWeight[year][process][_subprocess] = []
+                            BKG_totalWeight[year][process][_subprocess] = 0
+                        break
+                    elif "MC_" in process:
+                        for _subprocess in Xsec_json[process]:
+                            BKG_fileWeight[year][process][_subprocess] = []
+                            BKG_totalWeight[year][process][_subprocess] = 0
+                        break
+                else:
+                    BKG_fileWeight[year][process][subprocess] = []
+                    BKG_totalWeight[year][process][subprocess] = 0
+            
+
+    for data_file in data_files:
+        for year in BKG_fileWeight:
+            if (year + "_" ) in data_file:
+                for process in BKG_fileWeight[year]:
+                    if process in data_file:
+                        for subprocess in BKG_fileWeight[year][process]:
+                            if subprocess in data_file:
+                                print(data_file)
+                                rdf_np = ROOT.RDataFrame("Runs", data_file).AsNumpy(["genEventSumw"])
+                                BKG_fileWeight[year][process][subprocess].append(sum(rdf_np["genEventSumw"]))
+    for year in BKG_fileWeight:
+        for process in BKG_fileWeight[year]:
+            for subprocess in BKG_fileWeight[year][process]:
+                BKG_totalWeight[year][process][subprocess] = sum(BKG_fileWeight[year][process][subprocess])
+
+    return BKG_fileWeight, BKG_totalWeight

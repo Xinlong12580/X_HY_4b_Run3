@@ -63,9 +63,9 @@ pwd | tee -a $root_dir/out.txt
 export X509_CERT_DIR=/cvmfs/grid.cern.ch/etc/grid-security/certificates/
 
 # MAIN FUNCTION
-echo python run_division_1p1.py $* | tee -a $root_dir/out.txt
-python run_division_1p1.py $* | tee -a $root_dir/out.txt
+echo python run_selection_1p1.py $* | tee -a $root_dir/out.txt
+python run_selection_1p1.py $* | tee -a $root_dir/out.txt
 ls | tee -a $root_dir/out.txt
 # move all snapshots to the EOS (there will only be one)
-xrdcp -f *.root root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_2022_division_1p1/
-xrdcp -f $root_dir/out.txt root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_2022_division_1p1/
+xrdcp -f *.root root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_selection_1p1/
+xrdcp -f $root_dir/out.txt root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_selection_1p1/

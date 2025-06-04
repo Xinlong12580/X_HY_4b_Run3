@@ -23,9 +23,9 @@ for file in $files; do
     elif [[ "$file" == *"MX-3000_MY-300"* ]]; then
         pass=1
     fi
-    if [[ "$file" != *"Data"* ]]; then
-        pass=0
-    fi
+    #if [[ "$file" != *"Data"* ]]; then
+    #    pass=0
+    #fi
 
     if [[ $operation == *"selection"* ]]; then
     extras=("-s nom" "-s JES__up" "-s JES__down" "-s JER__up" "-s JER__down")
