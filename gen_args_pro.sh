@@ -13,6 +13,8 @@ for file in $files; do
     
     if [[ $operation == *"selection"* && ( $file == *"QCD"* ||  $file == *"Data"* ) ]] ; then
         n_files=2
+    elif [[ $operation == *"selection"* && ( $file == *"TTBar"* ) ]] ; then
+        n_files=10
     else
         n_files=$n_files_base
     fi
@@ -23,9 +25,6 @@ for file in $files; do
     elif [[ "$file" == *"MX-3000_MY-300"* ]]; then
         pass=1
     fi
-    #if [[ "$file" != *"Data"* ]]; then
-    #    pass=0
-    #fi
 
     if [[ $operation == *"selection"* ]]; then
     extras=("-s nom" "-s JES__up" "-s JES__down" "-s JER__up" "-s JER__down")
@@ -42,7 +41,7 @@ for file in $files; do
                 ./gen_args.sh $file 2023BPix $output $n_files "$extra"
             fi
         fi
-        if [[ $file == *"Data"* ]]; then
+        if [[ $file == *"Data"* || $file == *"QCD"* ]]; then
             break
         fi
     done

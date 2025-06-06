@@ -22,5 +22,5 @@ classify_files(){
     done
 }
 classify_files "/store/user/xinlong/XHY4bRun3_skim" "SKIM" 
-classify_files "/store/user/xinlong/XHY4bRun3_selection_1p1_hadded" "SELECTION" 
+classify_files "/store/user/xinlong/XHY4bRun3_selection_1p1" "SELECTION" 
 classify_files "/store/user/xinlong/XHY4bRun3_division" "DIVISION" 

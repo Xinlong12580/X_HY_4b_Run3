@@ -129,11 +129,12 @@ class XHY4b_Analyzer:
         self.analyzer = analyzer(self.files)
     
     def register_weight(self, var, weight = "genWeight"):
+        print(var)
         if self.isData == 1:
             self.totalWeight[var] = self.analyzer.GetActiveNode().DataFrame.Count().GetValue()
         else:
             self.totalWeight[var] = self.analyzer.GetActiveNode().DataFrame.Sum(weight).GetValue()
-    
+        print(self.totalWeight[var])
     
     def save_cutflowInfo(self):     
         in_file = ROOT.TFile.Open(self.files[0],"READ")    
@@ -351,7 +352,7 @@ class XHY4b_Analyzer:
 ###################developping####################################################################
 
 ##########################################################################################
-    def Nminus1_1p1(self, JME_syst, f):
+    def Nminus1_1p1(self, JME_syst, MC_weight, f):
         f.cd()
         AutoJME.AutoJME(self.analyzer, "FatJet", self.corr_year, self.data_era, True)
         print(self.isData)
@@ -397,11 +398,16 @@ class XHY4b_Analyzer:
         self.analyzer.Define(f"MassLeadingTwoFatJets", "InvMass_PtEtaPhiM({FatJet_pt_" + JME_syst + "[0], FatJet_pt_" + JME_syst + "[1]}, {FatJet_eta[0], FatJet_eta[1]}, {FatJet_phi[0], FatJet_phi[1]}, {FatJet_msoftdrop_" + JME_syst + "[0], FatJet_msoftdrop_" + JME_syst + "[1]})")
         self.analyzer.Define("idxH", f"higgsMassMatching(FatJet_msoftdrop_{JME_syst}[0], FatJet_msoftdrop_{JME_syst}[1])")
         self.analyzer.Define("idxY", "1 - idxH")
+        self.analyzer.Define("PNet_0", "FatJet_particleNet_XbbVsQCD[0]")
+        self.analyzer.Define("PNet_1", "FatJet_particleNet_XbbVsQCD[1]")
         self.analyzer.Define(f"FatJet_pt_{JME_syst}_0", f"FatJet_pt_{JME_syst}[0]")
         self.analyzer.Define(f"FatJet_pt_{JME_syst}_1", f"FatJet_pt_{JME_syst}[1]")
         self.analyzer.Define(f"FatJet_msoftdrop_{JME_syst}_0", f"FatJet_msoftdrop_{JME_syst}[0]")
         self.analyzer.Define(f"FatJet_msoftdrop_{JME_syst}_1", f"FatJet_msoftdrop_{JME_syst}[1]")
         self.analyzer.Define("AbsDeltaEta", "abs(FatJet_eta[0] - FatJet_eta[1])")
+        self.analyzer.MakeWeightCols(name = "All")
+        
+
         NCuts = CutGroup("Nminus1_1p1")
         Vars = {}
 
@@ -412,14 +418,17 @@ class XHY4b_Analyzer:
         Vars["MassCut"] = {f"FatJet_msoftdrop_{JME_syst}_0": array.array("d", np.linspace(0, 3000, 301)), f"FatJet_msoftdrop_{JME_syst}_1": array.array("d", np.linspace(0, 3000, 301))}
 
         NCuts.Add("DeltaEtaCut", "abs(FatJet_eta[0] - FatJet_eta[1]) < 1.3")
-        Vars["DeltaEtaCut"] = {"AbsDeltaEta": array.array("d", np.linspace(-3, 3, 21) )}
+        Vars["DeltaEtaCut"] = {"AbsDeltaEta": array.array("d", np.linspace(0, 6, 201) )}
 
         NCuts.Add("MJJCut", "MassLeadingTwoFatJets > 700")
-        Vars["MJJCut"] = {"MassLeadingTwoFatJets": array.array("d", np.linspace(0, 3000, 301))}
+        Vars["MJJCut"] = {"MassLeadingTwoFatJets": array.array("d", np.linspace(0, 5000, 501))}
 
         NCuts.Add("HiggsCut", "idxH >= 0") 
         Vars["HiggsCut"] = {f"FatJet_msoftdrop_{JME_syst}_0":array.array("d", np.linspace(0, 3000, 301)), f"FatJet_msoftdrop_{JME_syst}_1": array.array("d", np.linspace(0, 3000, 301))}        
         
+        wp = 0.95
+        NCuts.Add("BTaggingCut", f"PNet_0 >= {wp} && PNet_1 > {wp}") 
+        Vars["BTaggingCut"] = {f"PNet_0":array.array("d", np.linspace(0, 1, 101)), f"PNet_1": array.array("d", np.linspace(0, 1, 101))}        
 
 
         nodes = self.analyzer.Nminus1(NCuts)
@@ -427,11 +436,10 @@ class XHY4b_Analyzer:
             if key == "full":
                 continue
             for var in Vars[key]:
-                hist = nodes[key].DataFrame.Histo1D(( f"{key}__{var}__{self.year}__{self.process}__{self.subprocess}", f"{key}__{var}__{self.year}__{self.process}__{self.subprocess}", len(Vars[key][var]) - 1, Vars[key][var]), var)        
+                hist = nodes[key].DataFrame.Histo1D(( f"{key}__{var}__{self.year}__{self.process}__{self.subprocess}__{MC_weight}", f"{key}__{var}__{self.year}__{self.process}__{self.subprocess}__{MC_weight}", len(Vars[key][var]) - 1, Vars[key][var]), var, MC_weight )        
                 hist.Write()
 
         
-        self.analyzer.MakeWeightCols(name = "All")
         
 
         
@@ -561,6 +569,14 @@ class XHY4b_Analyzer:
             print(column)
         print(len(columns))
         self.analyzer.Snapshot(columns, self.output, "Events", saveRunChain = saveRunChain)
+    
+    def save_fileInfo(self): #This function already exists in TIMBER
+        run_rdf = ROOT.RDataFrame("Runs", self.files)
+        opts = ROOT.RDF.RSnapshotOptions()
+        opts.fMode = "UPDATE"
+        run_rdf.Snapshot("Runs", self.output, "", opts)
+
+
     
     
 

@@ -34,7 +34,6 @@ def load_TH1(data_files, template_files, years, bins, processes, MC_weight, save
     
     print("Loading data successful")
     
-    #-----------------making BKG templates -----------------------------------------------------------------
     
     #defining and initiating weight info for scaling
     h_BKGs = {}
@@ -93,7 +92,8 @@ def load_TH1(data_files, template_files, years, bins, processes, MC_weight, save
                                     if MC_weight in hist_name:
                                         for column in bins:
                                             if column in hist_name:
-                                                h_BKGs[year][column].Add(hist.Scale(1/BKG_totalWeight[process][subprocess]))
+                                                hist.Scale(1/BKG_totalWeight[process][subprocess])
+                                                h_BKGs[year][process][subprocess][column].Add(hist)
                                 f.Close()
     h_All = {"data" : h_data, "BKGs" : h_BKGs}
     with open(save_name, "wb") as f:

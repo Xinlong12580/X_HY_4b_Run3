@@ -39,6 +39,7 @@ MC_weight = "genWeight"
 mplhep.style.use("CMS")
 years = ["2022", "2022EE", "2023", "2023BPix"]
 processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
+save_dir = "plots/plots_selection_1p1_TH"
 #-------------------------------------rebinning -----------------------------------------
 rebinned_h_data = {}
 rebinned_h_BKGs = {}
@@ -180,10 +181,10 @@ for year in years:
         fig.tight_layout()
         ax1.set_yscale("linear")
         ax1.set_ylim(auto = True)
-        fig.savefig(f"plots/plots_selection/linear_stack_{year}_{column}.png")
+        fig.savefig(f"{save_dir}/linear_stack_{year}_{column}.png")
         ax1.set_yscale("log")
         ax1.set_ylim(1,10000000)
-        fig.savefig(f"plots/plots_selection/stack_{year}_{column}.png")
+        fig.savefig(f"{save_dir}/stack_{year}_{column}.png")
 
     
         #----plotting signal------
@@ -216,8 +217,8 @@ for year in years:
         fig_s.tight_layout()
         ax1_s.set_yscale("linear")
         ax1_s.set_ylim(auto = True)
-        fig_s.savefig(f"plots/plots_selection/linear_signal_{year}_{column}.png")
+        fig_s.savefig(f"{save_dir}/linear_signal_{year}_{column}.png")
         ax1_s.set_yscale("log")
         ax1_s.set_ylim(1,10000000)
-        fig_s.savefig(f"plots/plots_selection/signal_{year}_{column}.png")
+        fig_s.savefig(f"{save_dir}/signal_{year}_{column}.png")
     
