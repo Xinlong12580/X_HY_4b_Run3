@@ -6,11 +6,12 @@ import ROOT
 import array
 import json
 import pickle
+from XHY4b_Helper import *
 print("TEST")
 #-----------------------------------loading files for the templates --------------------------------------------
-with open("outputList/output_division.txt") as f:
+with open("outputList/output_division_1p1.txt") as f:
     lines = f.readlines()
-    data_files =[line.strip() for line in lines]
+    data_files =[line.strip() for line in lines if "VB1" in line and "nom" in line and "Templates" not in line and "output.log" not in line]
 
 with open("raw_nano/Luminosity.json") as f:
     lumi_json = json.load(f)
@@ -18,6 +19,8 @@ with open("raw_nano/Luminosity.json") as f:
 with open("raw_nano/Xsections_background.json") as f:
     Xsec_json = json.load(f)
 
+with open("raw_nano/Datasets_signal.json") as f:
+    signal_json=json.load(f)
 
 #----------------------------- set bins, variable columns and other configs--------------------------------------------------------------------
   
@@ -32,7 +35,7 @@ MC_weight = "genWeight"
 mplhep.style.use("CMS")
 
 processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
-save_name = "pkls/hists_selection_cutflow.pkl"
+save_name = "pkls/hists_division_1p1_cutflow.pkl"
 #------------------------------ making data template ------------------------------------------------------------
 
 print("Loading data")
@@ -60,30 +63,8 @@ print("Loading data successful")
 #-----------------making BKG templates -----------------------------------------------------------------
 
 #defining and initiating weight info for scaling
-BKG_fileWeight = {}
-BKG_totalWeight = {}
 
-for year in years:
-    BKG_fileWeight[year] = {}
-    BKG_totalWeight[year] = {}
-    for process in processes:
-        BKG_fileWeight[year][process] = {}
-        BKG_totalWeight[year][process] = {}
-        for subprocess in processes[process]:
-            if subprocess == "*":
-                if "SignalMC_" in process:
-                    for _subprocess in signal_json[year][process]:
-                        BKG_fileWeight[year][process][_subprocess] = []
-                        BKG_totalWeight[year][process][_subprocess] = 0
-                    break
-                elif "MC_" in process:
-                    for _subprocess in Xsec_json[process]:
-                        BKG_fileWeight[year][process][_subprocess] = []
-                        BKG_totalWeight[year][process][_subprocess] = 0
-                    break
-            else:
-                BKG_fileWeight[year][process][subprocess] = []
-                BKG_totalWeight[year][process][subprocess] = 0
+BKG_fileWeight, BKG_totalWeight = load_weight(data_files, years, processes, signal_json, Xsec_json)
 for cut in cuts:            
     for year in years:
         for process in processes:
@@ -100,34 +81,13 @@ for cut in cuts:
                         break
                 else:
                     cutflows[cut][year][process][subprocess] = 0
-print(BKG_totalWeight)
-# loading weight info
-print("Loading Weight")
 
-for data_file in data_files:
-    if "VB1" not in data_file:
-        continue
-    for year in BKG_fileWeight:
-        if (year + "__" ) in data_file:
-            for process in BKG_fileWeight[year]:
-                if process in data_file:
-                    for subprocess in BKG_fileWeight[year][process]:
-                        if subprocess in data_file:
-                            print(data_file)
-                            rdf_np = ROOT.RDataFrame("Runs", data_file).AsNumpy(["genEventSumw"])
-                            BKG_fileWeight[year][process][subprocess].append(sum(rdf_np["genEventSumw"]))
-for year in BKG_fileWeight:
-    for process in BKG_fileWeight[year]:
-        for subprocess in BKG_fileWeight[year][process]:
-            BKG_totalWeight[year][process][subprocess] = sum(BKG_fileWeight[year][process][subprocess])
 
 print("Loading BKG")
 
 
 # making templates
 for data_file in data_files:
-    if "VB1" not in data_file:
-        continue
     for year in cutflows["Skim"]:
         lumi = lumi_json[year]
         if (year + "__" ) in data_file:
@@ -146,12 +106,8 @@ for data_file in data_files:
                             else:
                                 rdf_np = rdf.AsNumpy()
                                 for cut in cuts:
-                                    if cut == "GoldenJson":
-                                        cut_before = cuts[cuts.index(cut) - 1]
-                                        cutflows[cut][year][process][subprocess] += sum(rdf_np[cut_before]) * (lumi * Xsec / BKG_totalWeight[year][process][subprocess])
-                                    else:
-                                        print(sum(rdf_np[cut]))
-                                        cutflows[cut][year][process][subprocess] += sum(rdf_np[cut]) * (lumi * Xsec / BKG_totalWeight[year][process][subprocess])
+                                    print(sum(rdf_np[cut]))
+                                    cutflows[cut][year][process][subprocess] += sum(rdf_np[cut]) * (lumi * Xsec / BKG_totalWeight[year][process][subprocess])
         
 
 with open(save_name, "wb") as f:

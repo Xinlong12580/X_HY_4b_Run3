@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #--------------------------------defining parameters---------------------------------------------------------
-cuts = [ "BeforeSkim", "Skim", "GoldenJson", "SkimOf1p1", "LeptonVeto", "TriggerCut", "FlagCut", "FatJetID", "FatJetPt", "FatJetMass", "DeltaEta", "MassJJ", "HiggsMatch", "Region_VB1"]
+cuts = [ "Region_VB1", "BeforeSkim", "Skim", "GoldenJson", "SkimOf1p1", "LeptonVeto", "TriggerCut", "FlagCut", "FatJetID", "FatJetPt", "FatJetMass", "DeltaEta", "MassJJ", "HiggsMatch", "Region_VB1"]
 cutflows = {}
 years = ["2022", "2022EE", "2023", "2023BPix"]
 for cut in cuts:
@@ -14,8 +14,9 @@ MC_weight = "genWeight"
 
 processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
 colors = {"data": "black", "MC_QCDJets": "red", "MC_WZJets": "blue", "MC_HiggsJets": "yellow", "MC_TTBarJets": "green", "MC_DibosonJets": "purple", "MC_SingleTopJets": "lightblue", "SignalMC_XHY4b": "beige"}
-with open("hists_selection_cutflow.pkl", "rb") as f:
+with open("pkls/hists_division_1p1_cutflow.pkl", "rb") as f:
     cutflows = pickle.load(f)
+save_dir = "plots/plots_division_1p1_cutflow"
 #------------------------------ making plots ------------------------------------------------------------
 #plotting individually
 for year in years:
@@ -43,7 +44,7 @@ for year in years:
     ax.set_xticklabels(cuts, rotation=45, ha='right')
     ax.set_yscale("log")
     ax.legend()
-    fig.savefig(f"plots_division_cutflow/{year}_cutflow.png")
+    fig.savefig(f"{save_dir}/{year}_cutflow.png")
 
 #plotting S/sqrt(B)
 for year in years:
@@ -79,7 +80,7 @@ for year in years:
     ax.set_xticks(x)
     ax.set_xticklabels(cuts, rotation=45, ha='right')
     ax.legend()
-    fig.savefig(f"plots_division_cutflow/{year}_SoverSqrtB.png")
+    fig.savefig(f"{save_dir}/{year}_SoverSqrtB.png")
 
 #plotting S/sqrt(B)
 

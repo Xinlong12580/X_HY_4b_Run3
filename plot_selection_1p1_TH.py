@@ -7,7 +7,7 @@ import array
 import json
 import pickle
 from XHY4b_Helper import *
-with open("pkls/hists_selection_TH.pkl", "rb") as f:
+with open("pkls/hists_selection_1p1_TH.pkl", "rb") as f:
     hists = pickle.load(f)
 h_data = hists["data"]
 h_BKGs = hists["BKGs"]
@@ -102,7 +102,7 @@ for year in years:
         ratio_error[year][column] = []
 for year in years:
     for subprocess in h_BKGs[year]["MC_QCDJets"]:
-        if subprocess == "QCD-4Jets_HT-100to200": #This one seems to be buggy, ignore it
+        if subprocess == "QCD-4Jets_HT-100to200" or subprocess == "QCD-4Jets_HT-200to400": #This one seems to be buggy, ignore it
             continue
         for column in var_columns:
             h_QCD[year][column].Add(rebinned_h_BKGs[year]["MC_QCDJets"][subprocess][column])

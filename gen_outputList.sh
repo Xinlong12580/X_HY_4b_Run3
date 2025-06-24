@@ -6,10 +6,13 @@ classify_files(){
     prefix=$eosprefix$input_dir/
     declare -A classified_files
     for file in ${files[@]}; do
+        if [[ $file == *"Templates"* || $file == *"output.log"* ]]; then
+            continue
+        fi
         if [[ $file = *.txt* ]]; then
             file_base="${file%%.txt*}"
         else
-            file_base="${file%%.root*}"
+            file_base="${file%%_n-*.root*}"
         fi
         
         classified_files["$file_base"]="${classified_files["$file_base"]} $prefix$file"
@@ -23,4 +26,4 @@ classify_files(){
 }
 classify_files "/store/user/xinlong/XHY4bRun3_skim" "SKIM" 
 classify_files "/store/user/xinlong/XHY4bRun3_selection_1p1" "SELECTION" 
-classify_files "/store/user/xinlong/XHY4bRun3_division" "DIVISION" 
+classify_files "/store/user/xinlong/XHY4bRun3_division_1p1" "DIVISION" 

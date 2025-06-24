@@ -4,7 +4,7 @@ output=inputArgs/"$operation"_args.txt
 > $output
 if [[ $operation == "skim" ]] ; then
     files=raw_nano/files/*.txt
-    n_files_base=2
+    n_files_base=1
 else
     files=outputList/"${input^^}"*.txt
     n_files_base=10000
@@ -12,9 +12,9 @@ fi
 for file in $files; do
     
     if [[ $operation == *"selection"* && ( $file == *"QCD"* ||  $file == *"Data"* ) ]] ; then
-        n_files=2
+        n_files=4
     elif [[ $operation == *"selection"* && ( $file == *"TTBar"* ) ]] ; then
-        n_files=10
+        n_files=20
     else
         n_files=$n_files_base
     fi

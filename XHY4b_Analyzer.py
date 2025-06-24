@@ -131,23 +131,27 @@ class XHY4b_Analyzer:
     def register_weight(self, var, weight = "genWeight"):
         print(var)
         if self.isData == 1:
-            self.totalWeight[var] = self.analyzer.GetActiveNode().DataFrame.Count().GetValue()
+            self.totalWeight[var] = float(self.analyzer.GetActiveNode().DataFrame.Count().GetValue())
         else:
-            self.totalWeight[var] = self.analyzer.GetActiveNode().DataFrame.Sum(weight).GetValue()
+            self.totalWeight[var] = float(self.analyzer.GetActiveNode().DataFrame.Sum(weight).GetValue())
         print(self.totalWeight[var])
     
-    def save_cutflowInfo(self):     
+    def save_cutflowInfo(self):    
+        print("saving cutflow.................") 
         in_file = ROOT.TFile.Open(self.files[0],"READ")    
         cutflow_tree = in_file.Get("Cutflow")
-        new_tree =  (not (cutflow_tree and isinstance(cutflow_tree, ROOT.TTree) and cutflow_tree.GetEntries() == 1))
+        new_tree =  (len(self.files) > 1 or (not (cutflow_tree and isinstance(cutflow_tree, ROOT.TTree) and cutflow_tree.GetEntries() == 1)))
         squashing = cutflow_tree and isinstance(cutflow_tree, ROOT.TTree)
         in_file.Close()
         if new_tree:
             if squashing:
+                print("squashing existing tree.................") 
                 rdf_tmp = ROOT.RDataFrame("Cutflow", self.files)
                 branches = rdf_tmp.GetColumnNames()
+                
                 sums = {branch: 0.0 for branch in branches}
                 for branch in branches:
+                    print("summing " + branch)
                     sums[branch] = rdf_tmp.Sum(branch).GetValue()
                 for key in sums:
                     print(key, sums[key])
@@ -157,20 +161,21 @@ class XHY4b_Analyzer:
                 out_vars = {}
                 for branch in branches:
                     print(sums[branch])
-                    vec = array.array('f', [sums[branch]])
+                    vec = array.array('d', [sums[branch]])
                     out_vars[branch] = vec
                     
-                    squashed_tree.Branch(f"{branch}", vec, f"{branch}/F")    
+                    squashed_tree.Branch(f"{branch}", vec, f"{branch}/D")    
                     out_vars[branch][0] = sums[branch]
                 squashed_tree.Fill()
                 squashed_tree.SetDirectory(tmp_file)
                 squashed_tree.Write()
                 tmp_file.Close()
             else:
+                print("creating tree.................") 
                 tmp_file = ROOT.TFile.Open("tmp.root","RECREATE")    
                 cutflow_tree = ROOT.TTree("Cutflow", "Cutflow")
-                n_files = array.array('f', [len(self.files)])  
-                cutflow_tree.Branch("n_files", n_files, "n_files/F")
+                n_files = array.array('d', [float(len(self.files))])  
+                cutflow_tree.Branch("n_files", n_files, "n_files/D")
                 cutflow_tree.Fill()
                 cutflow_tree.SetDirectory(tmp_file)
                 cutflow_tree.Write()
@@ -180,7 +185,7 @@ class XHY4b_Analyzer:
         else:
             cutflow_rdf = ROOT.RDataFrame("Cutflow", self.files)
         for w_name in self.totalWeight:
-            cutflow_rdf = cutflow_rdf.Define(w_name, f"{self.totalWeight[w_name]}")
+            cutflow_rdf = cutflow_rdf.Define(w_name, f"double({self.totalWeight[w_name]})")
         opts = ROOT.RDF.RSnapshotOptions()
         opts.fMode = "UPDATE"
         cutflow_rdf.Snapshot("Cutflow", self.output, "", opts)
@@ -191,6 +196,8 @@ class XHY4b_Analyzer:
     def skim(self):
         #make skim cut
         self.register_weight("BeforeSkim")
+        if self.totalWeight["BeforeSkim"] == 0:
+            raise ValueError("file loading failed")
         self.analyzer.Define("SkimFlag","skimFlag(nFatJet,FatJet_pt, FatJet_eta,FatJet_msoftdrop,nJet,Jet_pt, Jet_eta, nElectron,Electron_cutBased,nMuon,Muon_looseId,Muon_pfIsoId,Muon_miniIsoId)")
         self.analyzer.Cut("SkimFlagCut","SkimFlag>0")
         self.register_weight("Skim")
@@ -322,8 +329,8 @@ class XHY4b_Analyzer:
 
     def dumpTemplates_1p1(self, region, f, JME_syst, weight = "weight_All__nominal"):
         f.cd()
-        MJY_bins = array.array("d", np.linspace(0, 2000, 201) )
-        MJJ_bins = array.array("d", np.linspace(0, 4000, 401) )
+        MJY_bins = array.array("d", np.linspace(0, 3000, 301) )
+        MJJ_bins = array.array("d", np.linspace(0, 5000, 501) )
         if JME_syst == "nom":
             templates = self.analyzer.MakeTemplateHistos(
                 ROOT.TH2D(f"MJJvsMJY_{region}", f"MJJ vs MJY in {region}", len(MJY_bins) - 1, MJY_bins, len(MJJ_bins) - 1, MJJ_bins), 
@@ -536,7 +543,7 @@ class XHY4b_Analyzer:
         self.analyzer.Cut(f"RegionCut_{region}","Region_" + region)
         self.register_weight("Region_"+region)
     
-    def snapshot(self, columns = None, saveRunChain = True):
+    def snapshot(self, columns = None):
         if columns == None:
             with open("raw_nano/columnBlackList.txt","r") as f:                                 
                 badColumns = f.read().splitlines()
@@ -565,10 +572,8 @@ class XHY4b_Analyzer:
                 
                 if passed == 1:                                                                    
                     columns.append(c)  
-        for column in columns:
-            print(column)
-        print(len(columns))
-        self.analyzer.Snapshot(columns, self.output, "Events", saveRunChain = saveRunChain)
+        print(f"Total number of columns: {len(columns)}")
+        self.analyzer.Snapshot(columns, self.output, "Events", saveRunChain = False, openOption='UPDATE')
     
     def save_fileInfo(self): #This function already exists in TIMBER
         run_rdf = ROOT.RDataFrame("Runs", self.files)

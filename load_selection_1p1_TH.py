@@ -52,7 +52,7 @@ for column in bins:
 MC_weight = "weight_All__nominal"
 
 processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
-save_name = "pkls/hists_selection_TH.pkl" 
+save_name = "pkls/hists_selection_1p1_TH.pkl" 
 root_save_name = "All_selection.root" 
 
 
