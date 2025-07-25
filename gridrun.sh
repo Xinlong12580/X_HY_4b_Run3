@@ -66,15 +66,15 @@ pwd | tee -a $root_dir/$OUTTXT
 export X509_CERT_DIR=/cvmfs/grid.cern.ch/etc/grid-security/certificates/
 
 # MAIN FUNCTION
-echo python run_skim.py $* | tee -a $root_dir/$OUTTXT
-python run_skim.py $* 2>&1 | tee -a $root_dir/$OUTTXT
+echo python run_Nminus1_1p1.py $* | tee -a $root_dir/$OUTTXT
+python run_Nminus1_1p1.py $* 2>&1 | tee -a $root_dir/$OUTTXT
 status=${PIPESTATUS[0]}
 if [ $status -eq 0 ]; then
     # move all snapshots to the EOS (there will only be one)
-    xrdcp -f *.root root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_skim/
+    xrdcp -f *.root root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_Nminus1_1p1/
 else
     mv $root_dir/$OUTTXT $root_dir/FAILED_$OUTTXT
     OUTTXT=FAILED_$OUTTXT
 fi
 ls | tee -a $root_dir/$OUTTXT
-xrdcp -f $root_dir/$OUTTXT root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_skim/
+xrdcp -f $root_dir/$OUTTXT root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_Nminus1_1p1/

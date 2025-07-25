@@ -17,14 +17,14 @@ args = parser.parse_args()
 CompileCpp("cpp_modules/deltaRMatching.cc")
 CompileCpp("cpp_modules/helperFunctions.cc")
 CompileCpp("cpp_modules/massMatching.cc")
-CompileCpp("cpp_modules/Matching.cc")
+CompileCpp("cpp_modules/selection_functions.cc")
 file_basename = os.path.basename(args.dataset).removesuffix(".txt")
 
 
 ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job)
 
-ana.output =  "nom_tagged_selected_1p1_" + file_basename + f"_n-{args.n_files}_i-{args.i_job}.root"
+ana.output =  "nom_tagged_selected_2p1_" + file_basename + f"_n-{args.n_files}_i-{args.i_job}.root"
 ana.save_fileInfo()
 f = ROOT.TFile("Templates_Nminus1_" + ana.output, "RECREATE")
-ana.Nminus1_1p1("nom", "weight_All__nominal", f)
+ana.Nminus1_2p1("nom", "weight_All__nominal", f)
 f.Close()

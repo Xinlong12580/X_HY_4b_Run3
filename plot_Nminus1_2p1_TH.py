@@ -8,7 +8,7 @@ import json
 import pickle
 import math
 from XHY4b_Helper import *
-with open("pkls/hists_Nminus1_1p1_TH.pkl", "rb") as f:
+with open("pkls/hists_Nminus1_2p1_TH.pkl", "rb") as f:
     hists = pickle.load(f)
 with open("raw_nano/color_scheme.json", "r") as f:
     color_scheme = json.load(f)
@@ -18,28 +18,28 @@ h_BKGs = hists["BKGs"]
 
 bins = {}
 
-bins["PtHCut__FatJet_pt_nom_H"] = array.array("d", np.linspace(0, 1000, 51))
-bins["PtYCut__FatJet_pt_nom_Y"] = array.array("d", np.linspace(0, 1000, 51))
-bins["MassHCut__FatJet_msoftdrop_nom_H"] = array.array("d", np.linspace(0, 1000, 51))
-bins["MassYCut__FatJet_msoftdrop_nom_Y"] = array.array("d", np.linspace(0, 1000, 51))
-bins["DeltaEtaCut__AbsDeltaEta"] = array.array("d", np.linspace(0, 6, 21))
-bins["MJJCut__MassLeadingTwoFatJets"] = array.array("d", np.linspace(0, 4000, 201))
+bins["PtHCut__PtHiggsCandidate"] = array.array("d", np.linspace(0, 1000, 51))
+bins["PtJY0Cut__PtJY0"] = array.array("d", np.linspace(0, 1000, 51))
+bins["PtJY1Cut__PtJY1"] = array.array("d", np.linspace(0, 1000, 51))
+bins["HiggsMassCut__MassHiggsCandidate"] = array.array("d", np.linspace(0, 500, 51))
+bins["DeltaRCut__DeltaR_JJ"] = array.array("d", np.linspace(0, 10, 21))
+bins["MJJCut__MassJJH"] = array.array("d", np.linspace(0, 5000, 101))
 bins["BTaggingHCut__PNet_H"] = array.array("d", np.linspace(0, 1, 21))
 bins["BTaggingYCut__PNet_Y"] = array.array("d", np.linspace(0, 1, 21))
 
 cuts = {}
-cuts["PtHCut__FatJet_pt_nom_H"] = [450]
-cuts["PtYCut__FatJet_pt_nom_Y"] = [450]
-cuts["MassHCut__FatJet_msoftdrop_nom_H"] = [110, 140]
-cuts["MassYCut__FatJet_msoftdrop_nom_Y"] = [60]
-cuts["DeltaEtaCut__AbsDeltaEta"] = [1.3]
-cuts["MJJCut__MassLeadingTwoFatJets"] = [700] 
+cuts["PtHCut__PtHiggsCandidate"] = [450] 
+cuts["PtJY0Cut__PtJY0"] = [100]
+cuts["PtJY1Cut__PtJY1"] = [100]
+cuts["HiggsMassCut__MassHiggsCandidate"] = [110, 140]
+cuts["DeltaRCut__DeltaR_JJ"] = [0.4]
+cuts["MJJCut__MassJJH"] = [700]
 cuts["BTaggingHCut__PNet_H"] = [0.9]
 cuts["BTaggingYCut__PNet_Y"] = [0.9]
 processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
 years = ["2022", "2022EE", "2023", "2023BPix"]
 processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
-save_dir = "plots/plots_Nminus1_1p1_TH"
+save_dir = "plots/plots_Nminus1_2p1_TH"
 #-------------------------------------rebinning -----------------------------------------
 h_BKGs_rebinned = {}
 
@@ -72,7 +72,7 @@ for year in h_BKGs_rebinned:
 
 
 #-------------------------------Ploting -----------------------------------------------------------
-directions = ["right", "left"]
+directions = ["left", "right"]
 for direction in directions:
     for year in years:
         for column in bins:
@@ -100,16 +100,10 @@ for direction in directions:
             if direction == "left":
                 h_cum_BKG_rebinned_merged = h_BKG_rebinned_merged.GetCumulative(False, "cum_{direction}_{year}_{column}_ALL_BKG")
                 h_cum_Signal_rebinned_merged =  h_Signal_rebinned_merged.GetCumulative(False, "cum_{direction}_{year}_{column}_ALL_Signal")
+            for i in range(1, h_cum_BKG_rebinned_merged.GetNbinsX() + 1):
+                print(h_BKG_rebinned_merged.GetBinContent(i))
             Sigs = [h_cum_Signal_rebinned_merged.GetBinContent(i) / (1 + math.sqrt(max(0, h_cum_BKG_rebinned_merged.GetBinContent(i)))) for i in range(1, h_cum_BKG_rebinned_merged.GetNbinsX() + 1)] 
             Sigs.append(Sigs[-1]) 
-            for i in range(1, h_BKG_rebinned_merged.GetNbinsX() + 1):
-                if "BTagging" in column:
-                    print(f"{direction} bin {i}")
-                    print(h_BKG_rebinned_merged.GetBinContent(i))
-                    print(h_Signal_rebinned_merged.GetBinContent(i))
-                    print(h_cum_BKG_rebinned_merged.GetBinContent(i))
-                    print(h_cum_Signal_rebinned_merged.GetBinContent(i))
-                    print(Sigs[i])
             mplhep.histplot(
                 hs,
                 label = labels,
@@ -130,8 +124,9 @@ for direction in directions:
             ax2.set_ylabel("Significance")
             ax2.set_ylim(0, 2*max(Sigs))
             ax2.set_xlabel(column)
+
             for cut in cuts[column]:
-                ax2.axvline(x = cut, color = "red", linewidth = 2)
+                ax2.axvline(x = cut, color = "red", linewidth = 2) 
 
             fig.tight_layout()
             ax1.set_yscale("linear")
@@ -140,4 +135,3 @@ for direction in directions:
             ax1.set_yscale("log")
             ax1.set_ylim(auto = True)
             fig.savefig(f"{save_dir}/log_overlap_{direction}_{year}_{column}.png")
-

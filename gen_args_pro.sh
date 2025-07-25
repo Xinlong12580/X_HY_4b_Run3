@@ -11,40 +11,43 @@ else
 fi
 for file in $files; do
     
-    if [[ $operation == *"selection"* && ( $file == *"QCD"* ||  $file == *"Data"* ) ]] ; then
+    if [[ ( $operation == *"selection"* || $operation == *"Nminus1"* ) && ( $file == *"QCD"* ||  $file == *"Data"* ) ]] ; then
         n_files=4
-    elif [[ $operation == *"selection"* && ( $file == *"TTBar"* ) ]] ; then
+    elif [[ ( $operation == *"selection"* || $operation == *"Nminus1"* ) && ( $file == *"TTBar"* ) ]] ; then
         n_files=20
     else
         n_files=$n_files_base
     fi
         
-    pass=0
-    if [[ "$file" != *"SignalMC"* ]]; then
-        pass=1
-    elif [[ "$file" == *"MX-3000_MY-300"* ]]; then
-        pass=1
-    fi
+    pass=1
+    #if [[ "$file" == *"SignalMC"* ]]; then
+    #    pass=1
+    #elif [[ "$file" == *"MX-3000_MY-300"* ]]; then
+    #    pass=1
+    #fi
+    if [[  $operation == *"Nminus1"* && "$file" == *"Data"* ]]; then
+        pass=0
+    fi 
 
-    if [[ $operation == *"selection"* ]]; then
-    extras=("-s nom" "-s JES__up" "-s JES__down" "-s JER__up" "-s JER__down")
-    for extra in "${extras[@]}"; do
-        echo $extra
-        if [[ $pass == 1 ]] ; then
-            if [[ "$file" == *"2022__"* ]]; then
-                ./gen_args.sh $file 2022 $output $n_files "$extra"
-            elif [[ "$file" == *"2022EE__"* ]]; then
-                ./gen_args.sh $file 2022EE $output $n_files "$extra"
-            elif [[ "$file" == *"2023__"* ]]; then
-                ./gen_args.sh $file 2023 $output $n_files "$extra"
-            elif [[ "$file" == *"2023BPix__"* ]]; then
-                ./gen_args.sh $file 2023BPix $output $n_files "$extra"
+    if [[ $operation == *"selection"* && $pass == 1 ]]; then
+        extras=("-s nom" "-s JES__up" "-s JES__down" "-s JER__up" "-s JER__down")
+        for extra in "${extras[@]}"; do
+            echo $extra
+            if [[ $pass == 1 ]] ; then
+                if [[ "$file" == *"2022__"* ]]; then
+                    ./gen_args.sh $file 2022 $output $n_files "$extra"
+                elif [[ "$file" == *"2022EE__"* ]]; then
+                    ./gen_args.sh $file 2022EE $output $n_files "$extra"
+                elif [[ "$file" == *"2023__"* ]]; then
+                    ./gen_args.sh $file 2023 $output $n_files "$extra"
+                elif [[ "$file" == *"2023BPix__"* ]]; then
+                    ./gen_args.sh $file 2023BPix $output $n_files "$extra"
+                fi
             fi
-        fi
-        if [[ $file == *"Data"* || $file == *"QCD"* ]]; then
-            break
-        fi
-    done
+            if [[ $file == *"Data"* || $file == *"QCD"* ]]; then
+                break
+            fi
+        done
     else
         if [[ $pass == 1 ]]; then
             if [[ "$file" == *"2022__"* ]]; then

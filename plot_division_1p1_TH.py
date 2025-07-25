@@ -178,6 +178,8 @@ for region in h_data_rebinned_all:
 #----------------------------------------making stack plots ------------------------------------------------------------------------------------
 ##############################################################################################################################
 for region in h_data:
+    if region not in ["VB1", "VB2", "VS1", "VS2", "VS3", "VS4"]:
+        continue
     for year in h_data[region]:
 
         bin_centers_projx = (np.array(MJY_bins)[:-1] + np.array(MJY_bins)[1:])/2

@@ -5,7 +5,7 @@ import json
 with open("raw_nano/color_scheme.json", "r") as f:
     color_scheme = json.load(f)
 #--------------------------------defining parameters---------------------------------------------------------
-cuts = [ "BeforeSkim", "Skim", "GoldenJson", "SkimOf1p1", "LeptonVeto", "TriggerCut", "FlagCut", "FatJetID", "FatJetPt", "FatJetMass", "DeltaEta", "MassJJ", "HiggsMatch", "Region_SR1"]
+cuts = [ "BeforeSkim", "Skim", "GoldenJson", "SkimOf2p1", "LeptonVeto", "TriggerCut", "FlagCut", "FatJetID", "FatJetPt_nom", "HiggsMatch", "JYMatch", "JYPt", "JYJYDeltaR", "MassJJH", "Region_SR1"]
 cutflows = {}
 years = ["2022", "2022EE", "2023", "2023BPix"]
 for cut in cuts:
@@ -15,9 +15,9 @@ for cut in cuts:
 MC_weight = "genWeight"
 
 processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
-with open("pkls/hists_division_1p1_cutflow.pkl", "rb") as f:
+with open("pkls/hists_division_2p1_cutflow.pkl", "rb") as f:
     cutflows = pickle.load(f)
-save_dir = "plots/plots_division_1p1_cutflow"
+save_dir = "plots/plots_division_2p1_cutflow"
 #------------------------------ making plots ------------------------------------------------------------
 #plotting individually
 for year in years:

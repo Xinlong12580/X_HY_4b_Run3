@@ -9,7 +9,7 @@ import pickle
 from XHY4b_Helper import *
 print("TEST")
 #-----------------------------------loading files for the templates --------------------------------------------
-with open("outputList/output_division_1p1.txt") as f:
+with open("outputList/output_division_2p1.txt") as f:
     lines = f.readlines()
     data_files =[line.strip() for line in lines if "SR1" in line and "nom" in line and "Templates" not in line and "output.log" not in line]
 
@@ -24,7 +24,7 @@ with open("raw_nano/Datasets_signal.json") as f:
 
 #----------------------------- set bins, variable columns and other configs--------------------------------------------------------------------
   
-cuts = ["Region_SR1", "BeforeSkim", "Skim", "GoldenJson", "SkimOf1p1", "LeptonVeto", "TriggerCut", "FlagCut", "FatJetID", "FatJetPt", "FatJetMass", "DeltaEta", "MassJJ", "HiggsMatch"]
+cuts = ["Region_SR1", "BeforeSkim", "Skim", "GoldenJson", "SkimOf2p1", "LeptonVeto", "TriggerCut", "FlagCut", "FatJetID", "FatJetPt_nom", "HiggsMatch", "JYMatch", "JYPt", "JYJYDeltaR", "MassJJH"]
 cutflows = {}
 years = ["2022", "2022EE", "2023", "2023BPix"]
 for cut in cuts:
@@ -35,7 +35,7 @@ MC_weight = "genWeight"
 mplhep.style.use("CMS")
 
 processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
-save_name = "pkls/hists_division_1p1_cutflow.pkl"
+save_name = "pkls/hists_division_2p1_cutflow.pkl"
 #------------------------------ making data template ------------------------------------------------------------
 '''
 print("Loading data")

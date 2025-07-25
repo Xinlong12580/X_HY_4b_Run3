@@ -9,21 +9,31 @@ parser.add_argument('-d', type=str, dest='dataset',action='store', required=True
 parser.add_argument('-y', type=str, dest='year',action='store', required=True)
 parser.add_argument('-n', type=int, dest='n_files',action='store', required=True)
 parser.add_argument('-i', type=int, dest='i_job',action='store', required=True)
-parser.add_argument('-r', type=str, dest='region',action='store', required=True)
 args = parser.parse_args()
 
-#dataset="raw_nano/files/2023_SignalMC_XHY4b_NMSSM_XtoYHto4B_MX-900_MY-95_TuneCP5_13p6TeV_madgraph-pythia8_Run3Summer23NanoAODv12-130X_mcRun3_2023_realistic_v15-v2_NANOAODSIM.txt"
 ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job)
-#ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job, 10000)
 ana.b_tagging_2p1()
-ana.divide(args.region)
-file_basename=os.path.basename(args.dataset)
-ana.output = args.region + "_" + file_basename
-columns = ["leadingFatJetPt","leadingFatJetPhi","leadingFatJetEta", "leadingFatJetMsoftdrop", "MassLeadingTwoFatJets", "MassHiggsCandidate", "PtHiggsCandidate", "EtaHiggsCandidate", "PhiHiggsCandidate", "MassYCandidate", "PtYCandidate", "EtaYCandidate", "PhiYCandidate", "MJJ", "MJY", "PNet_", "Region_"]
-if "MC" in args.dataset:
-    ana.snapshot()
-else:
-    ana.snapshot()
+regions = ["SR1", "SR2", "SB1", "SB2", "VS1", "VS2", "VS3", "VS4", "VB1", "VB2"]
 
-ana.save_fileInfo()
-ana.save_cutflowInfo()
+file_basename=os.path.basename(args.dataset).replace(".txt", f"_n-{args.n_files}_i-{args.i_job}.root")
+JME_systs = ["nom", "JES__up", "JES__down", "JER__up", "JER__down"]
+for ele in JME_systs:
+    if ele in file_basename:
+        JME_syst = ele
+        break
+
+#base_output_template = file_basename.partition("_202")[1] + file_basename.partition("_202")[2]
+base_node = ana.analyzer.GetActiveNode()
+for region in regions:
+    ana.analyzer.SetActiveNode(base_node)
+    ana.divide(region)
+    ana.output = region + "_" + file_basename
+    print(ana.output)
+    ana.save_fileInfo()
+    ana.save_cutflowInfo()
+    ana.snapshot()
+    f = ROOT.TFile.Open("Templates_" + ana.output, "RECREATE")
+    ana.dumpTemplates_2p1(region, f, JME_syst) 
+    f.Close()
+
+
