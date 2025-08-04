@@ -14,7 +14,6 @@ for cut in cuts:
         cutflows[cut][year] = {}
 MC_weight = "genWeight"
 
-processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
 with open("pkls/hists_division_1p1_cutflow.pkl", "rb") as f:
     cutflows = pickle.load(f)
 save_dir = "plots/plots_division_1p1_cutflow"

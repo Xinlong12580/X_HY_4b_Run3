@@ -195,7 +195,12 @@ def load_TH1(data_files, template_files, years, bins, processes, MC_weight, save
     
     
     BKG_fileWeight, BKG_totalWeight = load_weight(data_files, years, processes, signal_json, Xsec_json)
-     
+    
+    
+    
+    
+    
+    
     
     print("Loading BKG")
     
@@ -240,113 +245,3 @@ def load_TH1(data_files, template_files, years, bins, processes, MC_weight, save
     
     print("LOADING BKG SUCCESSFUL")
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def load_TH2(data_files, template_files, years, bins, processes, MC_weight, Xsec_json, signal_json, hist_name = "hist"):
-    print("Loading data")
-    h_data = {}
-    for year in years:
-        h_data[year] = {}
-        for column in bins:
-            h_data[year][column] = ROOT.TH2D(f"{hist_name}_division_{year}_Data_Data_{column}_1", f"{hist_name}_division_{year}_Data_Data_{column}_1", len(bins[column]["x"]) - 1, bins[column]["x"], len(bins[column]["y"]) - 1, bins[column]["y"])
-
-    for template_file in template_files:
-        if "JetMET" in template_file:
-            for year in years:
-                if (year + "__") in template_file:
-                    print(template_file +" " + year)
-                    f = ROOT.TFile.Open(template_file, "READ")
-                    for key in f.GetListOfKeys():
-                        hist = key.ReadObj()
-                        if isinstance(hist, ROOT.TH1):  
-                            hist_name = hist.GetName()
-                            for column in bins:
-                                if "nom" in hist_name and column in hist_name:
-                                    h_data[year][column].Add(hist)
-                    f.Close()
-    
-    
-    
-    print("Loading data successful")
-
-
-    BKG_fileWeight, BKG_totalWeight = load_weight(data_files, years, processes, signal_json, Xsec_json)
-    #-----------------making BKG templates -----------------------------------------------------------------
-
-    #defining and initiating weight info for scaling
-    h_BKGs = {}
-
-    for year in years:
-        h_BKGs[year] = {}
-        for process in processes:
-            h_BKGs[year][process] = {}
-            for subprocess in processes[process]:
-                if subprocess == "*":
-                    if "SignalMC_" in process:
-                        for _subprocess in signal_json[year][process]:
-                            h_BKGs[year][process][_subprocess] = {}
-                            for column in bins:
-                                h_BKGs[year][process][_subprocess][column] =  ROOT.TH2D(f"{hist_name}_division_{year}_{process}_{subprocess}_{column}_1", f"{hist_name}_division_{year}_{process}_{subprocess}_{column}_1", len(bins[column]["x"]) - 1, bins[column]["x"], len(bins[column]["y"]) - 1, bins[column]["y"])
-                        break
-                    elif "MC_" in process:
-                        for _subprocess in Xsec_json[process]:
-                            h_BKGs[year][process][_subprocess] = {}
-                            for column in bins:
-                                h_BKGs[year][process][_subprocess][column] =  ROOT.TH2D(f"{hist_name}_division_{year}_{process}_{subprocess}_{column}_1", f"{hist_name}_division_{year}_{process}_{subprocess}_{column}_1", len(bins[column]["x"]) - 1, bins[column]["x"], len(bins[column]["y"]) - 1, bins[column]["y"])
-                        break
-                else:
-                    h_BKGs[year][process][subprocess] = {}
-                    for column in bins:
-                        h_BKGs[year][process][subprocess][column] =  ROOT.TH2D(f"{hist_name}_division_{year}_{process}_{subprocess}_{column}_1", f"{hist_name}_division_{year}_{process}_{subprocess}_{column}_1", len(bins[column]["x"]) - 1, bins[column]["x"], len(bins[column]["y"]) - 1, bins[column]["y"])
-                
-    print(BKG_totalWeight)
-    # loading weight info
-
-    print("Loading BKG")
-
-
-    # making templates
-    for template_file in template_files:
-        for year in h_BKGs:
-            if (year + "__" ) in template_file:
-                for process in h_BKGs[year]:
-                    if process in template_file:
-                        for subprocess in h_BKGs[year][process]:
-                            if subprocess in template_file:
-                                print(template_file)
-                                if "SignalMC_" in process:
-                                    Xsec = 1
-                                elif "MC_" in process:
-                                    Xsec = Xsec_json[process][subprocess]
-                                print(template_file)
-                                f = ROOT.TFile.Open(template_file, "READ")
-                                for key in f.GetListOfKeys():
-                                    hist = key.ReadObj()
-                                    if isinstance(hist, ROOT.TH1):  
-                                        hist_name = hist.GetName()
-                                        for column in bins:
-                                            if "nom" in hist_name and column in hist_name:
-                                                hist.Scale(1/BKG_totalWeight[year][process][subprocess])
-                                                h_BKGs[year][process][subprocess][column].Add(hist)
-                                f.Close()
-
-    print("LOADING BKG SUCCESSFUL")
-    return h_data, h_BKGs
-
-

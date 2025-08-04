@@ -9,6 +9,8 @@ import pickle
 from XHY4b_Helper import *
 with open("pkls/hists_selection_1p1_TH.pkl", "rb") as f:
     hists = pickle.load(f)
+with open("raw_nano/color_scheme.json", "r") as f:
+    color_json = json.load(f)
 h_data = hists["data"]
 h_BKGs = hists["BKGs"]
 #----------------------------- set bins, variable columns and other configs---------------------------------------------------------------------
@@ -145,6 +147,7 @@ for year in years:
 
 #-------------------------------Ploting -----------------------------------------------------------
 
+colors = [color_json["MC_SingleTopJets"], color_json["MC_DibosonJets"], color_json["MC_HiggsJets"], color_json["MC_TTBarJets"], color_json["MC_WZJets"], color_json["MC_QCDJets"]]
 for year in years:
     for column in var_columns:
 
@@ -154,7 +157,7 @@ for year in years:
         mplhep.histplot(
             [h_SingleTop[year][column], h_Diboson[year][column], h_Higgs[year][column], h_TTBar[year][column], h_WZ[year][column], h_QCD[year][column] ],
             label = ["SingleTop", "Diboson", "Higgs", "TTBar", "WZ", "QCD"],
-            color = ["darkblue", "beige", "red", "lightblue", "green", "orange"],
+            color = colors,
             stack = True,
             histtype = "fill",
             ax = ax1,

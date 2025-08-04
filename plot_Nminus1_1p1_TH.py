@@ -18,14 +18,14 @@ h_BKGs = hists["BKGs"]
 
 bins = {}
 
-bins["PtHCut__FatJet_pt_nom_H"] = array.array("d", np.linspace(0, 1000, 51))
-bins["PtYCut__FatJet_pt_nom_Y"] = array.array("d", np.linspace(0, 1000, 51))
-bins["MassHCut__FatJet_msoftdrop_nom_H"] = array.array("d", np.linspace(0, 1000, 51))
-bins["MassYCut__FatJet_msoftdrop_nom_Y"] = array.array("d", np.linspace(0, 1000, 51))
-bins["DeltaEtaCut__AbsDeltaEta"] = array.array("d", np.linspace(0, 6, 21))
+bins["PtHCut__FatJet_pt_nom_H"] = array.array("d", np.linspace(0, 1000, 101))
+bins["PtYCut__FatJet_pt_nom_Y"] = array.array("d", np.linspace(0, 1000, 101))
+bins["MassHCut__FatJet_msoftdrop_nom_H"] = array.array("d", np.linspace(0, 1000, 101))
+bins["MassYCut__FatJet_msoftdrop_nom_Y"] = array.array("d", np.linspace(0, 1000, 101))
+bins["DeltaEtaCut__AbsDeltaEta"] = array.array("d", np.linspace(0, 6, 101))
 bins["MJJCut__MassLeadingTwoFatJets"] = array.array("d", np.linspace(0, 4000, 201))
-bins["BTaggingHCut__PNet_H"] = array.array("d", np.linspace(0, 1, 21))
-bins["BTaggingYCut__PNet_Y"] = array.array("d", np.linspace(0, 1, 21))
+bins["BTaggingHCut__PNet_H"] = array.array("d", np.linspace(0, 1, 101))
+bins["BTaggingYCut__PNet_Y"] = array.array("d", np.linspace(0, 1, 101))
 
 cuts = {}
 cuts["PtHCut__FatJet_pt_nom_H"] = [450]

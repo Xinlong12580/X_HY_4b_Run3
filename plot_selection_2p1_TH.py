@@ -6,11 +6,14 @@ import ROOT
 import array
 import json
 import pickle
-from XHY4b import *
+from XHY4b_Helper import *
 with open("hists_selection_2p1_TH.pkl", "rb") as f:
     hists = pickle.load(f)
+with open("raw_nano/color_scheme.json", "r") as f:
+    color_json = json.load(f)
 h_data = hists["data"]
 h_BKGs = hists["BKGs"]
+save_dir = "plots/plots_selection_2p1_TH"
 #----------------------------- set bins, variable columns and other configs---------------------------------------------------------------------
 years = ["2022", "2022EE", "2023", "2023BPix"]
 var_columns = ["PtJY0", "PtJY1", "EtaJY0", "EtaJY1", "PhiJY0", "PhiJY1", "MassJY0", "MassJY1", "MassJJH", "MassHiggsCandidate", "PtHiggsCandidate", "EtaHiggsCandidate", "PhiHiggsCandidate", "MassYCandidate", "MJJH", "MJY"]
@@ -147,6 +150,7 @@ for year in years:
 
 
 #-------------------------------Ploting -----------------------------------------------------------
+colors = [color_json["MC_SingleTopJets"], color_json["MC_DibosonJets"], color_json["MC_HiggsJets"], color_json["MC_TTBarJets"], color_json["MC_WZJets"], color_json["MC_QCDJets"]]
 
 for year in years:
     for column in var_columns:
@@ -157,7 +161,7 @@ for year in years:
         mplhep.histplot(
             [h_SingleTop[year][column], h_Diboson[year][column], h_Higgs[year][column], h_TTBar[year][column], h_WZ[year][column], h_QCD[year][column] ],
             label = ["SingleTop", "Diboson", "Higgs", "TTBar", "WZ", "QCD"],
-            color = ["darkblue", "beige", "red", "lightblue", "green", "orange"],
+            color = colors,
             stack = True,
             histtype = "fill",
             ax = ax1,
@@ -184,10 +188,10 @@ for year in years:
         fig.tight_layout()
         ax1.set_yscale("linear")
         ax1.set_ylim(auto = True)
-        fig.savefig(f"plots_selection_2p1/linear_stack_{year}_{column}.png")
+        fig.savefig(f"{save_dir}/linear_stack_{year}_{column}.png")
         ax1.set_yscale("log")
         ax1.set_ylim(1,10000000)
-        fig.savefig(f"plots_selection_2p1/stack_{year}_{column}.png")
+        fig.savefig(f"{save_dir}/stack_{year}_{column}.png")
 
     
         #----plotting signal------
@@ -220,8 +224,8 @@ for year in years:
         fig_s.tight_layout()
         ax1_s.set_yscale("linear")
         ax1_s.set_ylim(auto = True)
-        fig_s.savefig(f"plots_selection_2p1/linear_signal_{year}_{column}.png")
+        fig_s.savefig(f"{save_dir}/linear_signal_{year}_{column}.png")
         ax1_s.set_yscale("log")
         ax1_s.set_ylim(1,10000000)
-        fig_s.savefig(f"plots_selection_2p1/signal_{year}_{column}.png")
+        fig_s.savefig(f"{save_dir}/signal_{year}_{column}.png")
     

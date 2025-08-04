@@ -165,7 +165,7 @@ for data_file in data_files:
                             del rdf
 
 h_All = {"data" : h_data, "BKGs" : h_BKGs}
-with open("hists_selection_2p1_TH.pkl", "wb") as f:
+with open("pkls/hists_selection_2p1_TH.pkl", "wb") as f:
     pickle.dump(h_All, f)
 
 print("LOADING BKG SUCCESSFUL")

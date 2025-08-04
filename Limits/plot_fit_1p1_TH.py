@@ -7,86 +7,75 @@ import array
 import json
 import pickle
 from XHY4b_Helper import *
-with open("pkls/hists_division_1p1_TH.pkl", "rb") as f:
-    hists = pickle.load(f)
-with open("raw_nano/color_scheme.json", "r") as f:
-    color_json = json.load(f)
+years = ["2022", "2022EE", "2023", "2023BPix"]
+processes = {"MC_WZJets": ["*"], "MC_TTBarJets": ["*"], "MC_QCDJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
+regions = ["VS1", "VS2", "VS3", "VS4", "VB1", "VB2"]
 
 MJY_bins = array.array("d", np.linspace(0, 2000, 101) )
 MJJ_bins = array.array("d", np.linspace(0, 4000, 401) )
+nbins_x = len(MJY_bins) - 1
+nbins_y = len(MJJ_bins) - 1
 h_base = ROOT.TH2D("Mass", "MJJ vs MJY", len(MJY_bins) - 1, MJY_bins, len(MJJ_bins) - 1, MJJ_bins) 
 h_base_projx = h_base.ProjectionX("MassJY")
 h_base_projy = h_base.ProjectionY("MassJJ")
-nbins_x = len(MJY_bins) - 1
-nbins_y = len(MJJ_bins) - 1
 
 x_edges = np.array(MJY_bins)
 y_edges = np.array(MJJ_bins)
-h_data = hists["data"]
-h_BKGs = hists["BKGs"]
-save_dir = "plots/plots_division_1p1_TH"
+save_dir = "test_fit"
 #######################################################################################################################
 #--------------------------rebinning  and creating projection hists--------------------------------------------------------------------------------
 ######################################################################################################################
 h_data_rebinned = {}
 h_data_rebinned_projx = {}
 h_data_rebinned_projy = {}
-h_BKGs_rebinned = {}
-h_BKGs_rebinned_projx = {}
-h_BKGs_rebinned_projy = {}
-for region in h_data:
-    h_data_rebinned[region] = {}
-    h_data_rebinned_projx[region] = {}
-    h_data_rebinned_projy[region] = {}
-    for year in h_data[region]:
-        h_data_rebinned[region][year] = rebin_TH2(h_data[region][year]["MJJvsMJY"], MJY_bins, MJJ_bins)
-        #h_data_rebinned[region][year] = h_data[region][year]
-        h_data_rebinned_projx[region][year] = h_data_rebinned[region][year].ProjectionX(f"projx_data_{year}_{region}")
-        h_data_rebinned_projy[region][year] = h_data_rebinned[region][year].ProjectionY(f"projy_data_{year}_{region}")
-
-for region in h_BKGs:
-    h_BKGs_rebinned[region] = {}
-    h_BKGs_rebinned_projx[region] = {}
-    h_BKGs_rebinned_projy[region] = {}
-    for year in h_BKGs[region]:
-        h_BKGs_rebinned[region][year] = {}
-        h_BKGs_rebinned_projx[region][year] = {}
-        h_BKGs_rebinned_projy[region][year] = {}
-        for process in h_BKGs[region][year]:
-            h_BKGs_rebinned[region][year][process] = {}
-            h_BKGs_rebinned_projx[region][year][process] = {}
-            h_BKGs_rebinned_projy[region][year][process] = {}
-            for subprocess in h_BKGs[region][year][process]:
-                h_BKGs_rebinned[region][year][process][subprocess] = rebin_TH2(h_BKGs[region][year][process][subprocess]["MJJvsMJY"], MJY_bins, MJJ_bins)
-                h_BKGs_rebinned_projx[region][year][process][subprocess] = h_BKGs_rebinned[region][year][process][subprocess].ProjectionX(f"projx_MC_{year}_{process}_{subprocess}_{region}")
-                h_BKGs_rebinned_projy[region][year][process][subprocess] = h_BKGs_rebinned[region][year][process][subprocess].ProjectionY(f"projy_MC_{year}_{process}_{subprocess}_{region}")
-
-
-############################################################################################################################
-#--------------------------merging subprocesses------------------------------------------------------------------------------
-#####################################################################################################################
-
-
 h_BKGs_rebinned_merged = {}
 h_BKGs_rebinned_projx_merged = {}
 h_BKGs_rebinned_projy_merged = {}
-for region in h_BKGs_rebinned:
+for region in regions:
+    h_data_rebinned[region] = {}
+    h_data_rebinned_projx[region] = {}
+    h_data_rebinned_projy[region] = {}
+
+for region in regions:
     h_BKGs_rebinned_merged[region] = {}
     h_BKGs_rebinned_projx_merged[region] = {}
     h_BKGs_rebinned_projy_merged[region] = {}
-    for year in h_BKGs_rebinned[region]:
+    for year in years:
         h_BKGs_rebinned_merged[region][year] = {}
         h_BKGs_rebinned_projx_merged[region][year] = {}
         h_BKGs_rebinned_projy_merged[region][year] = {}
-        for process in h_BKGs_rebinned[region][year]:
-            h_BKGs_rebinned_merged[region][year][process] = h_base.Clone("mergingSubprocess_MC_{year}_{process}_{region}")
-            h_BKGs_rebinned_projx_merged[region][year][process] = h_base_projx.Clone("mergingSubprocess_projx_MC_{year}_{process}_{region}")
-            h_BKGs_rebinned_projy_merged[region][year][process] = h_base_projy.Clone("mergingSubprocess_projy_MC_{year}_{process}_{region}")
-            print(process)
-            for subprocess in h_BKGs_rebinned[region][year][process]:
-                h_BKGs_rebinned_merged[region][year][process].Add(h_BKGs_rebinned[region][year][process][subprocess])
-                h_BKGs_rebinned_projx_merged[region][year][process].Add(h_BKGs_rebinned_projx[region][year][process][subprocess])
-                h_BKGs_rebinned_projy_merged[region][year][process].Add(h_BKGs_rebinned_projy[region][year][process][subprocess])
+
+f_name="Templates_all.root"
+f = ROOT.TFile.Open(f_name, "READ")
+for key in f.GetListOfKeys():
+    hist = key.ReadObj()
+    if isinstance(hist, ROOT.TH2):
+        hist_name = hist.GetName()
+        if "nom" not in hist_name:
+            continue
+        print(hist_name)
+        if "JetMET" in hist_name:
+            for region in regions:
+                if region in hist_name:
+                    for year in years:
+                        if (year + "_") in hist_name:
+                            h_data_rebinned[region][year] = rebin_TH2(hist,  MJY_bins, MJJ_bins)
+        #h_data_rebinned[region][year] = h_data[region][year]
+                            h_data_rebinned_projx[region][year] = h_data_rebinned[region][year].ProjectionX(f"projx_data_{year}_{region}")
+                            h_data_rebinned_projy[region][year] = h_data_rebinned[region][year].ProjectionY(f"projy_data_{year}_{region}")
+        elif "MC" in hist_name:
+            for region in regions:
+                if region in hist_name:
+                    for year in years:
+                        if (year + "_") in hist_name:
+                            for process in processes:
+                                if process in hist_name:
+                                    h_BKGs_rebinned_merged[region][year][process] = rebin_TH2(hist, MJY_bins, MJJ_bins)
+                                    h_BKGs_rebinned_projx_merged[region][year][process] = h_BKGs_rebinned_merged[region][year][process].ProjectionX(f"projx_MC_{process}_{year}_{region}")
+                                    h_BKGs_rebinned_projy_merged[region][year][process] = h_BKGs_rebinned_merged[region][year][process].ProjectionY(f"projy_MC_{process}_{year}_{region}")
+                                
+        
+
 ################################################################################################################################
 #-----------------------------------------making 2D plots-------------------------
 ########################################################################################################################
@@ -94,12 +83,12 @@ data_binned_projx = {}
 data_binned_error_projx = {}
 data_binned_projy = {}
 data_binned_error_projy = {}
-for region in h_data:
+for region in regions:
     data_binned_projx[region] = {}
     data_binned_error_projx[region] = {}
     data_binned_projy[region] = {}
     data_binned_error_projy[region] = {}
-    for year in h_data[region]:
+    for year in years:
         data_binned_projx[region][year] = [h_data_rebinned_projx[region][year].GetBinContent(i) for i in range(1, h_data_rebinned_projx[region][year].GetNbinsX() + 1)]
         data_binned_error_projx[region][year] = [h_data_rebinned_projx[region][year].GetBinError(i) for i in range(1, h_data_rebinned_projx[region][year].GetNbinsX() + 1)]
         data_binned_projy[region][year] = [h_data_rebinned_projy[region][year].GetBinContent(i) for i in range(1, h_data_rebinned_projy[region][year].GetNbinsX() + 1)]
@@ -111,15 +100,15 @@ h_data_rebinned_all = {}
 h_ttbar_rebinned_merged_all = {}
 h_netQCD_rebinned_merged_all = {}
 h_MCQCD_rebinned_merged_all = {}
-for region in h_data:
+for region in regions:
     print(region)
     h_data_rebinned_all[region] = h_base.Clone(f"2DMass_data_all_{region}")
     h_ttbar_rebinned_merged_all[region] = h_base.Clone(f"2DMass_ttbar_all_{region}")
     h_netQCD_rebinned_merged_all[region] = h_base.Clone(f"2DMass_netQCD_all_{region}")
     h_MCQCD_rebinned_merged_all[region] = h_base.Clone(f"2DMass_netQCD_all_{region}")
 
-for region in h_data:
-    for year in h_data[region]:
+for region in regions:
+    for year in years:
  
         h_data_rebinned_all[region].Add(h_data_rebinned[region][year])
         h_ttbar_rebinned_merged_all[region].Add(h_BKGs_rebinned_merged[region][year]["MC_TTBarJets"])
@@ -152,8 +141,6 @@ for region in h_data:
 
 
 for region in h_data_rebinned_all:
-    if region not in ["VB1", "VB2", "VS1", "VS2", "VS3", "VS4"]:
-        continue
     print(region)
 
 
@@ -169,7 +156,7 @@ for region in h_data_rebinned_all:
         process =   processes[i]
         fig, ax = plt.subplots(figsize=(8, 6))
         mesh = ax.pcolormesh(x_edges, y_edges, z, cmap="viridis") 
-        mplhep.cms.text("Simulation Internal", ax=ax)  # Optional CMS-style label
+        mplhep.cms.text("Simulation WiP", ax=ax)  # Optional CMS-style label
         cbar = fig.colorbar(mesh, ax=ax, label="Entries")
         ax.set_xlabel("MJY")
         ax.set_ylabel("MJJ")
@@ -181,11 +168,8 @@ for region in h_data_rebinned_all:
 #########################################################################################################################################
 #----------------------------------------making stack plots ------------------------------------------------------------------------------------
 ##############################################################################################################################
-
-for region in h_data:
-    if region not in ["VB1", "VB2", "VS1", "VS2", "VS3", "VS4"]:
-        continue
-    for year in h_data[region]:
+for region in regions:
+    for year in years:
 
         bin_centers_projx = (np.array(MJY_bins)[:-1] + np.array(MJY_bins)[1:])/2
         bin_centers_projy = (np.array(MJJ_bins)[:-1] + np.array(MJJ_bins)[1:])/2
@@ -198,16 +182,16 @@ for region in h_data:
             #[h_BKGs_rebinned_projx_merged[year]["MC_SingleTopJets"][region], h_BKGs_rebinned_projx_merged[year]["MC_DibosonJets"][region], h_BKGs_rebinned_projx_merged[year]["MC_HiggsJets"][region], h_BKGs_rebinned_projx_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projx_merged[year]["MC_WZJets"][region], h_BKGs_rebinned_projx_merged[region][year]["MC_QCDJets"]],
             #label = ["SingleTop", "Diboson", "Higgs", "TTBar", "WZ", "QCD"],
             #color = ["darkblue", "beige", "red", "lightblue", "green", "orange"],
-            [h_BKGs_rebinned_projx_merged[region][year]["MC_WZJets"], h_BKGs_rebinned_projx_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projx_merged[region][year]["MC_QCDJets"]],
-            label = ["WZ", "TTBar", "QCD"],
-            color = [color_json["MC_WZJets"], color_json["MC_TTBarJets"], color_json["MC_QCDJets"]],
+            [h_BKGs_rebinned_projx_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projx_merged[region][year]["MC_QCDJets"]],
+            label = ["TTBar", "QCD"],
+            color = ["lightblue", "orange"],
             stack = True,
             histtype = "fill",
             ax = ax1,
         )
         mplhep.histplot(
             #[h_BKGs_rebinned_projx_merged[year]["MC_SingleTopJets"][region], h_BKGs_rebinned_projx_merged[year]["MC_DibosonJets"][region], h_BKGs_rebinned_projx_merged[year]["MC_HiggsJets"][region], h_BKGs_rebinned_projx_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projx_merged[year]["MC_WZJets"][region], h_BKGs_rebinned_projx_merged[region][year]["MC_QCDJets"]],
-            [h_BKGs_rebinned_projx_merged[region][year]["MC_WZJets"], h_BKGs_rebinned_projx_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projx_merged[region][year]["MC_QCDJets"]],
+            [h_BKGs_rebinned_projx_merged[region][year]["MC_TTBarJets"],  h_BKGs_rebinned_projx_merged[region][year]["MC_QCDJets"]],
             stack = True,  # Note: keep stack=True so contours align with total stacks
             histtype = "step",
             color = "black",
@@ -232,92 +216,19 @@ for region in h_data:
 
         ax1.errorbar(bin_centers_projy, data_binned_projy[region][year], yerr=data_binned_error_projy[region][year], fmt='o', color='black', label='Data')
         mplhep.histplot(
-            [h_BKGs_rebinned_projy_merged[region][year]["MC_WZJets"], h_BKGs_rebinned_projy_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projy_merged[region][year]["MC_QCDJets"]],
-            label = ["WZ", "TTBar", "QCD"],
-            color = [color_json["MC_WZJets"], color_json["MC_TTBarJets"], color_json["MC_QCDJets"]],
-            stack = True,
-            histtype = "fill",
-            ax = ax1,
-        )
-        mplhep.histplot(
-            #[h_BKGs_rebinned_projy_merged[year]["MC_SingleTopJets"][region], h_BKGs_rebinned_projy_merged[year]["MC_DibosonJets"][region], h_BKGs_rebinned_projy_merged[year]["MC_HiggsJets"][region], h_BKGs_rebinned_projy_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projy_merged[year]["MC_WZJets"][region], h_BKGs_rebinned_projy_merged[region][year]["MC_QCDJets"]],
-            [h_BKGs_rebinned_projy_merged[region][year]["MC_WZJets"], h_BKGs_rebinned_projy_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projy_merged[region][year]["MC_QCDJets"]],
-            stack = True,  # Note: keep stack=True so contours align with total stacks
-            histtype = "step",
-            color = "black",
-            ax = ax1,
-            linewidth = 1.2,
-        )
-        mplhep.cms.label("Preliminary", data = False, rlabel = r"7.9804 $fb^{-1}$, 2022(13.6 TeV)", ax = ax1)
-        ax1.set_ylabel("Event Counts")
-        ax1.set_xlabel("")
-        ax1.legend()
-        
-        fig.tight_layout()
-        ax1.set_yscale("linear")
-        ax1.set_ylim(auto = True)
-        fig.savefig(f"{save_dir}/linear_stack_projy_{year}_{region}.png")
-        ax1.set_yscale("log")
-        ax1.set_ylim(1,10000000)
-        fig.savefig(f"{save_dir}/stack_projy_{year}_{region}.png")
-
-
-
-for region in h_data:
-    if region not in ["SR1", "SR2"]:
-        continue
-    for year in h_data[region]:
-
-        
-
-        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 12), gridspec_kw={"height_ratios": [3, 1]}, sharex=True)
-
-        mplhep.histplot(
-            [h_BKGs_rebinned_projx_merged[region][year]["MC_WZJets"], h_BKGs_rebinned_projx_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projx_merged[region][year]["MC_QCDJets"]],
-            label = ["WZ", "TTBar", "QCD"],
-            color = [color_json["MC_WZJets"], color_json["MC_TTBarJets"], color_json["MC_QCDJets"]],
-            stack = True,
-            histtype = "fill",
-            ax = ax1,
-        )
-        mplhep.histplot(
-            [h_BKGs_rebinned_projx_merged[region][year]["MC_WZJets"], h_BKGs_rebinned_projx_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projx_merged[region][year]["MC_QCDJets"]],
-            stack = True,  # Note: keep stack=True so contours align with total stacks
-            histtype = "step",
-            color = "black",
-            ax = ax1,
-            linewidth = 1.2,
-        )
-        mplhep.cms.label("Preliminary", data = False, rlabel = r"7.9804 $fb^{-1}$, 2022(13.6 TeV)", ax = ax1)
-        ax1.set_ylabel("Event Counts")
-        ax1.set_xlabel("")
-        ax1.legend()
-        
-        fig.tight_layout()
-        ax1.set_yscale("linear")
-        ax1.set_ylim(auto = True)
-        fig.savefig(f"{save_dir}/linear_stack_projx_{year}_{region}.png")
-        ax1.set_yscale("log")
-        ax1.set_ylim(1,10000000)
-        fig.savefig(f"{save_dir}/stack_projx_{year}_{region}.png")
-
-    
-        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 12), gridspec_kw={"height_ratios": [3, 1]}, sharex=True)
-
-        mplhep.histplot(
             #[h_BKGs_rebinned_projy_merged[year]["MC_SingleTopJets"][region], h_BKGs_rebinned_projy_merged[year]["MC_DibosonJets"][region], h_BKGs_rebinned_projy_merged[year]["MC_HiggsJets"][region], h_BKGs_rebinned_projy_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projy_merged[year]["MC_WZJets"][region], h_BKGs_rebinned_projy_merged[region][year]["MC_QCDJets"]],
             #label = ["SingleTop", "Diboson", "Higgs", "TTBar", "WZ", "QCD"],
             #color = ["darkblue", "beige", "red", "lightblue", "green", "orange"],
-            [h_BKGs_rebinned_projy_merged[region][year]["MC_WZJets"], h_BKGs_rebinned_projy_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projy_merged[region][year]["MC_QCDJets"]],
-            label = ["WZ", "TTBar", "QCD"],
-            color = [color_json["MC_WZJets"], color_json["MC_TTBarJets"], color_json["MC_QCDJets"]],
+            [h_BKGs_rebinned_projy_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projy_merged[region][year]["MC_QCDJets"]],
+            label = [ "TTBar",  "QCD"],
+            color = [ "lightblue",  "orange"],
             stack = True,
             histtype = "fill",
             ax = ax1,
         )
         mplhep.histplot(
             #[h_BKGs_rebinned_projy_merged[year]["MC_SingleTopJets"][region], h_BKGs_rebinned_projy_merged[year]["MC_DibosonJets"][region], h_BKGs_rebinned_projy_merged[year]["MC_HiggsJets"][region], h_BKGs_rebinned_projy_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projy_merged[year]["MC_WZJets"][region], h_BKGs_rebinned_projy_merged[region][year]["MC_QCDJets"]],
-            [h_BKGs_rebinned_projy_merged[region][year]["MC_WZJets"], h_BKGs_rebinned_projy_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projy_merged[region][year]["MC_QCDJets"]],
+            [h_BKGs_rebinned_projy_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projy_merged[region][year]["MC_QCDJets"]],
             stack = True,  # Note: keep stack=True so contours align with total stacks
             histtype = "step",
             color = "black",
@@ -336,81 +247,7 @@ for region in h_data:
         ax1.set_yscale("log")
         ax1.set_ylim(1,10000000)
         fig.savefig(f"{save_dir}/stack_projy_{year}_{region}.png")
-
-
-for region in h_data:
-    if region not in ["SR1", "SR2"]:
-        continue
-    for year in h_data[region]:
-
-        bin_centers_projx = (np.array(MJY_bins)[:-1] + np.array(MJY_bins)[1:])/2
-        bin_centers_projy = (np.array(MJJ_bins)[:-1] + np.array(MJJ_bins)[1:])/2
-        
-
-        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 12), gridspec_kw={"height_ratios": [3, 1]}, sharex=True)
-
-        mplhep.histplot(
-            [h_BKGs_rebinned_projx[region][year]["SignalMC_XHY4b"]["MX-3000_MY-300"]],
-            label = ["WX-3000_MY-300"],
-            color = [color_json["SignalMC_XHY4b"]],
-            stack = True,
-            histtype = "fill",
-            ax = ax1,
-        )
-        mplhep.histplot(
-            [h_BKGs_rebinned_projx[region][year]["SignalMC_XHY4b"]["MX-3000_MY-300"]],
-            stack = True,  # Note: keep stack=True so contours align with total stacks
-            histtype = "step",
-            color = "black",
-            ax = ax1,
-            linewidth = 1.2,
-        )
-        mplhep.cms.label("Preliminary", data = False, rlabel = r"7.9804 $fb^{-1}$, 2022(13.6 TeV)", ax = ax1)
-        ax1.set_ylabel("Event Counts")
-        ax1.set_xlabel("")
-        ax1.legend()
-        
-        fig.tight_layout()
-        ax1.set_yscale("linear")
-        ax1.set_ylim(auto = True)
-        fig.savefig(f"{save_dir}/linear_signal_projx_{year}_{region}.png")
-        ax1.set_yscale("log")
-        ax1.set_ylim(1,10000000)
-        fig.savefig(f"{save_dir}/log_signal_{year}_{region}.png")
-
-    
-        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 12), gridspec_kw={"height_ratios": [3, 1]}, sharex=True)
-
-        mplhep.histplot(
-            [h_BKGs_rebinned_projy[region][year]["SignalMC_XHY4b"]["MX-3000_MY-300"]],
-            label = ["WX-3000_MY-300"],
-            color = [color_json["SignalMC_XHY4b"]],
-            stack = True,
-            histtype = "fill",
-            ax = ax1,
-        )
-        mplhep.histplot(
-            [h_BKGs_rebinned_projy[region][year]["SignalMC_XHY4b"]["MX-3000_MY-300"]],
-            stack = True,  # Note: keep stack=True so contours align with total stacks
-            histtype = "step",
-            color = "black",
-            ax = ax1,
-            linewidth = 1.2,
-        )
-        mplhep.cms.label("Preliminary", data = False, rlabel = r"7.9804 $fb^{-1}$, 2022(13.6 TeV)", ax = ax1)
-        ax1.set_ylabel("Event Counts")
-        ax1.set_xlabel("")
-        ax1.legend()
-        
-        fig.tight_layout()
-        ax1.set_yscale("linear")
-        ax1.set_ylim(auto = True)
-        fig.savefig(f"{save_dir}/linear_signal_projy_{year}_{region}.png")
-        ax1.set_yscale("log")
-        ax1.set_ylim(1,10000000)
-        fig.savefig(f"{save_dir}/log_signal_projy_{year}_{region}.png")
-
-exit()
+exit()         
 ##########################################################################################################################
 #--------------------------------------fitting R_p/f------------------------------------------------------------------------
 ###################################################################################################################

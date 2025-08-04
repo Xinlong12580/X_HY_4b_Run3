@@ -26,9 +26,18 @@ with open("raw_nano/Datasets_signal.json") as f:
     signal_json=json.load(f)
 #----------------------------- set bins, variable columns and other configs---------------------------------------------------------------------
 years = ["2022", "2022EE", "2023", "2023BPix"]
-processes = { "MC_QCDJets": ["QCD-4Jets_HT-400to600", "QCD-4Jets_HT-600to800", "QCD-4Jets_HT-800to1000", "QCD-4Jets_HT-1000to1200", "QCD-4Jets_HT-1200to1500", "QCD-4Jets_HT-1500to2000", "QCD-4Jets_HT-2000"], "MC_TTBarJets": ["TTto4Q", "TTtoLNu2Q", "TTto2L2Nu"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
+processes = { "MC_QCDJets": ["QCD-4Jets_HT-400to600", "QCD-4Jets_HT-600to800", "QCD-4Jets_HT-800to1000", "QCD-4Jets_HT-1000to1200", "QCD-4Jets_HT-1200to1500", "QCD-4Jets_HT-1500to2000", "QCD-4Jets_HT-2000"], "MC_TTBarJets": ["TTto4Q", "TTtoLNu2Q", "TTto2L2Nu"], "MC_WZJets":["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
+for process in processes:
+    if processes[process] == ["*"]:
+        processes[process] = []
+        if "SignalMC" in process:
+            for mass in signal_json["2022"]["SignalMC_XHY4b"]:
+                processes[process].append(mass)
+        elif "MC" in process:
+            for subprocess in Xsec_json[process]:
+                processes[process].append(subprocess) 
 regions = ["SR1", "SR2", "SB1", "SB2", "VS1", "VS2", "VS3", "VS4", "VB1", "VB2"]
-bins={"MJJvsMJY":{"x":array.array("d", np.linspace(0, 3000, 301)), "y": array.array("d", np.linspace(0, 5000, 501))}}
+bins={"MJJvsMJY":{"x":array.array("d", np.linspace(0, 5000, 501)), "y": array.array("d", np.linspace(0, 5000, 501))}}
  
 
 MC_weight = "weight_All__nominal"

@@ -1,0 +1,34 @@
+{
+    "Hadron":{
+        "2022":[
+            "HLT_AK8PFJet425_SoftDropMass40"
+        ],
+        "2022EE":[
+            "HLT_AK8PFJet425_SoftDropMass40"
+        ],
+        "2023":[
+            "HLT_AK8PFJet425_SoftDropMass40"
+        ],
+        "2023BPix":[
+            "HLT_AK8PFJet425_SoftDropMass40"
+        ]
+    }, 
+    "Lepton":{
+        "2022":[
+            "HLT_Ele32_WPTight_Gsf",
+            "HLT_IsoMu27"
+        ],
+        "2022EE":[
+            "HLT_Ele32_WPTight_Gsf",
+            "HLT_IsoMu27"
+        ],
+        "2023":[
+            "HLT_Ele32_WPTight_Gsf",
+            "HLT_IsoMu27"
+        ],
+        "2023BPix":[
+            "HLT_Ele32_WPTight_Gsf",
+            "HLT_IsoMu27"
+        ]
+    } 
+}

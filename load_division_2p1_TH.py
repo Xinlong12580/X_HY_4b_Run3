@@ -21,8 +21,8 @@ with open("raw_nano/Datasets_signal.json") as f:
     signal_json=json.load(f)
 #----------------------------- set bins, variable columns and other configs---------------------------------------------------------------------
 years = ["2022", "2022EE", "2023", "2023BPix"]
-processes = {"MC_QCDJets": ["QCD-4Jets_HT-400to600", "QCD-4Jets_HT-600to800", "QCD-4Jets_HT-800to1000", "QCD-4Jets_HT-1000to1200", "QCD-4Jets_HT-1200to1500", "QCD-4Jets_HT-1500to2000", "QCD-4Jets_HT-2000"], "MC_TTBarJets": ["TTto4Q", "TTtoLNu2Q", "TTto2L2Nu"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
-regions = ["VS1", "VS2", "VS3", "VS4", "VB1", "VB2"]
+processes = { "MC_QCDJets": ["QCD-4Jets_HT-400to600", "QCD-4Jets_HT-600to800", "QCD-4Jets_HT-800to1000", "QCD-4Jets_HT-1000to1200", "QCD-4Jets_HT-1200to1500", "QCD-4Jets_HT-1500to2000", "QCD-4Jets_HT-2000"], "MC_TTBarJets": ["TTto4Q", "TTtoLNu2Q", "TTto2L2Nu"], "MC_WZJets":["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
+regions = ["SR1", "SR2", "SB1", "SB2", "VS1", "VS2", "VS3", "VS4", "VB1", "VB2"]
 MJY_bins = array.array("d", np.linspace(0, 1000, 11) )
 #MJY_bins = array.array("d", np.array([ 60, 100, 140, 200, 300, 500]) )
 MJJ_bins = array.array("d", np.linspace(0, 4000, 101) )

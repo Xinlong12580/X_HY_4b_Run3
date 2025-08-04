@@ -22,10 +22,10 @@ bins["PtHCut__PtHiggsCandidate"] = array.array("d", np.linspace(0, 1000, 51))
 bins["PtJY0Cut__PtJY0"] = array.array("d", np.linspace(0, 1000, 51))
 bins["PtJY1Cut__PtJY1"] = array.array("d", np.linspace(0, 1000, 51))
 bins["HiggsMassCut__MassHiggsCandidate"] = array.array("d", np.linspace(0, 500, 51))
-bins["DeltaRCut__DeltaR_JJ"] = array.array("d", np.linspace(0, 10, 21))
+bins["DeltaRCut__DeltaR_JJ"] = array.array("d", np.linspace(0, 10, 101))
 bins["MJJCut__MassJJH"] = array.array("d", np.linspace(0, 5000, 101))
-bins["BTaggingHCut__PNet_H"] = array.array("d", np.linspace(0, 1, 21))
-bins["BTaggingYCut__PNet_Y"] = array.array("d", np.linspace(0, 1, 21))
+bins["BTaggingHCut__PNet_H"] = array.array("d", np.linspace(0, 1, 101))
+bins["BTaggingYCut__PNet_Y"] = array.array("d", np.linspace(0, 1, 101))
 
 cuts = {}
 cuts["PtHCut__PtHiggsCandidate"] = [450] 
