@@ -1,5 +1,6 @@
 {
     "Hadron":{
+        "__COMMENT__": "main trigger",
         "2022":[
             "HLT_AK8PFJet425_SoftDropMass40"
         ],
@@ -14,6 +15,7 @@
         ]
     }, 
     "Lepton":{
+        "__COMMENT__": "Auxilary Trigger",
         "2022":[
             "HLT_Ele32_WPTight_Gsf",
             "HLT_IsoMu27"

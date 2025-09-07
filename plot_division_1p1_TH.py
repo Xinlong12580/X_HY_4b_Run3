@@ -6,10 +6,14 @@ import ROOT
 import array
 import json
 import pickle
+import os
+import sys
+DIR_TOP = os.environ["ANA_TOP"]
+sys.path.append(DIR_TOP)
 from XHY4b_Helper import *
 with open("pkls/hists_division_1p1_TH.pkl", "rb") as f:
     hists = pickle.load(f)
-with open("raw_nano/color_scheme.json", "r") as f:
+with open(DIR_TOP + "raw_nano/color_scheme.json", "r") as f:
     color_json = json.load(f)
 
 MJY_bins = array.array("d", np.linspace(0, 2000, 101) )
@@ -193,7 +197,7 @@ for region in h_data:
 
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 12), gridspec_kw={"height_ratios": [3, 1]}, sharex=True)
 
-        ax1.errorbar(bin_centers_projx, data_binned_projx[region][year], yerr=data_binned_error_projx[region][year], fmt='o', color='black', label='Data')
+        #ax1.errorbar(bin_centers_projx, data_binned_projx[region][year], yerr=data_binned_error_projx[region][year], fmt='o', color='black', label='Data')
         mplhep.histplot(
             #[h_BKGs_rebinned_projx_merged[year]["MC_SingleTopJets"][region], h_BKGs_rebinned_projx_merged[year]["MC_DibosonJets"][region], h_BKGs_rebinned_projx_merged[year]["MC_HiggsJets"][region], h_BKGs_rebinned_projx_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projx_merged[year]["MC_WZJets"][region], h_BKGs_rebinned_projx_merged[region][year]["MC_QCDJets"]],
             #label = ["SingleTop", "Diboson", "Higgs", "TTBar", "WZ", "QCD"],
@@ -230,7 +234,7 @@ for region in h_data:
     
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 12), gridspec_kw={"height_ratios": [3, 1]}, sharex=True)
 
-        ax1.errorbar(bin_centers_projy, data_binned_projy[region][year], yerr=data_binned_error_projy[region][year], fmt='o', color='black', label='Data')
+        #ax1.errorbar(bin_centers_projy, data_binned_projy[region][year], yerr=data_binned_error_projy[region][year], fmt='o', color='black', label='Data')
         mplhep.histplot(
             [h_BKGs_rebinned_projy_merged[region][year]["MC_WZJets"], h_BKGs_rebinned_projy_merged[region][year]["MC_TTBarJets"], h_BKGs_rebinned_projy_merged[region][year]["MC_QCDJets"]],
             label = ["WZ", "TTBar", "QCD"],

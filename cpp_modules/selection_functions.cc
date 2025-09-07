@@ -20,12 +20,13 @@ RVec<float> DeltaR(RVec<float> Etas, RVec<float> Phies, float eta, float phi){
     return Delta_Rs;
 }
 
-RVec<int> FindIdxJY(RVec<float> DeltaR_HJ, float deltaR = 1.2){
+RVec<int> FindIdxJY(RVec<float> Etas, RVec<float> Phies, float eta, float phi, RVec<float> BScores, float deltaR = 0.8, float minBScore = 0.5, float maxBScore = 1.01){
     RVec<int> IdxJYs = {-1, -1};
     int count = 0;
+    RVec<float> DeltaR_HJ = DeltaR(Etas, Phies, eta, phi);
     for (int i = 0; i < DeltaR_HJ.size(); i++)
     {
-        if (DeltaR_HJ.at(i) > deltaR)
+        if (DeltaR_HJ.at(i) > deltaR && BScores.at(i) >= minBScore && BScores.at(i) < maxBScore )
         {
             IdxJYs.at(count) = i;
             count ++;
@@ -35,6 +36,29 @@ RVec<int> FindIdxJY(RVec<float> DeltaR_HJ, float deltaR = 1.2){
     }
     return IdxJYs; 
 }
+
+Int_t FindIdxJH(RVec<float> Masses, float minM, float maxM, int nMass){
+//returns index of the Higgs jet
+//criterion is that it falls into 110-140 GeV mass window
+//if both are in the window, choose randomly
+    RVec<int> validIdxs = {};
+    for (int i = 0; i < Masses.size(); i++)
+    {
+        if (i >= nMass) 
+            break;
+        if (Masses.at(i) >= minM && Masses.at(i) <= maxM)
+            validIdxs.push_back(i);
+    }
+    if (validIdxs.size() >= 1){
+        std::random_device rd;                 
+        std::mt19937 gen(rd());                
+        std::uniform_int_distribution<> dist(0, validIdxs.size() - 1);  
+
+        return validIdxs.at(dist(gen));
+	}
+	return -1;
+}
+
 
 
 //Calculate Inv mass for a list of variables

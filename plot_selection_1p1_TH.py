@@ -6,16 +6,19 @@ import ROOT
 import array
 import json
 import pickle
+import os
+import sys
+DIR_TOP = os.environ["ANA_TOP"]
+sys.path.append(DIR_TOP)
 from XHY4b_Helper import *
 with open("pkls/hists_selection_1p1_TH.pkl", "rb") as f:
     hists = pickle.load(f)
-with open("raw_nano/color_scheme.json", "r") as f:
+with open(DIR_TOP + "raw_nano/color_scheme.json", "r") as f:
     color_json = json.load(f)
 h_data = hists["data"]
 h_BKGs = hists["BKGs"]
 #----------------------------- set bins, variable columns and other configs---------------------------------------------------------------------
 
-var_columns = ["leadingFatJetPt", "leadingFatJetPhi", "leadingFatJetEta", "leadingFatJetMsoftdrop", "MassLeadingTwoFatJets", "MassHiggsCandidate", "PtHiggsCandidate", "EtaHiggsCandidate", "PhiHiggsCandidate", "MassYCandidate", "PtYCandidate", "EtaYCandidate", "PhiYCandidate"]
 bins = {}
 bin_centers = {}
 bins["leadingFatJetPt"] = array.array("d", np.linspace(0, 3000, 101))
@@ -34,7 +37,7 @@ bins["leadingFatJetMsoftdrop"] = array.array("d", np.linspace(0, 1500, 51) )
 bins["MassLeadingTwoFatJets"] = array.array("d", np.linspace(0, 5000, 101) )
 bins["MassHiggsCandidate"] = array.array("d", np.linspace(0, 1500, 51) )
 bins["MassYCandidate"] = array.array("d", np.linspace(0, 1500, 51) )
-for column in var_columns:
+for column in bins:
     bin_centers[column] = 0.5 * (np.array(bins[column])[:-1] + np.array(bins[column])[1:])
 #MC_weight = "lumiXsecWeight"
 MC_weight = "genWeight"
@@ -65,7 +68,7 @@ data_binned_error = {}
 for year in years:
     data_binned[year] = {}
     data_binned_error[year] = {}
-    for column in var_columns:
+    for column in bins:
         data_binned[year][column] = [rebinned_h_data[year][column].GetBinContent(i) for i in range(1, rebinned_h_data[year][column].GetNbinsX() + 1)]
         data_binned_error[year][column] = [rebinned_h_data[year][column].GetBinError(i) for i in range(1, rebinned_h_data[year][column].GetNbinsX() + 1)]
 
@@ -91,7 +94,7 @@ for year in years:
     ratio[year] = {}
     ratio_error[year] = {}
 
-    for column in var_columns:
+    for column in bins:
         h_QCD[year][column] = ROOT.TH1D(f"selection_MC_QCD_{year}_{column}", f"{year}_{column}", len(bins[column]) - 1, bins[column])
         h_WZ[year][column] = ROOT.TH1D(f"selection_MC_WZ_{year}_{column}", f"{year}_{column}", len(bins[column]) - 1, bins[column])
         h_Higgs[year][column] = ROOT.TH1D(f"selection_MC_Higgs_{year}_{column}", f"{year}_{column}", len(bins[column]) - 1, bins[column])
@@ -106,36 +109,36 @@ for year in years:
     for subprocess in h_BKGs[year]["MC_QCDJets"]:
         if subprocess == "QCD-4Jets_HT-100to200" or subprocess == "QCD-4Jets_HT-200to400": #This one seems to be buggy, ignore it
             continue
-        for column in var_columns:
+        for column in bins:
             h_QCD[year][column].Add(rebinned_h_BKGs[year]["MC_QCDJets"][subprocess][column])
 
     for subprocess in h_BKGs[year]["MC_WZJets"]:
-        for column in var_columns:
+        for column in bins:
             h_WZ[year][column].Add(rebinned_h_BKGs[year]["MC_WZJets"][subprocess][column])
 
     for subprocess in h_BKGs[year]["MC_HiggsJets"]:
         #if subprocess == "WplusH_Hto2B_Wto2Q_M-125": #This one seems to be buggy, ignore it
         #    continue
-        for column in var_columns:
+        for column in bins:
             h_Higgs[year][column].Add(rebinned_h_BKGs[year]["MC_HiggsJets"][subprocess][column])
 
     for subprocess in h_BKGs[year]["MC_TTBarJets"]:
-        for column in var_columns:
+        for column in bins:
             h_TTBar[year][column].Add(rebinned_h_BKGs[year]["MC_TTBarJets"][subprocess][column])
 
     for subprocess in h_BKGs[year]["MC_DibosonJets"]:
-        for column in var_columns:
+        for column in bins:
             h_Diboson[year][column].Add(rebinned_h_BKGs[year]["MC_DibosonJets"][subprocess][column])
 
     for subprocess in h_BKGs[year]["MC_SingleTopJets"]:
-        for column in var_columns:
+        for column in bins:
             h_SingleTop[year][column].Add(rebinned_h_BKGs[year]["MC_SingleTopJets"][subprocess][column])
 
     for subprocess in h_BKGs[year]["SignalMC_XHY4b"]:
-        for column in var_columns:
+        for column in bins:
             h_Signal[year][column].Add(rebinned_h_BKGs[year]["SignalMC_XHY4b"][subprocess][column])
 
-    for column in var_columns:
+    for column in bins:
         for hist in [h_QCD[year][column], h_WZ[year][column], h_TTBar[year][column], h_Higgs[year][column], h_Diboson[year][column], h_SingleTop[year][column]]:
             h_All[year][column].Add(hist)
         values = np.array([h_All[year][column].GetBinContent(i) for i in range(1, h_All[year][column].GetNbinsX() + 1)] )
@@ -149,7 +152,7 @@ for year in years:
 
 colors = [color_json["MC_SingleTopJets"], color_json["MC_DibosonJets"], color_json["MC_HiggsJets"], color_json["MC_TTBarJets"], color_json["MC_WZJets"], color_json["MC_QCDJets"]]
 for year in years:
-    for column in var_columns:
+    for column in bins:
 
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 12), gridspec_kw={"height_ratios": [3, 1]}, sharex=True)
 
