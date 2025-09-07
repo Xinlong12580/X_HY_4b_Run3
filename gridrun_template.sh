@@ -6,11 +6,11 @@ echo "OUTTXT" $OUTTXT
 echo "Run script starting" | tee $root_dir/$OUTTXT
 echo "Running on: `uname -a`" | tee -a $root_dir/$OUTTXT
 echo "System software: `cat /etc/redhat-release`" | tee -a $root_dir/$OUTTXT
-
+echo "USER: $USER" |  tee -a $root_dir/$OUTTXT
 # Set up pre-compiled CMSSW env
 ls | tee -a $root_dir/$OUTTXT
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-xrdcp root://cmseos.fnal.gov//store/user/$USER/testtar.tgz ./
+xrdcp root://cmseos.fnal.gov//store/user/USER_NAME/testtar.tgz ./
 export SCRAM_ARCH=el8_amd64_gcc10
 scramv1 project CMSSW CMSSW_12_3_5
 echo "Unpacking compiled CMSSW environment tarball..." | tee -a $root_dir/$OUTTXT
