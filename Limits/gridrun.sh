@@ -87,4 +87,4 @@ else
     OUTTXT=FAILED_$OUTTXT
 fi
 ls | tee -a $root_dir/$OUTTXT
-xrdcp -f $root_dir/$OUTTXT root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_limits_$mode/
+#xrdcp -f $root_dir/$OUTTXT root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_limits_$mode/

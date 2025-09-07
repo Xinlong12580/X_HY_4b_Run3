@@ -3,6 +3,7 @@
     "GLOBAL": {
         "FILE": "Templates_MODE_all.root",
         "HIST": "$process__$region__nominal",
+        "HIST_SYST": "$process__$region__",
         "HIST_UP": "$process__$region__$syst_up",
         "HIST_DOWN": "$process__$region__$syst_down",
         "PATH_LOCAL": "./Templates",
@@ -62,10 +63,10 @@
         },
         "2022__SIGNAME": {
             "SYSTEMATICS": [
-                "lumi_13p6TeV",
-                "JES_",
-                "JER_",
-                "PileUp_Corr"
+                "Y2022_lumi_13p6TeV",
+                "Y2022_JES_",
+                "Y2022_JER_",
+                "Y2022_PileUp_Corr"
             ],
             "SCALE": 1.0,
             "COLOR": "black",
@@ -75,10 +76,10 @@
         },
         "2022__MC_TTBarJets": {
             "SYSTEMATICS": [
-                "lumi_13p6TeV",
-                "JES_",
-                "JER_",
-                "PileUp_Corr"
+                "Y2022_lumi_13p6TeV",
+                "Y2022_JES_",
+                "Y2022_JER_",
+                "Y2022_PileUp_Corr"
             ],
             "SCALE": 1.0,
             "COLOR": "red",
@@ -88,10 +89,10 @@
         },
         "2022__MC_WZJets": {
             "SYSTEMATICS": [
-                "lumi_13p6TeV",
-                "JES_",
-                "JER_",
-                "PileUp_Corr"
+                "Y2022_lumi_13p6TeV",
+                "Y2022_JES_",
+                "Y2022_JER_",
+                "Y2022_PileUp_Corr"
             ],
             "SCALE": 1.0,
             "COLOR": "magenta",
@@ -101,10 +102,10 @@
         },
         "2022EE__SIGNAME": {
             "SYSTEMATICS": [
-                "lumi_13p6TeV",
-                "JES_",
-                "JER_",
-                "PileUp_Corr"
+                "Y2022EE_lumi_13p6TeV",
+                "Y2022EE_JES_",
+                "Y2022EE_JER_",
+                "Y2022EE_PileUp_Corr"
             ],
             "SCALE": 1.0,
             "COLOR": "black",
@@ -114,10 +115,10 @@
         },
         "2022EE__MC_TTBarJets": {
             "SYSTEMATICS": [
-                "lumi_13p6TeV",
-                "JES_",
-                "JER_",
-                "PileUp_Corr"
+                "Y2022EE_lumi_13p6TeV",
+                "Y2022EE_JES_",
+                "Y2022EE_JER_",
+                "Y2022EE_PileUp_Corr"
             ],
             "SCALE": 1.0,
             "COLOR": "red",
@@ -127,10 +128,10 @@
         },
         "2022EE__MC_WZJets": {
             "SYSTEMATICS": [
-                "lumi_13p6TeV",
-                "JES_",
-                "JER_",
-                "PileUp_Corr"
+                "Y2022EE_lumi_13p6TeV",
+                "Y2022EE_JES_",
+                "Y2022EE_JER_",
+                "Y2022EE_PileUp_Corr"
             ],
             "SCALE": 1.0,
             "COLOR": "magenta",
@@ -140,10 +141,10 @@
         },
         "2023__SIGNAME": {
             "SYSTEMATICS": [
-                "lumi_13p6TeV",
-                "JES_",
-                "JER_",
-                "PileUp_Corr"
+                "Y2023_lumi_13p6TeV",
+                "Y2023_JES_",
+                "Y2023_JER_",
+                "Y2023_PileUp_Corr"
             ],
             "SCALE": 1.0,
             "COLOR": "black",
@@ -153,10 +154,10 @@
         },
         "2023__MC_TTBarJets": {
             "SYSTEMATICS": [
-                "lumi_13p6TeV",
-                "JES_",
-                "JER_",
-                "PileUp_Corr"
+                "Y2023_lumi_13p6TeV",
+                "Y2023_JES_",
+                "Y2023_JER_",
+                "Y2023_PileUp_Corr"
             ],
             "SCALE": 1.0,
             "COLOR": "red",
@@ -166,10 +167,10 @@
         },
         "2023__MC_WZJets": {
             "SYSTEMATICS": [
-                "lumi_13p6TeV",
-                "JES_",
-                "JER_",
-                "PileUp_Corr"
+                "Y2023_lumi_13p6TeV",
+                "Y2023_JES_",
+                "Y2023_JER_",
+                "Y2023_PileUp_Corr"
             ],
             "SCALE": 1.0,
             "COLOR": "magenta",
@@ -179,10 +180,10 @@
         },
         "2023BPix__SIGNAME": {
             "SYSTEMATICS": [
-                "lumi_13p6TeV",
-                "JES_",
-                "JER_",
-                "PileUp_Corr"
+                "Y2023BPix_lumi_13p6TeV",
+                "Y2023BPix_JES_",
+                "Y2023BPix_JER_",
+                "Y2023BPix_PileUp_Corr"
             ],
             "SCALE": 1.0,
             "COLOR": "black",
@@ -192,10 +193,10 @@
         },
         "2023BPix__MC_TTBarJets": {
             "SYSTEMATICS": [
-                "lumi_13p6TeV",
-                "JES_",
-                "JER_",
-                "PileUp_Corr"
+                "Y2023BPix_lumi_13p6TeV",
+                "Y2023BPix_JES_",
+                "Y2023BPix_JER_",
+                "Y2023BPix_PileUp_Corr"
             ],
             "SCALE": 1.0,
             "COLOR": "red",
@@ -205,10 +206,10 @@
         },
         "2023BPix__MC_WZJets": {
             "SYSTEMATICS": [
-                "lumi_13p6TeV",
-                "JES_",
-                "JER_",
-                "PileUp_Corr"
+                "Y2023BPix_lumi_13p6TeV",
+                "Y2023BPix_JES_",
+                "Y2023BPix_JER_",
+                "Y2023BPix_PileUp_Corr"
             ],
             "SCALE": 1.0,
             "COLOR": "magenta",
@@ -221,21 +222,78 @@
 
 
     "SYSTEMATICS": {
-        "lumi_13p6TeV": {
+        "Y2022_lumi_13p6TeV": {
             "VAL": 1.05,
             "CODE": 0
         },
-        "JES_": {
+        "Y2022EE_lumi_13p6TeV": {
+            "VAL": 1.05,
+            "CODE": 0
+        },
+        "Y2023_lumi_13p6TeV": {
+            "VAL": 1.05,
+            "CODE": 0
+        },
+        "Y2023BPix_lumi_13p6TeV": {
+            "VAL": 1.05,
+            "CODE": 0
+        },
+        "Y2022_JES_": {
             "UP": "PATH_LOCAL/FILE:HIST_UP",
             "DOWN": "PATH_LOCAL/FILE:HIST_DOWN",
             "SIGMA": 1.0
         },
-        "JER_": {
+        "Y2022EE_JES_": {
             "UP": "PATH_LOCAL/FILE:HIST_UP",
             "DOWN": "PATH_LOCAL/FILE:HIST_DOWN",
             "SIGMA": 1.0
         },
-        "PileUp_Corr": {
+        "Y2023_JES_": {
+            "UP": "PATH_LOCAL/FILE:HIST_UP",
+            "DOWN": "PATH_LOCAL/FILE:HIST_DOWN",
+            "SIGMA": 1.0
+        },
+        "Y2023BPix_JES_": {
+            "UP": "PATH_LOCAL/FILE:HIST_UP",
+            "DOWN": "PATH_LOCAL/FILE:HIST_DOWN",
+            "SIGMA": 1.0
+        },
+        "Y2022_JER_": {
+            "UP": "PATH_LOCAL/FILE:HIST_UP",
+            "DOWN": "PATH_LOCAL/FILE:HIST_DOWN",
+            "SIGMA": 1.0
+        },
+        "Y2022EE_JER_": {
+            "UP": "PATH_LOCAL/FILE:HIST_UP",
+            "DOWN": "PATH_LOCAL/FILE:HIST_DOWN",
+            "SIGMA": 1.0
+        },
+        "Y2023_JER_": {
+            "UP": "PATH_LOCAL/FILE:HIST_UP",
+            "DOWN": "PATH_LOCAL/FILE:HIST_DOWN",
+            "SIGMA": 1.0
+        },
+        "Y2023BPix_JER_": {
+            "UP": "PATH_LOCAL/FILE:HIST_UP",
+            "DOWN": "PATH_LOCAL/FILE:HIST_DOWN",
+            "SIGMA": 1.0
+        },
+        "Y2022_PileUp_Corr": {
+            "UP": "PATH_LOCAL/FILE:HIST_UP",
+            "DOWN": "PATH_LOCAL/FILE:HIST_DOWN",
+            "SIGMA": 1.0
+        },
+        "Y2022EE_PileUp_Corr": {
+            "UP": "PATH_LOCAL/FILE:HIST_UP",
+            "DOWN": "PATH_LOCAL/FILE:HIST_DOWN",
+            "SIGMA": 1.0
+        },
+        "Y2023_PileUp_Corr": {
+            "UP": "PATH_LOCAL/FILE:HIST_UP",
+            "DOWN": "PATH_LOCAL/FILE:HIST_DOWN",
+            "SIGMA": 1.0
+        },
+        "Y2023BPix_PileUp_Corr": {
             "UP": "PATH_LOCAL/FILE:HIST_UP",
             "DOWN": "PATH_LOCAL/FILE:HIST_DOWN",
             "SIGMA": 1.0
@@ -246,14 +304,14 @@
             "X": {
                 "NAME": "M_JY",
                 "TITLE": "M_{J}^{Y}",
-                "BINS": [60,100,140,200,300, 400, 500],
-                "SIGSTART": 140,
-                "SIGEND": 200
+                "BINS":[200, 300, 400, 500, 600, 700, 800, 900,1000,1100,1200,1300, 1400, 1600, 2000, 3000, 4000, 5000],
+                "SIGSTART": 300,
+                "SIGEND": 700
             },
             "Y": {
                 "NAME": "M_JJ",
                 "TITLE": "M_{JJ}",
-                "BINS": [100, 200, 300, 400, 500, 600, 700, 800, 960,1000,1040,1080,1120,1160,1200,1240,1280,1320,1360,1400,1440,1480,1520,4000, 5000]
+                "BINS": [300, 400, 500, 600, 700, 800,900,1000,1100,1200,1300,1400,1600,2000,3000,4000, 5000]
             }
         }
     },

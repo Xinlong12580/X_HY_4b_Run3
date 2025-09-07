@@ -1,0 +1,5 @@
+root://cms-xrd-global.cern.ch//store/mc/Run3Summer23BPixNanoAODv12/NMSSM_XtoYHto4B_MX-1800_MY-600_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_postBPix_v6-v2/2550000/89e7fec1-ba49-4440-b177-b85f03ccc20f.root
+root://cms-xrd-global.cern.ch//store/mc/Run3Summer23BPixNanoAODv12/NMSSM_XtoYHto4B_MX-1800_MY-600_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_postBPix_v6-v2/2550000/cb0f7bf7-b550-44f9-9dba-5da32af934ad.root
+root://cms-xrd-global.cern.ch//store/mc/Run3Summer23BPixNanoAODv12/NMSSM_XtoYHto4B_MX-1800_MY-600_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_postBPix_v6-v2/2550000/31ffbb07-2880-4cb2-93d5-3f503fc1b8a0.root
+root://cms-xrd-global.cern.ch//store/mc/Run3Summer23BPixNanoAODv12/NMSSM_XtoYHto4B_MX-1800_MY-600_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_postBPix_v6-v2/2550000/3f8c8daf-fe41-4fe8-9dde-d41bcd8d36f1.root
+root://cms-xrd-global.cern.ch//store/mc/Run3Summer23BPixNanoAODv12/NMSSM_XtoYHto4B_MX-1800_MY-600_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_postBPix_v6-v2/2550000/16c8d4d1-58b5-4fd2-8af2-0613d5fdd9a8.root

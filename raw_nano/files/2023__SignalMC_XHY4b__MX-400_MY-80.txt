@@ -1,0 +1,2 @@
+root://cms-xrd-global.cern.ch//store/mc/Run3Summer23NanoAODv12/NMSSM_XtoYHto4B_MX-400_MY-80_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_v15-v2/130000/62a7f868-1273-475a-9354-b5278cb379d8.root
+root://cms-xrd-global.cern.ch//store/mc/Run3Summer23NanoAODv12/NMSSM_XtoYHto4B_MX-400_MY-80_TuneCP5_13p6TeV_madgraph-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_v15-v2/130000/dd73064a-89b3-483a-898e-52034c23de73.root

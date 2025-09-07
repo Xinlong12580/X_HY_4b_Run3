@@ -1,0 +1,1 @@
+root://cms-xrd-global.cern.ch//store/mc/Run3Summer23BPixNanoAODv12/Wto2Q-3Jets_HT-200to400_TuneCP5_13p6TeV_madgraphMLM-pythia8/NANOAODSIM/130X_mcRun3_2023_realistic_postBPix_v2-v2/2530000/21d6a12d-2182-45d1-ba0f-d910258b5bb7.root

@@ -7,6 +7,7 @@
 
 using ROOT::VecOps::RVec;
 
+//Lumi * Xsec to gen Weight
 class genW {
     public:
         genW(){};

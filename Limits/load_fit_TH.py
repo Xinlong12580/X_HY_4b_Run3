@@ -73,16 +73,20 @@ for year in years:
         for region in regions:
             hists[year]["JetMET"][region] = {}
             for syst in systs:
-                hists[year]["JetMET"][region][syst] = hist_base.Clone(f"{year}__JetMET__{region}__{syst}")
-                #hists[year]["JetMET"][region][syst] = hist_base.Clone(f"{year}_JetMET_{region}_{syst}")
+                if syst == "nominal":
+                    hists[year]["JetMET"][region][syst] = hist_base.Clone(f"{year}__JetMET__{region}__{syst}")
+                else:
+                    hists[year]["JetMET"][region][syst] = hist_base.Clone(f"{year}__JetMET__{region}__Y{year}_{syst}")
     if "SignalMC_XHY4b" in processes:
         for subprocess in processes["SignalMC_XHY4b"]:
             hists[year][f"SignalMC_XHY4b_{subprocess}"] = {}        
             for region in regions:
                 hists[year][f"SignalMC_XHY4b_{subprocess}"][region] = {}
                 for syst in systs:
-                    #hists[year][process][region][syst] = hist_base.Clone(f"{year}__{process}__{region}__{syst}")
-                    hists[year][f"SignalMC_XHY4b_{subprocess}"][region][syst] = hist_base.Clone(f"{year}__SignalMC_XHY4b_{subprocess}__{region}__{syst}")
+                    if syst == "nominal":
+                        hists[year][f"SignalMC_XHY4b_{subprocess}"][region][syst] = hist_base.Clone(f"{year}__SignalMC_XHY4b_{subprocess}__{region}__{syst}")
+                    else:
+                        hists[year][f"SignalMC_XHY4b_{subprocess}"][region][syst] = hist_base.Clone(f"{year}__SignalMC_XHY4b_{subprocess}__{region}__Y{year}_{syst}")
         
     for process in processes:
         if "SignalMC" in process:
@@ -91,8 +95,10 @@ for year in years:
         for region in regions:
             hists[year][process][region] = {}
             for syst in systs:
-                hists[year][process][region][syst] = hist_base.Clone(f"{year}__{process}__{region}__{syst}")
-                #hists[year][process][region][syst] = hist_base.Clone(f"{year}_{process}_{region}_{syst}")
+                if syst == "nominal":
+                    hists[year][process][region][syst] = hist_base.Clone(f"{year}__{process}__{region}__{syst}")
+                else:
+                    hists[year][process][region][syst] = hist_base.Clone(f"{year}__{process}__{region}__Y{year}_{syst}")
 print(hists)
 
 BKG_fileWeight, BKG_totalWeight = load_weight(VB1_files, years, processes, signal_json, Xsec_json)

@@ -33,6 +33,7 @@ file_basename=os.path.basename(args.dataset)
 ana.output = "skimmed_" + file_basename + f"_n-{args.n_files}_i-{args.i_job}.root"
 if "Data" in args.dataset:
     ana.output = "masked_skimmed_" + file_basename + f"_n-{args.n_files}_i-{args.i_job}.root"
+#ana.save_fileInfo()
 
 ana.snapshot(saveRunChain = True)
 ana.save_cutflowInfo()

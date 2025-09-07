@@ -1,5 +1,7 @@
 #include "TIMBER/Framework/include/common.h"
 #include "cpp_modules/share.h"
+
+//Calculating DeltaR of two points
 float DeltaR(RVec<float> Etas, RVec<float> Phies){
     float deltaEta = std::abs(Etas[0] - Etas[1]);
     float deltaPhi = std::abs(Phies[0]-Phies[1]) < M_PI ? std::abs(Phies[0] - Phies[1]) : 2*M_PI - std::abs(Phies[0] - Phies[1]);
@@ -7,7 +9,7 @@ float DeltaR(RVec<float> Etas, RVec<float> Phies){
     return deltaR;
 }
 
-
+//Calculating DeltaR of each object in a collection with respect to a given point
 RVec<float> DeltaR(RVec<float> Etas, RVec<float> Phies, float eta, float phi){
     if (Etas.size() != Phies.size())
         throw std::runtime_error("Eta vector and Phi vector should be of the same size");
@@ -20,6 +22,7 @@ RVec<float> DeltaR(RVec<float> Etas, RVec<float> Phies, float eta, float phi){
     return Delta_Rs;
 }
 
+//2p1 mode only. Looking for two Y Jets satifying DeltaR and B score requirement
 RVec<int> FindIdxJY(RVec<float> Etas, RVec<float> Phies, float eta, float phi, RVec<float> BScores, float deltaR = 0.8, float minBScore = 0.5, float maxBScore = 1.01){
     RVec<int> IdxJYs = {-1, -1};
     int count = 0;
@@ -37,10 +40,9 @@ RVec<int> FindIdxJY(RVec<float> Etas, RVec<float> Phies, float eta, float phi, R
     return IdxJYs; 
 }
 
+// 2p1 mode only. Looking for Higgs Jet from the first nmass FatJets, with mass requirement only
 Int_t FindIdxJH(RVec<float> Masses, float minM, float maxM, int nMass){
-//returns index of the Higgs jet
-//criterion is that it falls into 110-140 GeV mass window
-//if both are in the window, choose randomly
+    //Looking for all possible FatJets
     RVec<int> validIdxs = {};
     for (int i = 0; i < Masses.size(); i++)
     {
@@ -49,6 +51,7 @@ Int_t FindIdxJH(RVec<float> Masses, float minM, float maxM, int nMass){
         if (Masses.at(i) >= minM && Masses.at(i) <= maxM)
             validIdxs.push_back(i);
     }
+    //If there are more than one such FatJet, choose one randomly
     if (validIdxs.size() >= 1){
         std::random_device rd;                 
         std::mt19937 gen(rd());                
@@ -56,6 +59,7 @@ Int_t FindIdxJH(RVec<float> Masses, float minM, float maxM, int nMass){
 
         return validIdxs.at(dist(gen));
 	}
+    //if no FatJet found, return -1
 	return -1;
 }
 

@@ -3,7 +3,7 @@ using json = nlohmann::json;
 
 bool mask_goldenJson(string year, int run, int luminosityBlock)
 {
-    //std::cout << year << " " << run << "" << luminosityBlock <<std::endl;
+    //Looking for the correct goldenJson file to use
     string json_file;
     if( year == "2022" || year == "2022EE" )
         json_file = "raw_nano/json/Cert_Collisions2022_355100_362760_Golden.json";
@@ -12,6 +12,7 @@ bool mask_goldenJson(string year, int run, int luminosityBlock)
     else 
         throw "year must be 2022, 2022EE, 2023, 2023BPix";
     
+    // Checking if the run and the block is included in the goldenJson file. if found, return 1; else, 0
     std::ifstream file(json_file);
     std::stringstream buffer;
     buffer << file.rdbuf();
