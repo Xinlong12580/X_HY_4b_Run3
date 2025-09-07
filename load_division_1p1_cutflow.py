@@ -6,20 +6,24 @@ import ROOT
 import array
 import json
 import pickle
+import os
+import sys
+DIR_TOP = os.environ["ANA_TOP"]
+sys.path.append(DIR_TOP)
 from XHY4b_Helper import *
 print("TEST")
 #-----------------------------------loading files for the templates --------------------------------------------
-with open("outputList/output_division_1p1.txt") as f:
+with open(DIR_TOP + "outputList/output_division_1p1.txt") as f:
     lines = f.readlines()
     data_files =[line.strip() for line in lines if "SR1" in line and "nom" in line and "Templates" not in line and "output.log" not in line]
 
-with open("raw_nano/Luminosity.json") as f:
+with open(DIR_TOP + "raw_nano/Luminosity.json") as f:
     lumi_json = json.load(f)
 
-with open("raw_nano/Xsections_background.json") as f:
+with open(DIR_TOP + "raw_nano/Xsections_background.json") as f:
     Xsec_json = json.load(f)
 
-with open("raw_nano/Datasets_signal.json") as f:
+with open(DIR_TOP + "raw_nano/Datasets_signal.json") as f:
     signal_json=json.load(f)
 
 #----------------------------- set bins, variable columns and other configs--------------------------------------------------------------------

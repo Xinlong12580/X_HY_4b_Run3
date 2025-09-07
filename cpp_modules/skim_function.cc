@@ -21,11 +21,11 @@ int skimmingAK8JetwithTwoAK4Jets(int nFatJet, RVec<float> FatJet_pt, RVec<float>
     if(nFatJet < 1 || nJet < 2){
         return 0;
     }
-    Int_t pt_cut = FatJet_pt[0]>300 && Jet_pt[0]>300 && Jet_pt[1]>300;
-    Int_t eta_cut = TMath::Abs(FatJet_eta[0])<2.5 && TMath::Abs(Jet_eta[0])<2.5 && TMath::Abs(Jet_eta[1])<2.5;
-    Int_t mSD_cut = FatJet_msoftdrop[0]>30;
+    int pt_cut = FatJet_pt[0]>300 && Jet_pt[0]>50;
+    int ind_extra = std::min(nFatJet - 1, 1);
+    int eta_mSD_cut = (TMath::Abs(FatJet_eta[0])<2.5  && FatJet_msoftdrop[0]>30) || (TMath::Abs(FatJet_eta[ind_extra])<2.5  && FatJet_msoftdrop[ind_extra]>30) ;
     
-    if(pt_cut && eta_cut && mSD_cut){
+    if(pt_cut && eta_mSD_cut){
         return 1;
     }
     else{

@@ -6,10 +6,13 @@ import ROOT
 import array
 import json
 import pickle
+import os
+import sys
+DIR_TOP = os.environ["ANA_TOP"]
+sys.path.append(DIR_TOP)
 from XHY4b_Helper import *
-print("TEST")
 #-----------------------------------loading files for the templates --------------------------------------------
-with open("outputList/output_selection.txt") as f:
+with open(DIR_TOP + "/outputList/output_selection_1p1.txt") as f:
     lines = f.readlines()
     data_files =[ line.strip() for line in lines]
 data_files = [data_file for data_file in data_files if ((not ("Templates" in data_file)) and "nom" in data_file)]
@@ -19,13 +22,13 @@ for data_file in data_files:
     template_file = data_files_part[0] + "Templates_" + data_files_part[1] + data_files_part[2]
     template_files.append(template_file)
     
-with open("raw_nano/Luminosity.json") as f:
+with open(DIR_TOP + "/raw_nano/Luminosity.json") as f:
     lumi_json = json.load(f)
 
-with open("raw_nano/Xsections_background.json") as f:
+with open(DIR_TOP + "/raw_nano/Xsections_background.json") as f:
     Xsec_json = json.load(f)
 
-with open("raw_nano/Datasets_signal.json") as f:
+with open(DIR_TOP + "/raw_nano/Datasets_signal.json") as f:
     signal_json=json.load(f)
 #----------------------------- set bins, variable columns and other configs---------------------------------------------------------------------
 years = ["2022", "2022EE", "2023", "2023BPix"]
@@ -53,7 +56,7 @@ MC_weight = "weight_All__nominal"
 
 processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
 save_name = "pkls/hists_selection_1p1_TH.pkl" 
-root_save_name = "All_selection.root" 
+root_save_name = "All_selection_1p1.root" 
 
 
 load_TH1(data_files, template_files, years, bins, processes, MC_weight, save_name, root_save_name, Xsec_json, signal_json)

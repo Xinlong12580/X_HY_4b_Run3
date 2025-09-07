@@ -7,6 +7,10 @@ import ROOT
 import array
 import json
 import pickle
+import os
+import sys
+DIR_TOP = os.environ["ANA_TOP"]
+sys.path.append(DIR_TOP)
 from XHY4b_Helper import *
 ROOT.gROOT.SetBatch(True)
 with open("pkls/hists_division_TH.pkl", "rb") as f:

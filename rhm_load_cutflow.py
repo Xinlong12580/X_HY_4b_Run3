@@ -7,28 +7,24 @@ import array
 import json
 import pickle
 from XHY4b_Helper import *
-import os
-import sys
-DIR_TOP = os.environ["ANA_TOP"]
-sys.path.append(DIR_TOP)
 print("TEST")
 #-----------------------------------loading files for the templates --------------------------------------------
-with open(DIR_TOP + "outputList/output_division_2p1.txt") as f:
+with open("outputList/output_division_2p1.txt") as f:
     lines = f.readlines()
     data_files =[line.strip() for line in lines if "SR1" in line and "nom" in line and "Templates" not in line and "output.log" not in line]
 
-with open(DIR_TOP + "raw_nano/Luminosity.json") as f:
+with open("raw_nano/Luminosity.json") as f:
     lumi_json = json.load(f)
 
-with open(DIR_TOP + "raw_nano/Xsections_background.json") as f:
+with open("raw_nano/Xsections_background.json") as f:
     Xsec_json = json.load(f)
 
-with open(DIR_TOP + "raw_nano/Datasets_signal.json") as f:
+with open("raw_nano/Datasets_signal.json") as f:
     signal_json=json.load(f)
 
 #----------------------------- set bins, variable columns and other configs--------------------------------------------------------------------
   
-cuts = ["Region_SR1", "BeforeSkim", "Skim", "GoldenJson", "SkimOf2p1", "LeptonVeto", "TriggerCut", "FlagCut", "FatJetID", "FatJetPt_nom", "HiggsMatch", "JYMatch", "JYPt", "JYJYDeltaR", "MassJJH"]
+cuts = [ "BeforeSkim", "Skim", "GoldenJson", "SkimOf2p1", "LeptonVeto", "TriggerCut", "FlagCut", "HiggsMatch", "HiggsEta", "FatJetID", "FatJetPt_nom", "JYMatch", "YEta", "JYJYDeltaR", "MassJJH", "Region_SR1"]
 cutflows = {}
 years = ["2022", "2022EE", "2023", "2023BPix"]
 for cut in cuts:
@@ -38,7 +34,8 @@ for cut in cuts:
 MC_weight = "genWeight"
 mplhep.style.use("CMS")
 
-processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
+#processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
+processes = {"SignalMC_XHY4b": ["MX-3000_MY-300", "MX-1600_MY-1000", "MX-2500_MY-1600","MX-3500_MY-2600", "MX-2000_MY-500", "MX-2000_MY-1600", "MX-4000_MY-500"]}
 save_name = "pkls/hists_division_2p1_cutflow.pkl"
 #------------------------------ making data template ------------------------------------------------------------
 '''

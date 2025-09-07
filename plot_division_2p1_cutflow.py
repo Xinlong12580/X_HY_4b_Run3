@@ -2,7 +2,11 @@ import pickle
 import numpy as np
 import matplotlib.pyplot as plt
 import json
-with open("raw_nano/color_scheme.json", "r") as f:
+import os
+import sys
+DIR_TOP = os.environ["ANA_TOP"]
+sys.path.append(DIR_TOP)
+with open(DIR_TOP + "raw_nano/color_scheme.json", "r") as f:
     color_scheme = json.load(f)
 #--------------------------------defining parameters---------------------------------------------------------
 cuts = [ "BeforeSkim", "Skim", "GoldenJson", "SkimOf2p1", "LeptonVeto", "TriggerCut", "FlagCut", "FatJetID", "FatJetPt_nom", "HiggsMatch", "JYMatch", "JYPt", "JYJYDeltaR", "MassJJH", "Region_SR1"]

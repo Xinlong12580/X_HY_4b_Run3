@@ -7,10 +7,14 @@ import array
 import json
 import pickle
 import math
+import os
+import sys
+DIR_TOP = os.environ["ANA_TOP"]
+sys.path.append(DIR_TOP)
 from XHY4b_Helper import *
 with open("pkls/hists_Nminus1_1p1_TH.pkl", "rb") as f:
     hists = pickle.load(f)
-with open("raw_nano/color_scheme.json", "r") as f:
+with open(DIR_TOP + "raw_nano/color_scheme.json", "r") as f:
     color_scheme = json.load(f)
 h_data = hists["data"]
 h_BKGs = hists["BKGs"]

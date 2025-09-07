@@ -5,294 +5,76 @@ import ROOT
 import array
 import json
 import pickle
-
+import os
+import sys
+DIR_TOP = os.environ["ANA_TOP"]
+sys.path.append(DIR_TOP)
+from XHY4b_Helper import *
 #-----------------------------------loading files for the templates --------------------------------------------
-with open("division_2p1_output.txt") as f:
+with open(DIR_TOP + "outputList/output_division_2p1.txt") as f:
     lines = f.readlines()
-    data_files =[("root://cmsxrootd.fnal.gov//store/user/xinlong/XHY4bRun3_2022_division_2p1/" + line.strip()) for line in lines]
-
-with open("raw_nano/Luminosity.json") as f:
+    all_data_files =[line.strip() for line in lines if "nom" in line and "Templates" not in line and "output.log" not in line]
+all_template_files = []
+for data_file in all_data_files:
+    data_files_part = data_file.partition("2p1/")
+    template_file = data_files_part[0] + data_files_part[1] + "Templates_" + data_files_part[2]
+    all_template_files.append(template_file)
+    
+with open(DIR_TOP + "raw_nano/Luminosity.json") as f:
     lumi_json = json.load(f)
 
-with open("raw_nano/Xsections_background.json") as f:
+with open(DIR_TOP + "raw_nano/Xsections_background.json") as f:
     Xsec_json = json.load(f)
 
-with open("raw_nano/Datasets_signal.json") as f:
+with open(DIR_TOP + "raw_nano/Datasets_signal.json") as f:
     signal_json=json.load(f)
 #----------------------------- set bins, variable columns and other configs---------------------------------------------------------------------
 years = ["2022", "2022EE", "2023", "2023BPix"]
-processes = { "MC_QCDJets": ["QCD-4Jets_HT-400to600", "QCD-4Jets_HT-600to800", "QCD-4Jets_HT-800to1000", "QCD-4Jets_HT-1000to1200", "QCD-4Jets_HT-1200to1500", "QCD-4Jets_HT-1500to2000", "QCD-4Jets_HT-2000"], "MC_TTBarJets": ["TTto4Q", "TTtoLNu2Q", "TTto2L2Nu"], "MC_WZJets":["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
+processes = { "MC_QCDJets": ["QCD-4Jets_HT-400to600", "QCD-4Jets_HT-600to800", "QCD-4Jets_HT-800to1000", "QCD-4Jets_HT-1000to1200", "QCD-4Jets_HT-1200to1500", "QCD-4Jets_HT-1500to2000", "QCD-4Jets_HT-2000"], "MC_TTBarJets": ["TTto4Q", "TTtoLNu2Q", "TTto2L2Nu"], "MC_WZJets":["*"], "SignalMC_XHY4b": ["MX-3000_MY-95", "MX-3000_MY-200", "MX-3000_MY-300", "MX-3000_MY-1000"]}
+for process in processes:
+    if processes[process] == ["*"]:
+        processes[process] = []
+        if "SignalMC" in process:
+            for mass in signal_json["2022"]["SignalMC_XHY4b"]:
+                processes[process].append(mass)
+        elif "MC" in process:
+            for subprocess in Xsec_json[process]:
+                processes[process].append(subprocess) 
 regions = ["SR1", "SR2", "SB1", "SB2", "VS1", "VS2", "VS3", "VS4", "VB1", "VB2"]
-MJY_bins = array.array("d", np.linspace(0, 1000, 11) )
-#MJY_bins = array.array("d", np.array([ 60, 100, 140, 200, 300, 500]) )
-MJJ_bins = array.array("d", np.linspace(0, 4000, 101) )
+bins={"MJJvsMJY":{"x":array.array("d", np.linspace(0, 5000, 501)), "y": array.array("d", np.linspace(0, 5000, 501))}}
  
-h_BKG = {}
-h_data = {}
 
-MC_weight = "genWeight"
+MC_weight = "weight_All__nominal"
 mplhep.style.use("CMS")
 
-h_base = ROOT.TH2D("BaseMass", "MJJ vs MJY", len(MJY_bins) - 1, MJY_bins, len(MJJ_bins) - 1, MJJ_bins) 
+save_name = "pkls/hists_division_2p1_TH.pkl"
+root_save_name = "All_division_2p1.root"
 #------------------------------ making data template ------------------------------------------------------------
-
-print("Loading data")
 h_data = {}
-for year in years:
-    h_data[year] = {}
-    for region in regions:
-        h_data[year][region] = h_base.Clone(f"2DMass_data_{year}_{region}")
-
-for data_file in data_files:
-    if "JetMET" in data_file:
-        for year in years:
-            if (year + "__") in data_file:
-                for region in regions:
-                    if region in data_file:
-                        print(data_file)
-                        rdf = ROOT.RDataFrame("Events", data_file)
-                        if rdf.Count().GetValue() < 1:
-                            print("Empty File")
-                        else:
-                            th2 = rdf.Histo2D((f"Mass_{data_file}", "MJJ vs MJY", len(MJY_bins) - 1, MJY_bins, len(MJJ_bins) - 1, MJJ_bins), "MJY", "MJJH")
-                            h_data[year][region].Add(th2.GetValue())
-with open("hist_data.pkl", "wb") as f:
-    pickle.dump(h_data, f)
-
-print("Loading data successful")
-
-#-----------------making BKG templates -----------------------------------------------------------------
-
-#defining and initiating weight info for scaling
 h_BKGs = {}
-BKG_fileWeight = {}
-BKG_totalWeight = {}
-
-for year in years:
-    h_BKGs[year] = {}
-    BKG_fileWeight[year] = {}
-    BKG_totalWeight[year] = {}
-    for process in processes:
-        h_BKGs[year][process] = {}
-        BKG_fileWeight[year][process] = {}
-        BKG_totalWeight[year][process] = {}
-        for subprocess in processes[process]:
-            if subprocess == "*":
-                if "SignalMC_" in process:
-                    for _subprocess in signal_json[year][process]:
-                        BKG_fileWeight[year][process][_subprocess] = {}
-                        BKG_totalWeight[year][process][_subprocess] = {}
-                        h_BKGs[year][process][_subprocess] = {}
-                        for region in regions:
-                            BKG_fileWeight[year][process][_subprocess][region] = []
-                            BKG_totalWeight[year][process][_subprocess][region] = 0
-                            h_BKGs[year][process][_subprocess][region] = h_base.Clone(f"2DMass_MC_{year}_{process}_{_subprocess}_{region}")
-                    break
-                elif "MC_" in process:
-                    for _subprocess in Xsec_json[process]:
-                        BKG_fileWeight[year][process][_subprocess] = {}
-                        BKG_totalWeight[year][process][_subprocess] = {}
-                        h_BKGs[year][process][_subprocess] = {}
-                        for region in regions:
-                            BKG_fileWeight[year][process][_subprocess][region] = []
-                            BKG_totalWeight[year][process][_subprocess][region] = 0
-                            h_BKGs[year][process][_subprocess][region] = h_base.Clone(f"2DMass_MC_{year}_{process}_{_subprocess}_{region}")
-                    break
-            else:
-                BKG_fileWeight[year][process][subprocess] = {}
-                BKG_totalWeight[year][process][subprocess] = {}
-                h_BKGs[year][process][subprocess] = {}
-                for region in regions:
-                    BKG_fileWeight[year][process][subprocess][region] = []
-                    BKG_totalWeight[year][process][subprocess][region] = 0
-                    h_BKGs[year][process][subprocess][region] = h_base.Clone(f"2DMass_MC_{year}_{process}_{subprocess}_{region}")
-            
-print(BKG_totalWeight)
-# loading weight info
-print("Loading Weight")
-
-for data_file in data_files:
-    for year in BKG_fileWeight:
-        if (year + "__" ) in data_file:
-            for process in BKG_fileWeight[year]:
-                if process in data_file:
-                    for subprocess in BKG_fileWeight[year][process]:
-                        if subprocess in data_file:
-                            for region in BKG_fileWeight[year][process][subprocess]:
-                                if region in data_file:
-                                    print(data_file)
-                                    rdf_np = ROOT.RDataFrame("Runs", data_file).AsNumpy(["genEventSumw"])
-                                    BKG_fileWeight[year][process][subprocess][region].append(sum(rdf_np["genEventSumw"]))
-for year in BKG_fileWeight:
-    for process in BKG_fileWeight[year]:
-        for subprocess in BKG_fileWeight[year][process]:
-            for region in BKG_fileWeight[year][process][subprocess]:
-                BKG_totalWeight[year][process][subprocess][region] = sum(BKG_fileWeight[year][process][subprocess][region])
-
-print("Loading BKG")
-
-
-# making templates
-for data_file in data_files:
-    for year in h_BKGs:
-        lumi = lumi_json[year]
-        if (year + "__" ) in data_file:
-            for process in h_BKGs[year]:
-                if process in data_file:
-                    for subprocess in h_BKGs[year][process]:
-                        if subprocess in data_file:
-                            for region in regions:
-                                if region in data_file:
-                                    print(data_file)
-                                    if "SignalMC_" in process:
-                                        Xsec = 1
-                                    elif "MC_" in process:
-                                        Xsec = Xsec_json[process][subprocess]
-                                    rdf = ROOT.RDataFrame("Events", data_file)
-                                    if rdf.Count().GetValue() <= 0 or len(rdf.GetColumnNames()) < 1:
-                                        print("Empty File")
-                                    else:
-                                        rdf = rdf.Define("NormalizedWeight", f"{lumi * Xsec / BKG_totalWeight[year][process][subprocess][region]} * {MC_weight}")
-                                        th2 = rdf.Histo2D((f"Mass_{data_file}", "MJJ vs MJY", len(MJY_bins) - 1, MJY_bins, len(MJJ_bins) - 1, MJJ_bins), "MJY", "MJJH", "NormalizedWeight")
-                                        h_BKGs[year][process][subprocess][region].Add(th2.GetValue())
+for region in regions:
+    data_files = [f for f in all_data_files if region in f]
+    template_files = [f for f in all_template_files if region in f]
+ 
+    _h_data, _h_BKGs = load_TH2(data_files, template_files, years, bins, processes, MC_weight, Xsec_json, signal_json, hist_name = ("division_" + region))
+    h_data[region] = _h_data
+    h_BKGs[region] = _h_BKGs
 h_All = {"data" : h_data, "BKGs" : h_BKGs}
-with open("hists_division_2p1_TH.pkl", "wb") as f:
+with open(save_name, "wb") as f:
     pickle.dump(h_All, f)
-
-print("LOADING BKG SUCCESSFUL")
-exit()
-
-#--------------------- extracting interested processes-----------------------------------------------
-h_QCD = {}
-h_WZ = {}
-h_Higgs = {}
-h_TTBar = {}
-h_Diboson = {}
-h_SingleTop = {}
-h_Signal = {}
-h_All = {}
-ratio = {}
-ratio_error = {}
-for column in var_columns:
-    h_QCD[column] = Hist.new.Var(bins[column], name="BKG", label="BKG").Double()
-    h_WZ[column] = Hist.new.Var(bins[column], name="BKG", label="BKG").Double()
-    h_Higgs[column] = Hist.new.Var(bins[column], name="BKG", label="BKG").Double()
-    h_TTBar[column] = Hist.new.Var(bins[column], name="BKG", label="BKG").Double()
-    h_Diboson[column] = Hist.new.Var(bins[column], name="BKG", label="BKG").Double()
-    h_SingleTop[column] = Hist.new.Var(bins[column], name="BKG", label="BKG").Double()
-    h_Signal[column] = Hist.new.Var(bins[column], name="BKG", label="BKG").Double()
-    h_All[column] = Hist.new.Var(bins[column], name="BKG", label="BKG").Double()
-    ratio[column] = []
-    ratio_error[column] = []
-for subprocess in h_BKGs["MC_QCDJets"]:
-    for column in var_columns:
-        h_QCD[column] += h_BKGs["MC_QCDJets"][subprocess][column]
-
-for subprocess in h_BKGs["MC_WZJets"]:
-    for column in var_columns:
-        h_WZ[column] += h_BKGs["MC_WZJets"][subprocess][column]
-
-
-
-for subprocess in h_BKGs["MC_HiggsJets"]:
-    for column in var_columns:
-        h_Higgs[column] += h_BKGs["MC_HiggsJets"][subprocess][column]
-
-for subprocess in h_BKGs["MC_TTBarJets"]:
-    for column in var_columns:
-        h_TTBar[column] += h_BKGs["MC_TTBarJets"][subprocess][column]
-
-for subprocess in h_BKGs["MC_DibosonJets"]:
-    for column in var_columns:
-        h_Diboson[column] += h_BKGs["MC_DibosonJets"][subprocess][column]
-
-for subprocess in h_BKGs["MC_SingleTopJets"]:
-    for column in var_columns:
-        h_SingleTop[column] += h_BKGs["MC_SingleTopJets"][subprocess][column]
-
-for subprocess in h_BKGs["SignalMC_XHY4b"]:
-    for column in var_columns:
-        h_Signal[column] += h_BKGs["SignalMC_XHY4b"][subprocess][column]
-
-for column in var_columns:
-    h_All[column] =  h_QCD[column] + h_WZ[column] + h_TTBar[column] + h_Higgs[column] + h_Diboson[column] + h_SingleTop[column]
-    ratio[column] = [x / y for x,y in zip(data_binned[column], h_All[column].values())]
-    ratio_error[column] = [x / y for x,y in zip(data_binned_error[column], h_All[column].values())]
-
-
-
-#-------------------------------Ploting -----------------------------------------------------------
-
-with open("raw_nano/CMS_style.json") as f:
-    CMS_style = json.load(f)
-colors = CMS_style["color"]
-for column in var_columns:
-    h_QCD[column].label = "QCD"
-    h_WZ[column].label = "WZ"
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 12), gridspec_kw={"height_ratios": [3, 1]}, sharex=True)
-
-    ax1.errorbar(bin_centers[column], data_binned[column], yerr=data_binned_error[column], fmt='o', color='black', label='Data')
-    mplhep.histplot(
-        [h_SingleTop[column], h_Diboson[column], h_Higgs[column], h_TTBar[column], h_WZ[column], h_QCD[column] ],
-        label = ["SingleTop", "Diboson", "Higgs", "TTBar", "WZ", "QCD"],
-        color = ["darkblue", "beige", "red", "lightblue", "green", "orange"],
-        stack = True,
-        histtype = "fill",
-        ax = ax1,
-    )
-    mplhep.histplot(
-        [h_SingleTop[column], h_Diboson[column], h_Higgs[column], h_TTBar[column], h_WZ[column], h_QCD[column] ],
-        stack = True,  # Note: keep stack=True so contours align with total stacks
-        histtype = "step",
-        color = "black",
-        ax = ax1,
-        linewidth = 1.2,
-    )
-    mplhep.cms.label("Preliminary", data = False, rlabel = r"7.9804 $fb^{-1}$, 2022(13.6 TeV)", ax = ax1)
-    ax1.set_yscale("log")
-    ax1.set_ylim(1,10000000)
-    ax1.set_ylabel("Event Counts")
-    ax1.set_xlabel("")
-    ax1.legend()
-
-    ax2.errorbar(bin_centers[column], ratio[column], yerr=ratio_error[column], fmt='o', color='black', label='Data')
-    ax2.axhline(y = 1, linestyle = '--', color = 'red', linewidth = 1.5)
-    ax2.set_ylabel("Data/MC")
-    ax2.set_ylim(0, 2)
-    ax2.set_xlabel(column)
-
-    fig.tight_layout()
-    fig.savefig(f"test_new_{column}.png")
     
-    #----plotting signal------
-
-    fig_s, (ax1_s, ax2_s) = plt.subplots(2, 1, figsize=(15, 12), gridspec_kw={"height_ratios": [3, 1]}, sharex=True)
-    mplhep.histplot(
-        [h_Signal[column] ],
-        label = ["Signal MX-3000_MY-300"],
-        color = ["purple"],
-        stack = True,
-        histtype = "fill",
-        ax = ax1_s,
-    )
-    mplhep.histplot(
-        [h_Signal[column] ],
-        stack = True,  # Note: keep stack=True so contours align with total stacks
-        histtype = "step",
-        color = "black",
-        ax = ax1_s,
-        linewidth = 1.2,
-    )
+f = ROOT.TFile.Open(root_save_name, "RECREATE")
+f.cd()
+for region in h_data:
+    for year in h_data[region]:
+        for column in h_data[region][year]:
+            h_data[region][year][column].Write()
     
-    mplhep.cms.label("Preliminary", data = False, rlabel = r"7.9804 $fb^{-1}$, 2022(13.6 TeV)", ax = ax1_s)
-    ax1_s.set_yscale("log")
-    ax1_s.set_ylim(1,10000000)
-    ax1_s.set_ylabel("Event Counts")
-    ax1_s.set_xlabel("")
-    ax1_s.legend()
-
-    ax2_s.set_xlabel(column)
-
-    fig_s.tight_layout()
-    fig_s.savefig(f"test_new_signal_{column}.png")
+for region in h_BKGs:
+    for year in h_BKGs[region]:
+        for process in h_BKGs[region][year]:
+            for subprocess in h_BKGs[region][year][process]:
+                for column in h_BKGs[region][year][process][subprocess]:
+                    h_BKGs[region][year][process][subprocess][column].Write()
+f.Close()
     

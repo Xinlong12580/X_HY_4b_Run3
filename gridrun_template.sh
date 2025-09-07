@@ -10,7 +10,7 @@ echo "System software: `cat /etc/redhat-release`" | tee -a $root_dir/$OUTTXT
 # Set up pre-compiled CMSSW env
 ls | tee -a $root_dir/$OUTTXT
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-xrdcp root://cmseos.fnal.gov//store/user/xinlong/testtar.tgz ./
+xrdcp root://cmseos.fnal.gov//store/user/$USER/testtar.tgz ./
 export SCRAM_ARCH=el8_amd64_gcc10
 scramv1 project CMSSW CMSSW_12_3_5
 echo "Unpacking compiled CMSSW environment tarball..." | tee -a $root_dir/$OUTTXT
@@ -77,4 +77,4 @@ else
     OUTTXT=FAILED_$OUTTXT
 fi
 ls | tee -a $root_dir/$OUTTXT
-xrdcp -f $root_dir/$OUTTXT OUTPUT_DIR
+#xrdcp -f $root_dir/$OUTTXT OUTPUT_DIR

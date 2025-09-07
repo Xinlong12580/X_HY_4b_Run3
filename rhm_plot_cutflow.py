@@ -2,14 +2,11 @@ import pickle
 import numpy as np
 import matplotlib.pyplot as plt
 import json
-import os
-import sys
-DIR_TOP = os.environ["ANA_TOP"]
-sys.path.append(DIR_TOP)
-with open(DIR_TOP + "raw_nano/color_scheme.json", "r") as f:
+with open("raw_nano/color_scheme.json", "r") as f:
     color_scheme = json.load(f)
 #--------------------------------defining parameters---------------------------------------------------------
-cuts = [ "BeforeSkim", "Skim", "GoldenJson", "SkimOf1p1", "LeptonVeto", "TriggerCut", "FlagCut", "FatJetID", "FatJetPt", "FatJetMass", "DeltaEta", "MassJJ", "HiggsMatch", "Region_SR1"]
+cuts = ["BeforeSkim", "Skim", "GoldenJson", "SkimOf2p1", "LeptonVeto", "TriggerCut", "FlagCut", "HiggsMatch", "FatJetID", "FatJetPt_nom", "JYMatch", "JYJYDeltaR", "MassJJH", "Region_SR1"]
+cuts = [ "BeforeSkim", "Skim", "GoldenJson", "SkimOf2p1", "LeptonVeto", "TriggerCut", "FlagCut", "HiggsMatch", "HiggsEta", "FatJetID", "FatJetPt_nom", "JYMatch", "YEta", "JYJYDeltaR", "MassJJH", "Region_SR1"]
 cutflows = {}
 years = ["2022", "2022EE", "2023", "2023BPix"]
 for cut in cuts:
@@ -18,9 +15,12 @@ for cut in cuts:
         cutflows[cut][year] = {}
 MC_weight = "genWeight"
 
-with open("pkls/hists_division_1p1_cutflow.pkl", "rb") as f:
+processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
+processes = {"SignalMC_XHY4b": ["MX-3000_MY-300", "MX-1600_MY-1000", "MX-2500_MY-1600","MX-3500_MY-2600"]}
+with open("pkls/hists_division_2p1_cutflow.pkl", "rb") as f:
     cutflows = pickle.load(f)
-save_dir = "plots/plots_division_1p1_cutflow"
+save_dir = "plots/plots_division_2p1_cutflow"
+mass_point = "MX-4000_MY-500"
 #------------------------------ making plots ------------------------------------------------------------
 #plotting individually
 for year in years:
@@ -36,19 +36,20 @@ for year in years:
             cut = cuts[i]
             n = 0
             for subprocess in cutflows[cut][year][process]:
-                n += cutflows[cut][year][process][subprocess]
+                if subprocess == mass_point:
+                    n += cutflows[cut][year][process][subprocess]
             bars[i] = n
         print(bars)
         ax.bar(x - width/2, bars, width, edgecolor = color_scheme[process], linewidth = 3, facecolor = "none", label = process  ) 
         
     ax.set_ylabel("Events")
-    ax.set_title(f"{year} Cutflow")
+    ax.set_title(f"{year} {mass_point} Cutflow")
     ax.set_xticks(x)
     ax.set_xticklabels(cuts, rotation=45, ha='right')
     ax.set_yscale("log")
     ax.legend()
-    fig.savefig(f"{save_dir}/{year}_cutflow.png")
-
+    fig.savefig(f"{save_dir}/{year}_cutflow_{mass_point}.png")
+"""
 #plotting S/sqrt(B)
 for year in years:
     fig = plt.figure(figsize = (20,12))
@@ -86,7 +87,7 @@ for year in years:
     fig.savefig(f"{save_dir}/{year}_SoverSqrtB.png")
 
 #plotting S/sqrt(B)
-
+"""
 
 
 

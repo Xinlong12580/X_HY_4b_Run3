@@ -7,9 +7,13 @@ import array
 import json
 import pickle
 from XHY4b_Helper import *
+import os
+import sys
+DIR_TOP = os.environ["ANA_TOP"]
+sys.path.append(DIR_TOP)
 print("TEST")
 #-----------------------------------loading files for the templates --------------------------------------------
-with open("outputList/output_Nminus1_2p1.txt") as f:
+with open(DIR_TOP + "outputList/output_Nminus1_2p1.txt") as f:
     lines = f.readlines()
     data_files =[ line.strip() for line in lines]
 data_files = [data_file for data_file in data_files if ((not ("Templates" in data_file)) and "nom" in data_file)]
@@ -19,13 +23,13 @@ for data_file in data_files:
     template_file = data_files_part[0] + "Templates_Nminus1_" + data_files_part[1] + data_files_part[2]
     template_files.append(template_file)
     
-with open("raw_nano/Luminosity.json") as f:
+with open(DIR_TOP + "raw_nano/Luminosity.json") as f:
     lumi_json = json.load(f)
 
-with open("raw_nano/Xsections_background.json") as f:
+with open(DIR_TOP + "raw_nano/Xsections_background.json") as f:
     Xsec_json = json.load(f)
 
-with open("raw_nano/Datasets_signal.json") as f:
+with open(DIR_TOP + "raw_nano/Datasets_signal.json") as f:
     signal_json=json.load(f)
 #----------------------------- set bins, variable columns and other configs---------------------------------------------------------------------
 years = ["2022", "2022EE", "2023", "2023BPix"]
