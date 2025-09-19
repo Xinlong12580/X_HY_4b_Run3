@@ -10,7 +10,7 @@ echo "System software: `cat /etc/redhat-release`" | tee -a $root_dir/$OUTTXT
 # Set up pre-compiled CMSSW env
 ls | tee -a $root_dir/$OUTTXT
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-xrdcp root://cmseos.fnal.gov//store/user/xinlong/tar_2dalphabet.tgz ./
+xrdcp root://cmseos.fnal.gov//store/user/$USER/tar_2dalphabet.tgz ./
 export SCRAM_ARCH=el9_amd64_gcc12
 scramv1 project CMSSW CMSSW_14_1_0_pre4
 echo "Unpacking compiled CMSSW environment tarball..." | tee -a $root_dir/$OUTTXT
@@ -92,13 +92,13 @@ if [ $status -eq 0 ]; then
     cp SR*workspace/SignalMC_XHY4b_1x1_area/card.txt card_"$MX"_"$MY"_region_"$CR_FAIL"_"$CR_PASS"_"$SR_FAIL"_"$SR_PASS".txt
     cp SR*workspace/SignalMC_XHY4b_1x1_area/higgsCombine.AsymptoticLimits.mH125.123456.root higgsCombine.AsymptoticLimits.mH125.123456_"$MX"_"$MY"_region_"$CR_FAIL"_"$CR_PASS"_"$SR_FAIL"_"$SR_PASS".root 
     cp SR*workspace/SignalMC_XHY4b_1x1_area/higgsCombineSnapshot.MultiDimFit.mH125.root higgsCombineSnapshot.MultiDimFit.mH125_"$MX"_"$MY"_region_"$CR_FAIL"_"$CR_PASS"_"$SR_FAIL"_"$SR_PASS".root 
-    xrdcp -f *txt *root root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_limits_$mode/
+    xrdcp -f *txt *root root://cmseos.fnal.gov//store/user/$USER/XHY4bRun3_limits_$mode/
     tar -cvzf workspace_"$MX"_"$MY"_region_"$CR_FAIL"_"$CR_PASS"_"$SR_FAIL"_"$SR_PASS".tgz *workspace
-    xrdcp -f *gz root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_limits_$mode/
+    xrdcp -f *gz root://cmseos.fnal.gov//store/user/$USER/XHY4bRun3_limits_$mode/
     
 else
     mv $root_dir/$OUTTXT $root_dir/FAILED_$OUTTXT
     OUTTXT=FAILED_$OUTTXT
 fi
 ls | tee -a $root_dir/$OUTTXT
-#xrdcp -f $root_dir/$OUTTXT root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_limits_$mode/
+#xrdcp -f $root_dir/$OUTTXT root://cmseos.fnal.gov//store/user/$USER/XHY4bRun3_limits_$mode/
