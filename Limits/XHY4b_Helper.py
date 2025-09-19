@@ -121,6 +121,8 @@ def load_weight(data_files, years, processes, signal_json, Xsec_json ):
             
 
     for data_file in data_files:
+        if "2022EE" in data_file and "TTBar" in data_file:
+            print("CHECKING " + data_file)
         for year in BKG_fileWeight:
             if (year + "__" ) in data_file:
                 for process in BKG_fileWeight[year]:
@@ -134,7 +136,7 @@ def load_weight(data_files, years, processes, signal_json, Xsec_json ):
         for process in BKG_fileWeight[year]:
             for subprocess in BKG_fileWeight[year][process]:
                 BKG_totalWeight[year][process][subprocess] = sum(BKG_fileWeight[year][process][subprocess])
-
+    print(BKG_totalWeight)
     return BKG_fileWeight, BKG_totalWeight
 
 

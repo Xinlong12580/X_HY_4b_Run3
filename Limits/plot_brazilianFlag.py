@@ -28,7 +28,7 @@ for file in files:
     if limit[2] > 1000:
         continue
     M_i_ind = file.find("123456_") + 7
-    M_f_ind = file.find("_SB")
+    M_f_ind = file.find("_region")
     M_str = file[M_i_ind: M_f_ind]
     MX = int(M_str.partition("_")[0])
     MY = int(M_str.partition("_")[2])

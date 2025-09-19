@@ -26,12 +26,11 @@ columns = [ "PtJY0", "PtJY1", "EtaJY0", "EtaJY1", "PhiJY0", "PhiJY1", "MassJY0",
 
 #Running selection
 ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job)
-region = "Loose"
-ana.selection_2p1(args.JME_syst, region)
+ana.selection_2p1(args.JME_syst)
 
 #Saving snapshot and cutflow
 file_basename = os.path.basename(args.dataset).removesuffix(".txt")
-ana.output = args.JME_syst +"_" + region + "_tagged_selected_2p1_" + file_basename + f"_n-{args.n_files}_i-{args.i_job}.root"
+ana.output = args.JME_syst +"_tagged_selected_2p1_" + file_basename + f"_n-{args.n_files}_i-{args.i_job}.root"
 
 if "MC" in args.dataset:
     ana.snapshot(columns + ["genWeight"], saveRunChain = True)

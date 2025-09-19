@@ -41,10 +41,15 @@ for file in $files; do
     fi
     if [[ $debug == 1 ]]; then
         pass=0
-        if [[ $file == *"Signal"* || $file == *"2022EE"* ]]; then
+        
+        if [[ ( $file == *"QCD"* || $file == *"JetMET"* ) && $file != *"2022EE"* ]]; then
             pass=1
         fi
+        if [[ $file == *"Signal"* && $file == *"2022EE"* ]]; then
+            pass=0
+        fi
     fi
+    pass=1
     echo $pass
     if [[ $operation == *"selection"* && $pass == 1 ]]; then
         extras=("-s nom" "-s JES__up" "-s JES__down" "-s JER__up" "-s JER__down")
@@ -64,7 +69,7 @@ for file in $files; do
                     ./gen_args.sh $file 2023BPix $output $n_files "$extra"
                 fi
             fi
-            if [[ $file == *"Data"* || $file == *"QCD"* ]]; then
+            if [[ $file == *"Data"* || $file == *"QCD"* || $file == *"DiBoson"* || $file == *"SingleTop"* || $file == *"Higgs"* ]]; then
                 break
             fi
         done

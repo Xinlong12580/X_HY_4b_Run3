@@ -6,6 +6,7 @@
     "MC_HiggsJets": "#bd1f01",
     "MC_DibosonJets": "#717581",
     "MC_SingleTopJets": "#3f90da",
-    "SignalMC_XHY4b": "#832db6"
+    "SignalMC_XHY4b": "#832db6",
+    "data": "black"
 }
 

@@ -12,6 +12,7 @@ DIR_TOP = os.environ["ANA_TOP"]
 sys.path.append(DIR_TOP)
 from XHY4b_Helper import *
 #-----------------------------------loading files for the templates --------------------------------------------
+#with open(DIR_TOP + "/outputList/output_selection_1p1.txt") as f:
 with open(DIR_TOP + "/outputList/output_selection_1p1.txt") as f:
     lines = f.readlines()
     data_files =[ line.strip() for line in lines]

@@ -107,7 +107,7 @@ for year in years:
         ratio_error[year][column] = []
 for year in years:
     for subprocess in h_BKGs[year]["MC_QCDJets"]:
-        if subprocess == "QCD-4Jets_HT-100to200" or subprocess == "QCD-4Jets_HT-200to400": #This one seems to be buggy, ignore it
+        if (subprocess == "QCD-4Jets_HT-100to200" or subprocess == "QCD-4Jets_HT-200to400"): #This one seems to be buggy, ignore it
             continue
         for column in bins:
             h_QCD[year][column].Add(rebinned_h_BKGs[year]["MC_QCDJets"][subprocess][column])
@@ -177,7 +177,6 @@ for year in years:
         ax1.set_ylabel("Event Counts")
         ax1.set_xlabel("")
         ax1.legend()
-
         ax2.errorbar(bin_centers[column], ratio[year][column], yerr=ratio_error[year][column], fmt='o', color='black', label='Data')
         ax2.axhline(y = 1, linestyle = '--', color = 'red', linewidth = 1.5)
         ax2.set_ylabel("Data/MC")

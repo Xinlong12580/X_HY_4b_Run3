@@ -1,9 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-mode = "2p1"
+mode = "1p1"
+region = "SR1"
 # Load data from file
-data = np.loadtxt(f"{mode}_eff.txt")
+data = np.loadtxt(f"{mode}_{region}_eff.txt")
 
 # Separate into columns
 MX_vals = data[:, 0]
@@ -22,12 +23,12 @@ cbar.set_label("Efficiency")
 # Axis labels and title
 plt.xlabel("MX")
 plt.ylabel("MY")
-plt.title("Efficiency Map (MX vs. MY) with gen matching(Loose)")
+plt.title(f"Efficiency Map (MX vs. MY) with gen matching({region})")
 plt.grid(True)
 plt.tight_layout()
 
 # Save plot
-plt.savefig(f"Loose_gen_eff_map_{mode}.png", dpi=300)
+plt.savefig(f"{region}_gen_eff_map_{mode}.png", dpi=300)
 plt.yscale("log")
 plt.xscale("log")
-plt.savefig(f"Loose_gen_eff_map_{mode}_log.png", dpi=300)
+plt.savefig(f"{region}_gen_eff_map_{mode}_log.png", dpi=300)

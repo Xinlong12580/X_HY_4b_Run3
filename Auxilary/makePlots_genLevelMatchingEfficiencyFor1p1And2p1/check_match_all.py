@@ -124,8 +124,8 @@ rdf = rdf.Define("gen_bHiggs_phis", "ROOT::VecOps::RVec<float>({GenPart_phi[gen_
 rdf = rdf.Define("higgs_idx", "genHiggsMatching_withPNet(gen_higgs_eta, gen_higgs_phi, FatJet_eta, FatJet_phi, 0.8, FatJet_msoftdrop, 100, 150, FatJet_particleNet_XbbVsQCD, 0.9, 1.1 )")
 rdf = rdf.Define("Y_idx", f"genHiggsMatching_withPNet(gen_Y_eta, gen_Y_phi, FatJet_eta, FatJet_phi, 0.8, FatJet_msoftdrop, {0.8 * float(massY)}, {1.2 * float(massY)}, FatJet_particleNet_XbbVsQCD, 0.9, 1.1 )")
 
-rdf = rdf.Define("bY_idxes", "ROOT::VecOps::RVec<int>({genBMatching_withPNet(gen_bY_etas[0], gen_bY_phis[0], Jet_eta, Jet_phi, 0.4, Jet_btagPNetB, 0.9, 1.1), genBMatching_withPNet(gen_bY_etas[1], gen_bY_phis[1], Jet_eta, Jet_phi, 0.4, Jet_btagPNetB, 0.9, 1.1)})")
-rdf = rdf.Define("bHiggs_idxes", "ROOT::VecOps::RVec<int>({genBMatching_withPNet(gen_bHiggs_etas[0], gen_bHiggs_phis[0], Jet_eta, Jet_phi, 0.4, Jet_btagPNetB, 0.9, 1.1), genBMatching_withPNet(gen_bHiggs_etas[1], gen_bHiggs_phis[1], Jet_eta, Jet_phi, 0.4, Jet_btagPNetB, 0.9, 1.1)})")
+rdf = rdf.Define("bY_idxes", "ROOT::VecOps::RVec<int>({genBMatching_withPNet(gen_bY_etas[0], gen_bY_phis[0], Jet_eta, Jet_phi, 0.4, Jet_btagPNetB, 0.9, 1.1), genBMatching_withPNet(gen_bY_etas[1], gen_bY_phis[1], Jet_eta, Jet_phi, 0.4, Jet_btagPNetB, 0.0, 1.1)})")
+rdf = rdf.Define("bHiggs_idxes", "ROOT::VecOps::RVec<int>({genBMatching_withPNet(gen_bHiggs_etas[0], gen_bHiggs_phis[0], Jet_eta, Jet_phi, 0.4, Jet_btagPNetB, 0.9, 1.1), genBMatching_withPNet(gen_bHiggs_etas[1], gen_bHiggs_phis[1], Jet_eta, Jet_phi, 0.4, Jet_btagPNetB, 0.0, 1.1)})")
 
 rdf_1p0 = rdf.Filter("Y_idx >= 0")
 N_After = rdf_1p0.Count().GetValue()

@@ -9,7 +9,8 @@ sys.path.append(DIR_TOP)
 with open(DIR_TOP + "raw_nano/color_scheme.json", "r") as f:
     color_scheme = json.load(f)
 #--------------------------------defining parameters---------------------------------------------------------
-cuts = [ "BeforeSkim", "Skim", "GoldenJson", "SkimOf1p1", "LeptonVeto", "TriggerCut", "FlagCut", "FatJetID", "FatJetPt", "FatJetMass", "DeltaEta", "MassJJ", "HiggsMatch", "Region_SR1"]
+#cuts = [ "BeforeSkim", "Skim", "GoldenJson", "SkimOf1p1", "LeptonVeto", "TriggerCut", "FlagCut", "FatJetID", "FatJetPt", "FatJetMass", "DeltaEta", "MassJJ", "HiggsMatch", "Region_SR1"]
+cuts = [ "BeforeSkim", "Skim", "GoldenJson", "JERCJetVeto", "SkimOf1p1", "LeptonVeto", "TriggerCut", "FlagCut", "FatJetID", "HiggsMatch", "FatJetPt", "FatJetMass", "DeltaEta", "MassJJ",  "Region_SR2"]
 cutflows = {}
 years = ["2022", "2022EE", "2023", "2023BPix"]
 for cut in cuts:
@@ -38,7 +39,7 @@ for year in years:
             for subprocess in cutflows[cut][year][process]:
                 n += cutflows[cut][year][process][subprocess]
             bars[i] = n
-        print(bars)
+        print(year, process, bars)
         ax.bar(x - width/2, bars, width, edgecolor = color_scheme[process], linewidth = 3, facecolor = "none", label = process  ) 
         
     ax.set_ylabel("Events")

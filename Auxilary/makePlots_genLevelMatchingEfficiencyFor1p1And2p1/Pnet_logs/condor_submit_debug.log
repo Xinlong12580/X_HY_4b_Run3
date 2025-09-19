@@ -1,0 +1,24 @@
+09/16/2025 03:21:07 PM DEBUG: Remote pool to query is set to: cmst1mgr2.fnal.gov, cmst1mgr3.fnal.gov
+09/16/2025 03:21:07 PM DEBUG: Attempting to query collector: cmst1mgr2.fnal.gov
+09/16/2025 03:21:07 PM DEBUG: Schedd ads received: [[ Name = "lpcschedd4.fnal.gov"; MyAddress = "<131.225.189.251:9618?addrs=131.225.189.251-9618+[2620-6a-0-8421--e8]-9618&alias=lpcschedd4.fnal.gov&noUDP&sock=schedd_679377_b13b>"; TotalIdleJobs = 8188; MaxJobsRunning = 10000; ShadowsRunning = 779; RecentDaemonCoreDutyCycle = 3.426863938212166E-02 ], [ Name = "lpcschedd6.fnal.gov"; MyAddress = "<131.225.189.168:9618?addrs=131.225.189.168-9618+[2620-6a-0-8421-f0-0-189-168]-9618&alias=lpcschedd6.fnal.gov&noUDP&sock=schedd_2318263_2bf0>"; TotalIdleJobs = 1904; MaxJobsRunning = 10000; ShadowsRunning = 1096; RecentDaemonCoreDutyCycle = 4.838604731149450E-01 ], [ Name = "lpcschedd5.fnal.gov"; MyAddress = "<131.225.204.62:9618?addrs=131.225.204.62-9618+[2620-6a-0-8420-f0-0-204-62]-9618&alias=lpcschedd5.fnal.gov&noUDP&sock=schedd_2121822_fc21>"; TotalIdleJobs = 9584; MaxJobsRunning = 10000; ShadowsRunning = 634; RecentDaemonCoreDutyCycle = 4.311666569523720E-02 ]]
+09/16/2025 03:21:07 PM DEBUG: Going over the schedd list and calculating weight
+09/16/2025 03:21:07 PM DEBUG: Looking at schedd: lpcschedd4.fnal.gov
+09/16/2025 03:21:07 PM DEBUG: DutyCyle: 3.4268639382121657
+09/16/2025 03:21:07 PM DEBUG: Running percentage: 7.79
+09/16/2025 03:21:07 PM DEBUG: Idle jobs: 8188
+09/16/2025 03:21:07 PM DEBUG: Total weight calculated: 822.7568047567486
+09/16/2025 03:21:07 PM DEBUG: Looking at schedd: lpcschedd6.fnal.gov
+09/16/2025 03:21:07 PM DEBUG: DutyCyle: 48.3860473114945
+09/16/2025 03:21:07 PM DEBUG: Running percentage: 10.96
+09/16/2025 03:21:07 PM DEBUG: Idle jobs: 1904
+09/16/2025 03:21:07 PM DEBUG: Total weight calculated: 226.46223311804616
+09/16/2025 03:21:07 PM DEBUG: Looking at schedd: lpcschedd5.fnal.gov
+09/16/2025 03:21:07 PM DEBUG: DutyCyle: 4.3116665695237195
+09/16/2025 03:21:07 PM DEBUG: Running percentage: 6.34
+09/16/2025 03:21:07 PM DEBUG: Idle jobs: 9584
+09/16/2025 03:21:07 PM DEBUG: Total weight calculated: 962.6861665986667
+09/16/2025 03:21:07 PM DEBUG: Sorting schedds per their weight (lower the better)
+09/16/2025 03:21:07 PM DEBUG: Sorted list of schedd per their weight: [('lpcschedd6.fnal.gov', 226.46223311804616), ('lpcschedd4.fnal.gov', 822.7568047567486), ('lpcschedd5.fnal.gov', 962.6861665986667)]
+09/16/2025 03:21:07 PM DEBUG: Attempting to put SCHEDD_HOST into file: /storage/local/data1/condor/config.d/xinlongl.config
+09/16/2025 03:21:07 PM DEBUG: Successfully updated /storage/local/data1/condor/config.d/xinlongl.config
+09/16/2025 03:21:07 PM DEBUG: Final command to execute: /usr/bin/original_condor_submit use_x509userproxy=True temp_20250916-152059_jdl

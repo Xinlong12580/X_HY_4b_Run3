@@ -1,6 +1,6 @@
 #!/bin/bash
 root_dir=$(pwd)
-OUTTXT="$1"_"$2"_"$3"_"$4"_"${5}"_"${6}"_output.log
+OUTTXT="$1"_"$2"_"$3"_"$4"_"${5}"_"${6}"_"$7"_"$8"_"$9"_output.log
 OUTTXT="${OUTTXT//\//_}"
 echo "OUTTXT" $OUTTXT
 echo "Run script starting" | tee $root_dir/$OUTTXT
@@ -61,25 +61,39 @@ export X509_CERT_DIR=/cvmfs/grid.cern.ch/etc/grid-security/certificates/
 cd testdir
 MX=$1
 MY=$2
-R_FAIL=$3
-R_PASS=$4
-mode=$5
+SR_FAIL=$3
+SR_PASS=$4
+CR_FAIL=$5
+CR_PASS=$6
+mode=$7
+
 mkdir Templates
+
 ./load_fit.sh $MX $MY $mode
 ./make_json.sh $mode
-python3 XYH.py --tf 1x1 --sig $MX-$MY --r_fail $R_FAIL --r_pass $R_PASS --make --makeCard --wsp "$R_PASS"w_MX-"$MX"_MY-"$MY" 2>&1 | tee -a $root_dir/$OUTTXT
-./run_blinded.sh --fitdir "$R_PASS"w_MX-"$MX"_MY-"$MY"_workspace/SignalMC_XHY4b_1x1_area/ -bl -v 3  2>&1 | tee -a $root_dir/$OUTTXT
+python XYH.py --tf 1x1 --sig $MX-$MY --r_fail $CR_FAIL --r_pass $CR_PASS --make --makeCard --wsp CR_MX-"$MX"_MY-"$MY" 2>&1 | tee -a $root_dir/$OUTTXT
+python XYH.py --tf 1x1 --sig $MX-$MY --r_fail $SR_FAIL --r_pass $SR_PASS --make --makeCard --wsp SR_MX-"$MX"_MY-"$MY" 2>&1 | tee -a $root_dir/$OUTTXT
+
+./run_fit.sh  --fitdir CR_MX-"$MX"_MY-"$MY"_workspace/SignalMC_XHY4b_1x1_area/ -b -v 3 2>&1 | tee -a $root_dir/$OUTTXT 
+
+control_file=CR_MX-"$MX"_MY-"$MY"_workspace/SignalMC_XHY4b_1x1_area/higgsCombineSnapshot.MultiDimFit.mH125.root
+root -b -q -l load_parameters.C\(\"$control_file\"\) 2>&1 | tee -a $root_dir/$OUTTXT
+echo "CALCULATING LIMITS ......." | tee -a $root_dir/$OUTTXT
+ls | tee -a $root_dir/$OUTTXT
+./run_limits.sh --fitdir SR_MX-"$MX"_MY-"$MY"_workspace/SignalMC_XHY4b_1x1_area/ -l -v 3 2>&1 | tee -a $root_dir/$OUTTXT
+
+
 status=${PIPESTATUS[0]}
 if [ $status -eq 0 ]; then
     rm *root
     rm *txt
     # move all snapshots to the EOS (there will only be one)
-    cp *workspace/base.root base_"$MX"_"$MY"_"$R_FAIL"_"$R_PASS".root
-    cp *workspace/SignalMC_XHY4b_1x1_area/card.txt card_"$MX"_"$MY"_"$R_FAIL"_"$R_PASS".txt
-    cp *workspace/SignalMC_XHY4b_1x1_area/higgsCombine.AsymptoticLimits.mH125.123456.root higgsCombine.AsymptoticLimits.mH125.123456_"$MX"_"$MY"_"$R_FAIL"_"$R_PASS".root 
-    cp *workspace/SignalMC_XHY4b_1x1_area/higgsCombineSnapshot.MultiDimFit.mH125.root higgsCombineSnapshot.MultiDimFit.mH125_"$MX"_"$MY"_"$R_FAIL"_"$R_PASS".root 
+    cp SR*workspace/base.root base_"$MX"_"$MY"_region_"$CR_FAIL"_"$CR_PASS"_"$SR_FAIL"_"$SR_PASS".root
+    cp SR*workspace/SignalMC_XHY4b_1x1_area/card.txt card_"$MX"_"$MY"_region_"$CR_FAIL"_"$CR_PASS"_"$SR_FAIL"_"$SR_PASS".txt
+    cp SR*workspace/SignalMC_XHY4b_1x1_area/higgsCombine.AsymptoticLimits.mH125.123456.root higgsCombine.AsymptoticLimits.mH125.123456_"$MX"_"$MY"_region_"$CR_FAIL"_"$CR_PASS"_"$SR_FAIL"_"$SR_PASS".root 
+    cp SR*workspace/SignalMC_XHY4b_1x1_area/higgsCombineSnapshot.MultiDimFit.mH125.root higgsCombineSnapshot.MultiDimFit.mH125_"$MX"_"$MY"_region_"$CR_FAIL"_"$CR_PASS"_"$SR_FAIL"_"$SR_PASS".root 
     xrdcp -f *txt *root root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_limits_$mode/
-    tar -cvzf workspace_"$MX"_"$MY"_"$R_FAIL"_"$R_PASS".tgz *workspace
+    tar -cvzf workspace_"$MX"_"$MY"_region_"$CR_FAIL"_"$CR_PASS"_"$SR_FAIL"_"$SR_PASS".tgz *workspace
     xrdcp -f *gz root://cmseos.fnal.gov//store/user/xinlong/XHY4bRun3_limits_$mode/
     
 else

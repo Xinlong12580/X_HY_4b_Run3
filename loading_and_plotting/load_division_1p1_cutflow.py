@@ -14,8 +14,10 @@ from XHY4b_Helper import *
 print("TEST")
 #-----------------------------------loading files for the templates --------------------------------------------
 with open(DIR_TOP + "outputList/output_division_1p1.txt") as f:
+#with open(DIR_TOP + "outputList/output_selection_1p1_debug.txt") as f:
     lines = f.readlines()
-    data_files =[line.strip() for line in lines if "SR1" in line and "nom" in line and "Templates" not in line and "output.log" not in line]
+    data_files =[line.strip() for line in lines if "SR2" in line and "nom" in line and "Templates" not in line and "output.log" not in line]
+    #data_files =[line.strip() for line in lines if "nom" in line and "Templates" not in line and "output.log" not in line]
 
 with open(DIR_TOP + "raw_nano/Luminosity.json") as f:
     lumi_json = json.load(f)
@@ -29,6 +31,7 @@ with open(DIR_TOP + "raw_nano/Datasets_signal.json") as f:
 #----------------------------- set bins, variable columns and other configs--------------------------------------------------------------------
   
 cuts = ["Region_SR1", "BeforeSkim", "Skim", "GoldenJson", "SkimOf1p1", "LeptonVeto", "TriggerCut", "FlagCut", "FatJetID", "FatJetPt", "FatJetMass", "DeltaEta", "MassJJ", "HiggsMatch"]
+cuts = [ "BeforeSkim", "Skim", "GoldenJson", "SkimOf1p1", "JERCJetVeto", "LeptonVeto", "TriggerCut", "FlagCut", "FatJetID", "FatJetPt", "FatJetMass", "DeltaEta", "MassJJ", "HiggsMatch", "Region_SR2"]
 cutflows = {}
 years = ["2022", "2022EE", "2023", "2023BPix"]
 for cut in cuts:
@@ -45,7 +48,8 @@ save_name = "pkls/hists_division_1p1_cutflow.pkl"
 print("Loading data")
 for cut in cuts:
     for year in years:
-        cutflows[cut][year]["data"] = 0
+        cutflows[cut][year]["data"] = {}
+        cutflows[cut][year]["data"]["JetMET"] = 0
 
 for data_file in data_files:
     if "JetMET" in data_file:
@@ -58,7 +62,7 @@ for data_file in data_files:
                 else:
                     rdf_np = rdf.AsNumpy()
                     for cut in cuts:
-                         cutflows[cut][year]["data"] += sum(rdf_np[cut])
+                         cutflows[cut][year]["data"]["JetMET"] += sum(rdf_np[cut])
 
 print("Loading data successful")
 '''

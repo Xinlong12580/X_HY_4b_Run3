@@ -56,7 +56,7 @@ for process in processes:
                 processes[process].append(subprocess) 
 print(processes)
 #exit()
-        
+#print(VB1_files) 
 #processes = ["JetMET", "MC_TTBarJets", "MC_WZJets", "SignalMC_XHY4b" ]
 
 regions = ["SR1", "SR2", "SB1", "SB2", "VS1", "VS2", "VS3", "VS4", "VB1", "VB2"]
@@ -99,9 +99,10 @@ for year in years:
                     hists[year][process][region][syst] = hist_base.Clone(f"{year}__{process}__{region}__{syst}")
                 else:
                     hists[year][process][region][syst] = hist_base.Clone(f"{year}__{process}__{region}__Y{year}_{syst}")
-print(hists)
-
+#print(hists)
+#print(VB1_files)
 BKG_fileWeight, BKG_totalWeight = load_weight(VB1_files, years, processes, signal_json, Xsec_json)
+print(BKG_totalWeight)
 if args.type == "bkg" or args.type == "all":
     processes["JetMET"] = {}
 for f_name in template_files:

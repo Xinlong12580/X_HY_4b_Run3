@@ -70,3 +70,8 @@ if [[ $work == mass_debug_2p1 ]] ; then
     sed -e 's/PYTHON_SCRIPT/run_mass_debug_2p1.py/g' -e 's#OUTPUT_DIR#root://cmseos.fnal.gov//store/user/USER_NAME/XHY4bRun3_mass_debug_2p1/#g' -e "s/USER_NAME/$USER/g" gridrun_template.sh > gridrun.sh
     python CondorHelper.py -r gridrun.sh -a mass_debug_2p1_args.txt -i "cpp_modules run_mass_debug_2p1.py XHY4b_Analyzer.py raw_nano outputList"
 fi
+
+if [[ $work == selection_1p1_debug ]] ; then
+    sed -e 's/PYTHON_SCRIPT/run_selection_1p1_debug.py/g' -e 's#OUTPUT_DIR#root://cmseos.fnal.gov//store/user/USER_NAME/XHY4bRun3_selection_1p1_debug/#g' -e "s/USER_NAME/$USER/g" gridrun_template.sh > gridrun.sh
+    python CondorHelper.py -r gridrun.sh -a selection_1p1_debug_args.txt -i "cpp_modules run_selection_1p1_debug.py XHY4b_Analyzer.py raw_nano outputList"
+fi

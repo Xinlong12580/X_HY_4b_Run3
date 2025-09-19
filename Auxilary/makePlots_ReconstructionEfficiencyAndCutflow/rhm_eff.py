@@ -6,12 +6,13 @@ DIR_TOP = os.environ["ANA_TOP"]
 sys.path.append(DIR_TOP)
 from XHY4b_Helper import *
 mode = "2p1"
+region = "SR1"
 # Input txt file containing ROOT paths
 input_txt_path = DIR_TOP + f"outputList/output_division_{mode}.txt"
 #input_txt_path = DIR_TOP + f"outputList/output_mass_debug_{mode}.txt"
 
 # Output efficiency file
-output_file = f"{mode}_eff.txt"
+output_file = f"{mode}_{region}_eff.txt"
 
 # Open output file for writing
 with open(output_file, "w") as out:
@@ -21,7 +22,7 @@ with open(output_file, "w") as out:
             eos_path = line.strip()
 
             # Filter to only process ROOT files with required format
-            if re.search(r"SR1.*nom.*2022EE__.*Signal", eos_path):
+            if re.search(rf"{region}.*nom.*2022EE__.*Signal", eos_path):
                 # Extract MX and MY from filename
                 mx_match = re.search(r"MX-(\d+)", eos_path)
                 my_match = re.search(r"MY-(\d+)", eos_path)
@@ -55,16 +56,17 @@ with open(output_file, "w") as out:
                     cutflow.GetEntry(0)
 
                     # Extract variables
-                    #region_sr1 = getattr(cutflow, "Region_SR1", None)
-                    region_sr1 = getattr(cutflow, "MJYCut", None)
+                    region_sr1 = getattr(cutflow, f"Region_{region}", None)
                     before_skim = getattr(cutflow, "BeforeSkim", None)
 
                     # Check values exist and compute efficiency
-                    if region_sr1 and before_skim and before_skim != 0:
+                    #if region_sr1 and before_skim and before_skim != 0:
+                    if before_skim and before_skim != 0:
                         eff = region_sr1 / before_skim
                         print(f"MX = {MX}, MY = {MY}, Efficiency = {eff:.6f}")
                         out.write(f"{MX} {MY} {eff:.6f}\n")
                     else:
+                        print(bool(region_sr1), bool(before_skim), before_skim != 0)
                         print(f"Invalid values in: {file_path}")
 
                 except Exception as e:

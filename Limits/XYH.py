@@ -222,8 +222,8 @@ if __name__ == "__main__":
     if args.makeCard:
         make_card(name=args.wsp, signal=f'SignalMC_XHY4b', tf=args.tf)
 
-    #if args.fit:
-    #    FitDiagnostics(signal=f'SignalMC_XHY4b', tf=args.tf)
+    if args.fit:
+        FitDiagnostics(name=args.wsp, signal=f'SignalMC_XHY4b', tf=args.tf)
 
-    #if args.plot:
-    #    plot_postfit(signal=f'SignalMC_XHY4b', tf=args.tf, r_pass = args.r_pass, r_fail = args.r_fail)
+    if args.plot:
+        plot_postfit(name=args.wsp, signal=f'SignalMC_XHY4b', tf=args.tf, r_pass = args.r_pass, r_fail = args.r_fail)

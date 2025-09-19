@@ -86,3 +86,6 @@ sed "s@^@root://cmseos.fnal.gov/$file_dir@" outputList/output_mass_debug_2p1_tmp
 
 
 rm outputList/*tmp*
+file_dir=/store/user/$USER/XHY4bRun3_selection_1p1_debug/
+eosls $file_dir > outputList/output_selection_1p1_tmp.txt
+sed "s@^@root://cmseos.fnal.gov/$file_dir@" outputList/output_selection_1p1_tmp.txt > outputList/output_selection_1p1_debug.txt

@@ -27,7 +27,7 @@ for mode in effs_vals:
     # Axis labels and title
     plt.xlabel("MX")
     plt.ylabel("MY")
-    plt.title(f"Y Matching Efficiency Map (MX vs. MY) with PNet, {mode}")
+    plt.title(f"Matching Efficiency Map (MX vs. MY) with PNet, {mode}")
     #plt.title("Y Matching Efficiency Map (MX vs. MY)")
     plt.grid(True)
     #plt.yscale("log")
