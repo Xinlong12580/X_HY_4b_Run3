@@ -262,7 +262,7 @@ Before running fitting and expected limits, make sure all the division files hav
 cd Limits
 ```
 The general workflow is, we first run `gen_outputList.sh` to generate the output files of the division step, then use `load_fit.sh` to load the templates. Then we use `make_json.sh` to create the json file, `XYH.py` to create the workspace, `run_fit.sh` to fit on the Signal Region, and `load_parameters.C` to load the post-fit parameters. Finally `run_limits.sh` will read the parameters and run `AsymtoticLimits` in `COMBINE`. 
-### procedure
+### Local Jobs
 We create one directory to store the outputs of the division step and another file to store the templates, and run `gen_outputList.sh` to collect the files:
 ```
 mkdir outputList
@@ -302,4 +302,24 @@ loads the post-fit parameters to `control_parameters.txt`. Finally,
 ./run_limits.sh --fitdir Loose_MX-"$MX"_MY-"$MY"_workspace/SignalMC_XHY4b_1x1_area/ -l -v 2
 `
 generates the limits in the asimov signal region and store the limits in `Loose_MX-3000_MY-1000_workspace/SignalMC_XHY4b_1x1_area/higgsCombine.AsymptoticLimits.mH125.123456.root`.
+
+### GRID Jobs
+most of the steps have been automated remotely on GRID. There are still several things you need to do before submitting jobs, though. Firstly, we still need to collect the division files locally:
+```
+mkdir -p outputList
+./gen_outputList.sh
+```
+then we create the arguments:
+```
+./gen_args_limits.sh
+```
+you will see a file called `limits_args.txt` generated. Finally, we need to create the directory on eos file system to store the output:
+```
+eosmkdir /store/user/$USER/XHY4bRun3_limits_1p1
+eosmkdir /store/user/$USER/XHY4bRun3_limits_2p1
+```
+Finally we are ready to submit the jobs:
+```
+./gridpro.sh
+```
 
