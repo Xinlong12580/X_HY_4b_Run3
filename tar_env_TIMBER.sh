@@ -22,7 +22,7 @@ tar --exclude-vcs --exclude-caches-all -cvzf tarcmssw.tgz \
     CMSSW_12_3_5
 cd $TIMBERPATH/../
 tar -cvzf tartimber.tgz TIMBER
-tar -cvzf testtar.tgz tartimber.tgz tarcmssw.tgz
+tar -cvzf tarTIMBER.tgz tartimber.tgz tarcmssw.tgz
 
-xrdcp -f testtar.tgz root://cmseos.fnal.gov//store/user/$USER/testtar.tgz
+xrdcp -f tarTIMBER.tgz root://cmseos.fnal.gov//store/user/$USER/tarTIMBER.tgz
 cd ${WD}

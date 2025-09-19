@@ -10,14 +10,14 @@ echo "USER: $USER" |  tee -a $root_dir/$OUTTXT
 # Set up pre-compiled CMSSW env
 ls | tee -a $root_dir/$OUTTXT
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-xrdcp root://cmseos.fnal.gov//store/user/USER_NAME/testtar.tgz ./
+xrdcp root://cmseos.fnal.gov//store/user/USER_NAME/tarTIMBER.tgz ./
 export SCRAM_ARCH=el8_amd64_gcc10
 scramv1 project CMSSW CMSSW_12_3_5
 echo "Unpacking compiled CMSSW environment tarball..." | tee -a $root_dir/$OUTTXT
-tar -xzvf testtar.tgz | tee -a $root_dir/$OUTTXT
+tar -xzvf tarTIMBER.tgz | tee -a $root_dir/$OUTTXT
 tar -xzvf tarcmssw.tgz | tee -a $root_dir/$OUTTXT
 tar -xzvf tartimber.tgz | tee -a $root_dir/$OUTTXT
-rm testtar.tgz
+rm tarTIMBER.tgz
 rm tarcmssw.tgz
 rm tartimber.tgz
 mkdir tardir 
