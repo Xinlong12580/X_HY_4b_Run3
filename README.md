@@ -82,7 +82,7 @@ git clone git@github.com:JHU-Tools/2DAlphabet.git
 python3 -m virtualenv twoD-env
 source twoD-env/bin/activate
 cd 2DAlphabet/
-python setup.py develop
+python3 setup.py develop
 cd ..
 ```
 Then you make a file `tmp1.sh` with these lines:
@@ -142,7 +142,7 @@ To run skimming, generate the arguments using `gen_args_pro.sh`:
 ```
 you will see a file called `skim_args.txt` created. open this file and copy a line, then you can use `run_skim.py` to run skim on it. For example:
 ```
-python run_skim.py -d raw_nano/files/2023__SignalMC_XHY4b__MX-900_MY-60.txt -y 2023 -n 2 -i 0
+python3 run_skim.py -d raw_nano/files/2023__SignalMC_XHY4b__MX-900_MY-60.txt -y 2023 -n 2 -i 0
 ```
 You will see a file called `skimmed_2023__SignalMC_XHY4b__MX-900_MY-60.txt_n-1_i-0.root` generated, which contains the snapshot after skimming.
 
@@ -179,7 +179,7 @@ Then we create the arguments for 1+1 and 2+1 selection using `gen_args_pro.sh`. 
 ```
 you should see two files `selection_1p1_args.txt` and `selection_2p1_args.txt` generated. You can copy a line from `selection_1p1_args.txt` and run `run_selection_1p1.py` locally, or copy a line from `selection_2p1_args.txt` and run `run_selection_2p1.py`. For example:
 ```
- python run_selection_1p1.py -d outputList/SKIM_skimmed_2023__SignalMC_XHY4b__MX-900_MY-60.txt -y 2023 -n 1 -i 0 -s nom
+ python3 run_selection_1p1.py -d outputList/SKIM_skimmed_2023__SignalMC_XHY4b__MX-900_MY-60.txt -y 2023 -n 1 -i 0 -s nom
 ```
 You will see two files produced. One is `nom_tagged_selected_SKIM_skimmed_2023__SignalMC_XHY4b__MX-900_MY-60_n-1_i-0.root`, containing the snapshot of the selection flow; another one is `Templates_nom_tagged_selected_SKIM_skimmed_2023__SignalMC_XHY4b__MX-900_MY-60_n-1_i-0.root`, which contains some Templates in it. Note you can also change the argument after `-d ` to a local `.root` file.
 
@@ -209,7 +209,7 @@ Then we can generate the input args:
 ```
 you will see a file called `division_1p1_args.txt` created. Copy a line and run it locally with `run_division_1p1.py`, for example:
 ```
- python run_division_1p1.py -d outputList/SELECTION_1P1_JER__down_tagged_selected_SKIM_skimmed_20
+ python3 run_division_1p1.py -d outputList/SELECTION_1P1_JER__down_tagged_selected_SKIM_skimmed_20
 22EE__MC_DibosonJets__WWto4Q.txt -y 2022EE -n 10000 -i 0
 ```
 You will see 20 output files, where 10 of them contain the snapshots of 10 regions and another 10 of them contain the 2D templates of 10 regions that we will use latter for fitting. You are also allowed to change the argument after `-d` to a local `.root` file.
@@ -285,8 +285,8 @@ and it will create everything you need.
 
 We can also run the commands in it seperately. Open this file, you will see these two lines
 `
-python XYH.py --tf 1x1 --sig $MX-$MY --r_fail VB1 --r_pass VS2 --make --makeCard --wsp Control_MX-"$MX"_MY-"$MY"`, `
-python XYH.py --tf 1x1 --sig $MX-$MY --r_fail SB2 --r_pass SR2 --make --makeCard --wsp Loose_MX-"$MX"_MY-"$MY"
+python3 XYH.py --tf 1x1 --sig $MX-$MY --r_fail VB1 --r_pass VS2 --make --makeCard --wsp Control_MX-"$MX"_MY-"$MY"`, `
+python3 XYH.py --tf 1x1 --sig $MX-$MY --r_fail SB2 --r_pass SR2 --make --makeCard --wsp Loose_MX-"$MX"_MY-"$MY"
 `
 which create a workspace for the control region \(VB1+VS2\) called `Control_MX-"$MX"_MY-"$MY"_workspace`, and a workspace for the signal region called `Loose_MX-"$MX"_MY-"$MY"_workspace`. 
 The next line
