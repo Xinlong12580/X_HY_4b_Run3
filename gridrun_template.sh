@@ -1,6 +1,6 @@
 #!/bin/bash
 root_dir=$(pwd)
-OUTTXT="$2"_"$4"_"$6"_"$8"_"${10}"_"${12}"_output.log
+OUTTXT=PYTHON_SCRIPT_"$2"_"$4"_"$6"_"$8"_"${10}"_"${12}"_output.log
 OUTTXT="${OUTTXT//\//_}"
 echo "OUTTXT" $OUTTXT
 echo "Run script starting" | tee $root_dir/$OUTTXT

@@ -9,7 +9,6 @@ parser.add_argument('-d', type=str, dest='dataset',action='store', required=True
 parser.add_argument('-y', type=str, dest='year',action='store', required=True)
 parser.add_argument('-n', type=int, dest='n_files',action='store', required=True)
 parser.add_argument('-i', type=int, dest='i_job',action='store', required=True)
-#parser.add_argument('-s', type=str, dest='JME_syst',action='store', required=True)
 args = parser.parse_args()
 #if args.JME_syst != "nom" or "Data" in args.dataset:
 #    exit()

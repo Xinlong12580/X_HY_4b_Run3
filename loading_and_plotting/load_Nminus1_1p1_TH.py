@@ -34,17 +34,15 @@ with open(DIR_TOP + "raw_nano/Datasets_signal.json") as f:
 #----------------------------- set bins, variable columns and other configs---------------------------------------------------------------------
 years = ["2022", "2022EE", "2023", "2023BPix"]
 bins = {}
-bins["PtHCut__FatJet_pt_nom_H"] = array.array("d", np.linspace(0, 3000, 301))
-bins["PtYCut__FatJet_pt_nom_Y"] = array.array("d", np.linspace(0, 3000, 301))
-bins["MassHCut__FatJet_msoftdrop_nom_H"] = array.array("d", np.linspace(0, 3000, 301))
-bins["MassYCut__FatJet_msoftdrop_nom_Y"] = array.array("d", np.linspace(0, 5000, 501))
-bins["DeltaEtaCut__AbsDeltaEta"] = array.array("d", np.linspace(0, 6, 201))
-bins["MJJCut__MassLeadingTwoFatJets"] = array.array("d", np.linspace(0, 5000, 501))
+bins["PtHCut__FatJet_pt_0"] = array.array("d", np.linspace(0, 3000, 301))
+bins["PtYCut__FatJet_pt_1"] = array.array("d", np.linspace(0, 3000, 301))
+bins["DeltaEtaCut__deltaEta"] = array.array("d", np.linspace(0, 5, 101))
 bins["BTaggingHCut__PNet_H"] = array.array("d", np.linspace(0, 1, 101))
 bins["BTaggingYCut__PNet_Y"] = array.array("d", np.linspace(0, 1, 101))
 MC_weight = "weight_All__nominal"
 
-processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
+#processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
+processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-800_MY-300"]}
 save_name = "pkls/hists_Nminus1_1p1_TH.pkl" 
 root_save_name = "All_Nminus1_1p1.root" 
 

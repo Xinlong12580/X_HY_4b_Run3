@@ -22,12 +22,12 @@ CompileCpp("cpp_modules/massMatching.cc")
 CompileCpp("cpp_modules/selection_functions.cc")
 
 #Specifying columns to save
-columns = ["leadingFatJetPt","leadingFatJetPhi","leadingFatJetEta", "leadingFatJetMsoftdrop", "MassLeadingTwoFatJets", "MassHiggsCandidate", "PtHiggsCandidate", "EtaHiggsCandidate", "PhiHiggsCandidate", "MassYCandidate", "PtYCandidate", "EtaYCandidate", "PhiYCandidate", "MJJ", "MJY", "PNet_H", "PNet_Y", "weight.*",  "FatJet_pt_JER__up", "PileUp_Corr__nom", "PileUp_Corr__up", "PileUp_Corr__down", "Pileup_nTrueInt"]
+columns = [".*Weight", ".*weight", "MY", "MX", "leadingFatJetPt","leadingFatJetPhi","leadingFatJetEta", "leadingFatJetMsoftdrop", "MassLeadingTwoFatJets", "MassHiggsCandidate", "PtHiggsCandidate", "EtaHiggsCandidate", "PhiHiggsCandidate", "MassYCandidate", "PtYCandidate", "EtaYCandidate", "PhiYCandidate", "MJJ", "MJY", "PNet_H", "PNet_Y", "weight.*",  "FatJet_pt_JER__up", "PileUp_Corr__nom", "PileUp_Corr__up", "PileUp_Corr__down", "Pileup_nTrueInt"]
 
 #Running selection
 ana = XHY4b_Analyzer(args.dataset, args.year, args.n_files, args.i_job)
 ana.selection_1p1(args.JME_syst)
-
+ana.eff_after_selection_1p1()
 #Saving snapshot and cutflow
 file_basename = os.path.basename(args.dataset).removesuffix(".txt")
 ana.output = args.JME_syst + "_tagged_selected_" + file_basename + f"_n-{args.n_files}_i-{args.i_job}.root"

@@ -13,7 +13,7 @@ debug=0
 if [[ $operation == *"debug"* ]] ; then
     debug=1
 fi
-
+debug=0
 for file in $files; do
     
     if [[ ( $operation == *"selection"* || $operation == *"Nminus1"* ) && ( $file == *"QCD"* ||  $file == *"Data"* ) ]] ; then
@@ -39,18 +39,14 @@ for file in $files; do
     if [[ $file == *"Signal"* || $file == *"TTBar"* || $file == *"WZ"* || $file == *"Data"* ]]; then
         pass=1
     fi
-    if [[ $debug == 1 ]]; then
+    if [[ $debug == 0 ]]; then
         pass=0
         
-        if [[ ( $file == *"QCD"* || $file == *"JetMET"* ) && $file != *"2022EE"* ]]; then
+        #if [[ ( $file == *"QCD"* || $file == *"JetMET"* ) && $file != *"2022EE"* ]]; then
+        if [[ ( $file == *"JetMET"* || $file == *"TTBar"* || $file == *"Signal"* ) ]]; then
             pass=1
         fi
-        if [[ $file == *"Signal"* && $file == *"2022EE"* ]]; then
-            pass=0
-        fi
     fi
-    pass=1
-    echo $pass
     if [[ $operation == *"selection"* && $pass == 1 ]]; then
         extras=("-s nom" "-s JES__up" "-s JES__down" "-s JER__up" "-s JER__down")
         if [[ $debug == 1 ]]; then

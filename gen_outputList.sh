@@ -34,8 +34,10 @@ classify_files "/store/user/$USER/XHY4bRun3_skim" "SKIM"
 #classify_files "/store/user/$USER/XHY4bRun3_selection_1p1" "SELECTION_1P1" 
 #classify_files "/store/user/$USER/XHY4bRun3_division_1p1" "DIVISION_1P1" 
 #classify_files "/store/user/$USER/XHY4bRun3_selection_2p1" "SELECTION_2P1" 
-#classify_files "/store/user/$USER/XHY4bRun3_selection_2p1" "SELECTION_2P1" 
 #classify_files "/store/user/$USER/XHY4bRun3_division_2p1" "DIVISION_2P1" 
+#classify_files "/store/user/$USER/XHY4bRun3_selection_without_trigger_1p1" "SELECTION_WT_1P1" 
+#classify_files "/store/user/$USER/XHY4bRun3_selection_without_trigger_2p1" "SELECTION_WT_2P1" 
+classify_files "/store/user/$USER/XHY4bRun3_selection_compound" "SELECTION_COMPOUND" 
 
 
 
@@ -84,6 +86,9 @@ file_dir=/store/user/$USER/XHY4bRun3_mass_debug_2p1/
 eosls $file_dir > outputList/output_mass_debug_2p1_tmp.txt
 sed "s@^@root://cmseos.fnal.gov/$file_dir@" outputList/output_mass_debug_2p1_tmp.txt > outputList/output_mass_debug_2p1.txt
 
+file_dir=/store/user/$USER/XHY4bRun3_selection_compound/
+eosls $file_dir > outputList/output_tmp.txt
+sed "s@^@root://cmseos.fnal.gov/$file_dir@" outputList/output_tmp.txt > outputList/output_selection_compound.txt
 
 rm outputList/*tmp*
 file_dir=/store/user/$USER/XHY4bRun3_selection_1p1_debug/

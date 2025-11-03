@@ -22,24 +22,17 @@ h_BKGs = hists["BKGs"]
 
 bins = {}
 
-bins["PtHCut__FatJet_pt_nom_H"] = array.array("d", np.linspace(0, 1000, 101))
-bins["PtYCut__FatJet_pt_nom_Y"] = array.array("d", np.linspace(0, 1000, 101))
-bins["MassHCut__FatJet_msoftdrop_nom_H"] = array.array("d", np.linspace(0, 1000, 101))
-bins["MassYCut__FatJet_msoftdrop_nom_Y"] = array.array("d", np.linspace(0, 1000, 101))
-bins["DeltaEtaCut__AbsDeltaEta"] = array.array("d", np.linspace(0, 6, 101))
-bins["MJJCut__MassLeadingTwoFatJets"] = array.array("d", np.linspace(0, 4000, 201))
+bins["PtHCut__FatJet_pt_0"] = array.array("d", np.linspace(0, 1000, 101))
+bins["PtYCut__FatJet_pt_1"] = array.array("d", np.linspace(0, 1000, 101))
+bins["DeltaEtaCut__deltaEta"] = array.array("d", np.linspace(0, 5, 101))
 bins["BTaggingHCut__PNet_H"] = array.array("d", np.linspace(0, 1, 101))
 bins["BTaggingYCut__PNet_Y"] = array.array("d", np.linspace(0, 1, 101))
-
 cuts = {}
-cuts["PtHCut__FatJet_pt_nom_H"] = [450]
-cuts["PtYCut__FatJet_pt_nom_Y"] = [450]
-cuts["MassHCut__FatJet_msoftdrop_nom_H"] = [110, 140]
-cuts["MassYCut__FatJet_msoftdrop_nom_Y"] = [60]
-cuts["DeltaEtaCut__AbsDeltaEta"] = [1.3]
-cuts["MJJCut__MassLeadingTwoFatJets"] = [700] 
-cuts["BTaggingHCut__PNet_H"] = [0.9]
-cuts["BTaggingYCut__PNet_Y"] = [0.9]
+cuts["PtHCut__FatJet_pt_0"] = [450]
+cuts["PtYCut__FatJet_pt_1"] = [450]
+cuts["DeltaEtaCut__deltaEta"] = [1.6]
+cuts["BTaggingHCut__PNet_H"] = [0.95]
+cuts["BTaggingYCut__PNet_Y"] = [0.95]
 processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
 years = ["2022", "2022EE", "2023", "2023BPix"]
 processes = {"MC_QCDJets": ["*"], "MC_WZJets": ["*"], "MC_HiggsJets": ["*"], "MC_TTBarJets": ["*"], "MC_DibosonJets": ["*"], "MC_SingleTopJets": ["*"], "SignalMC_XHY4b": ["MX-3000_MY-300"]}
@@ -98,10 +91,10 @@ for direction in directions:
                 labels.append(process)
                 hs.append(h_BKGs_rebinned_merged[year][process][column])
                 colors.append(color_scheme[process])
-            if direction == "right":
+            if direction == "left":
                 h_cum_BKG_rebinned_merged = h_BKG_rebinned_merged.GetCumulative(True, "cum_{direction}_{year}_{column}_ALL_BKG")
                 h_cum_Signal_rebinned_merged =  h_Signal_rebinned_merged.GetCumulative(True, "cum_{direction}_{year}_{column}_ALL_Signal")
-            if direction == "left":
+            if direction == "right":
                 h_cum_BKG_rebinned_merged = h_BKG_rebinned_merged.GetCumulative(False, "cum_{direction}_{year}_{column}_ALL_BKG")
                 h_cum_Signal_rebinned_merged =  h_Signal_rebinned_merged.GetCumulative(False, "cum_{direction}_{year}_{column}_ALL_Signal")
             Sigs = [h_cum_Signal_rebinned_merged.GetBinContent(i) / (1 + math.sqrt(max(0, h_cum_BKG_rebinned_merged.GetBinContent(i)))) for i in range(1, h_cum_BKG_rebinned_merged.GetNbinsX() + 1)] 
@@ -126,7 +119,7 @@ for direction in directions:
             )
             mplhep.cms.label("Internal", data = False, rlabel = r"2022(13.6 TeV)", ax = ax1)
             ax1.set_ylabel("Event Counts")
-            ax1.set_xlabel("")
+            ax1.set_xlabel(column)
             ax1.legend(fontsize = "large")
             #ax2.step([(bins[column][i] + bins[column][i + 1]) / 2 for i in range(len(bins[column]) - 1)], Sigs, linewidth = 2, color='black')
             ax2.step(bins[column], Sigs, where = "post", linewidth = 2, color='black')
@@ -136,7 +129,7 @@ for direction in directions:
             ax2.set_xlabel(column)
             for cut in cuts[column]:
                 ax2.axvline(x = cut, color = "red", linewidth = 2)
-
+            ax1.set_title(f"N-1 distribution, integral from {direction}")
             fig.tight_layout()
             ax1.set_yscale("linear")
             ax1.set_ylim(auto = True)

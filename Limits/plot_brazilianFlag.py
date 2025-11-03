@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import ROOT
 import os
 import mplhep as hep
-
+import json
 from argparse import ArgumentParser
 
 parser=ArgumentParser()
@@ -39,6 +39,8 @@ for file in files:
     Limits["YSlice"][MY][MX] = limit
     Limits["XSlice"][MX][MY] = limit
 print(Limits)
+with open("Limits.txt", "w") as f:
+    json.dump(Limits, f, indent = 4)
 
 for MY in Limits["YSlice"]:
     MXs = []
@@ -71,6 +73,7 @@ for MY in Limits["YSlice"]:
     ax.set_title(f"XHY4b_{args.mode}_limit_MY: {MY} GeV")
     ax.set_xlabel("MX(GeV)")
     ax.set_ylabel("cross section x branching ratio(fb)")
+    ax.set_ylim(0.1, 1000)
     ax.legend(loc = 1)
     fig.savefig(f"{save_dir}/linear_limits_{args.mode}_MY_{MY}.png")
     ax.set_yscale("log")
@@ -110,6 +113,7 @@ for MX in Limits["XSlice"]:
     ax.set_title(f"XHY4b_{args.mode}_limit_MX: {MX} GeV")
     ax.set_xlabel("MY(GeV)")
     ax.set_ylabel("cross section x branching ratio(fb)")
+    ax.set_ylim(0.1, 1000)
     ax.legend(loc = 1)
     fig.savefig(f"{save_dir}/linear_limits_{args.mode}_MX_{MX}.png")
     ax.set_yscale("log")

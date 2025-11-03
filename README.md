@@ -174,10 +174,9 @@ then you will see the output files under `outputList`.
 
 Then we create the arguments for 1+1 and 2+1 selection using `gen_args_pro.sh`. Run
 ```
-./gen_args_pro.sh selection_1p1 skim
-./gen_args_pro.sh selection_2p1 skim
+./gen_args_pro.sh selection skim
 ```
-you should see two files `selection_1p1_args.txt` and `selection_2p1_args.txt` generated. You can copy a line from `selection_1p1_args.txt` and run `run_selection_1p1.py` locally, or copy a line from `selection_2p1_args.txt` and run `run_selection_2p1.py`. For example:
+you should see a file `selection_args.txt` generated. You can copy a line from `selection_args.txt` and run `run_selection_1p1.py` locally, or copy a line from `selection_args.txt` and run `run_selection_2p1.py`. For example:
 ```
  python3 run_selection_1p1.py -d outputList/SKIM_skimmed_2023__SignalMC_XHY4b__MX-900_MY-60.txt -y 2023 -n 1 -i 0 -s nom
 ```
