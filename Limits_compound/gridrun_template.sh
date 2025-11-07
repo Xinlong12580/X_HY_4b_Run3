@@ -1,23 +1,23 @@
 #!/bin/bash
 root_dir=$(pwd)
-OUTTXT=run_division_compound.py_"$2"_"$4"_"$6"_"$8"_"${10}"_"${12}"_output.log
+OUTTXT="$2"_"$4"_"$6"_"$8"_"${10}"_"${12}"_output.log
 OUTTXT="${OUTTXT//\//_}"
 echo "OUTTXT" $OUTTXT
 echo "Run script starting" | tee $root_dir/$OUTTXT
 echo "Running on: `uname -a`" | tee -a $root_dir/$OUTTXT
 echo "System software: `cat /etc/redhat-release`" | tee -a $root_dir/$OUTTXT
-echo "USER: $USER" |  tee -a $root_dir/$OUTTXT
+
 # Set up pre-compiled CMSSW env
 ls | tee -a $root_dir/$OUTTXT
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-xrdcp root://cmseos.fnal.gov//store/user/xinlongl/tarTIMBER.tgz ./
+xrdcp root://cmseos.fnal.gov//store/user/xinlong/testtar.tgz ./
 export SCRAM_ARCH=el8_amd64_gcc10
 scramv1 project CMSSW CMSSW_12_3_5
 echo "Unpacking compiled CMSSW environment tarball..." | tee -a $root_dir/$OUTTXT
-tar -xzvf tarTIMBER.tgz | tee -a $root_dir/$OUTTXT
+tar -xzvf testtar.tgz | tee -a $root_dir/$OUTTXT
 tar -xzvf tarcmssw.tgz | tee -a $root_dir/$OUTTXT
 tar -xzvf tartimber.tgz | tee -a $root_dir/$OUTTXT
-rm tarTIMBER.tgz
+rm testtar.tgz
 rm tarcmssw.tgz
 rm tartimber.tgz
 mkdir tardir 
@@ -66,15 +66,15 @@ pwd | tee -a $root_dir/$OUTTXT
 export X509_CERT_DIR=/cvmfs/grid.cern.ch/etc/grid-security/certificates/
 
 # MAIN FUNCTION
-echo python run_division_compound.py $* | tee -a $root_dir/$OUTTXT
-python run_division_compound.py $* 2>&1 | tee -a $root_dir/$OUTTXT
+echo python PYTHON_SCRIPT $* | tee -a $root_dir/$OUTTXT
+python PYTHON_SCRIPT $* 2>&1 | tee -a $root_dir/$OUTTXT
 status=${PIPESTATUS[0]}
 if [ $status -eq 0 ]; then
     # move all snapshots to the EOS (there will only be one)
-    xrdcp -f *.root root://cmseos.fnal.gov//store/user/xinlongl/XHY4bRun3_division_compound/
+    xrdcp -f *.root OUTPUT_DIR
 else
     mv $root_dir/$OUTTXT $root_dir/FAILED_$OUTTXT
     OUTTXT=FAILED_$OUTTXT
 fi
 ls | tee -a $root_dir/$OUTTXT
-#xrdcp -f $root_dir/$OUTTXT root://cmseos.fnal.gov//store/user/xinlongl/XHY4bRun3_division_compound/
+xrdcp -f $root_dir/$OUTTXT OUTPUT_DIR

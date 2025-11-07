@@ -127,7 +127,10 @@ class XHY4b_Analyzer:
         print(self.files) 
         self.analyzer = analyzer(self.files)
         self.analyzer.isData = self.isData
-        
+        if not (self.isData == 1):
+            self.sumW = ROOT.RDataFrame("Runs", self.files).Sum("genEventSumw").GetValue()
+        else:
+            self.sumW = 1 
         if(nEvents > 0): 
             self.analyzer.SetActiveNode(Node("choppedrdf", self.analyzer.GetActiveNode().DataFrame.Range(100000, 100000 + nEvents))) # makes an RDF with only the first nentries considered
         return
@@ -818,6 +821,23 @@ class XHY4b_Analyzer:
             hist = self.analyzer.DataFrame.Histo2D((f"MXvsMY_{region}__{weight}_{JME_syst}", f"MX vs MY in {region}", len(MJY_bins) - 1, MJY_bins, len(MJJ_bins) - 1, MJJ_bins), "MY", "MX", weight)
             hist.Write()
 
+
+    def dumpTemplates_compound(self, region, f, JME_syst, mode = "1p1"):
+        f.cd()
+        MY_bins = array.array("d", np.linspace(0, 5000, 501) )
+        MX_bins = array.array("d", np.linspace(0, 5000, 501) )
+        if JME_syst != "nom":
+            self.analyzer.Define(f"weight_{mode}__nominal_normalized", f"weight_{mode}__nominal/ {self.sumW}")
+            hist = self.analyzer.DataFrame.Histo2D((f"MXvsMY_{region}__weight_{mode}__nominal_{JME_syst}", f"MX vs MY in {region}", len(MY_bins) - 1, MY_bins, len(MX_bins) - 1, MX_bins), "MY", "MX", f"weight_{mode}__nominal_normalized")
+            hist.Write()
+        else:
+            for c in self.analyzer.DataFrame.GetColumnNames():
+                if str(c).startswith("weight_")  and mode in str(c):
+                    weight = str(c)
+                    self.analyzer.Define(f"{weight}_normalized", f"{weight}/ {self.sumW}")
+                    hist = self.analyzer.DataFrame.Histo2D((f"MXvsMY_{region}__{weight}", f"MX vs MY in {region}", len(MY_bins) - 1, MY_bins, len(MX_bins) - 1, MX_bins), "MY", "MX", f"{weight}_normalized")
+                    hist.Write()
+          
 
 
     #Saving a bunch of Hists where the column name and bins are specified in the "bins" dictionary, and weight given in the "weights" list

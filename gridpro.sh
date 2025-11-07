@@ -42,6 +42,10 @@ if [[ $work == selection_compound ]] ; then
     python CondorHelper.py -r gridrun.sh -a selection_args.txt -i "cpp_modules run_selection_compound.py XHY4b_Analyzer.py raw_nano outputList"
 fi
 
+if [[ $work == division_compound ]] ; then
+    sed -e 's/PYTHON_SCRIPT/run_division_compound.py/g' -e 's#OUTPUT_DIR#root://cmseos.fnal.gov//store/user/USER_NAME/XHY4bRun3_division_compound/#g' -e "s/USER_NAME/$USER/g" gridrun_template.sh > gridrun.sh
+    python CondorHelper.py -r gridrun.sh -a division_compound_args.txt -i "cpp_modules run_division_compound.py XHY4b_Analyzer.py raw_nano outputList"
+fi
 
 
 

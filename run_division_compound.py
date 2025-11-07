@@ -32,12 +32,14 @@ for veto_cut in Veto_cuts:
             break
 
     if "1p1" in veto_cut:
+        mode = "1p1"
         ana.analyzer.Define("PNet_Y", "val1p1_PNet_Y")
         ana.analyzer.Define("PNet_H", "val1p1_PNet_H")
         ana.analyzer.Define("MX", "val1p1_MX")
         ana.analyzer.Define("MY", "val1p1_MY")
         ana.b_tagging_1p1()
     if "2p1" in veto_cut:
+        mode = "2p1"
         ana.analyzer.Define("PNet_Y", "val2p1_PNet_Y")
         ana.analyzer.Define("PNet_H", "val2p1_PNet_H")
         ana.analyzer.Define("MX", "val2p1_MX")
@@ -45,15 +47,17 @@ for veto_cut in Veto_cuts:
         ana.b_tagging_2p1()
     ana.analyzer.Cut(veto_cut, Veto_cuts[veto_cut])
     veto_base_node = ana.analyzer.GetActiveNode()
+    ana.output = veto_cut + "_division_" + file_basename
+    f = ROOT.TFile.Open("Templates_" + ana.output, "RECREATE")
     for region in regions:
         ana.analyzer.SetActiveNode(veto_base_node)
         ana.divide(region)
-        ana.output = veto_cut + "_" + region + "_" + file_basename
+        #ana.output = veto_cut + "_" + region + "_" + file_basename
         print(ana.output)
-        ana.snapshot(saveRunChain = True)
-        ana.save_cutflowInfo()
-        f = ROOT.TFile.Open("Templates_" + ana.output, "RECREATE")
-        ana.dumpTemplates_1p1(region, f, JME_syst) 
-        f.Close()
+        #ana.snapshot(saveRunChain = True)
+        #ana.save_cutflowInfo()
+        ana.dumpTemplates_compound(region, f, JME_syst,  mode ) 
+        #f.Close()
+    f.Close()
 
 

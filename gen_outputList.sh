@@ -94,3 +94,7 @@ rm outputList/*tmp*
 file_dir=/store/user/$USER/XHY4bRun3_selection_1p1_debug/
 eosls $file_dir > outputList/output_selection_1p1_tmp.txt
 sed "s@^@root://cmseos.fnal.gov/$file_dir@" outputList/output_selection_1p1_tmp.txt > outputList/output_selection_1p1_debug.txt
+
+file_dir=/store/user/$USER/XHY4bRun3_division_compound/
+eosls $file_dir > outputList/output_tmp.txt
+sed "s@^@root://cmseos.fnal.gov/$file_dir@" outputList/output_tmp.txt > outputList/output_division_compound.txt
