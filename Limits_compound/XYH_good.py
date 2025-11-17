@@ -60,7 +60,7 @@ def _select_signal(row, args):
         else:   # Otherwise, it's not the signal we requested. This can occur if multiple signals are specified in the `SIGNAME` list in the JSON.
             return False
     elif 'QCD' in row.process:  # Check the `AddAlphaObj()` calls later in this script. Notice that their first argument is the name of the object, which begins with "QCD_". We are going to select (1) the QCD in the fail region, called "QCD_fail", and then the QCD in the pass region obtained from the transfer function parameterization we requested, called "QCD_pass_<tf>"
-        if "QCD_fail" in row.process:
+        if row.process == 'QCD_fail':
             print(f'Adding QCD fail object in (fail)')
             return True
         elif tf in row.process:

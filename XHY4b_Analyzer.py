@@ -258,7 +258,7 @@ class XHY4b_Analyzer:
         #Doing the skimming for 1p1
         self.analyzer.AddCorrection(
             Correction('Pdfweight','TIMBER/Framework/include/PDFweight_uncert.h',[self.analyzer.lhaid],corrtype='uncert')
-        ) 
+        )
         AutoNF(self.analyzer, self.year, self.isData)
         self.register_weight("NoiseFilterCut")
 
@@ -338,6 +338,9 @@ class XHY4b_Analyzer:
         self.analyzer.Define("MY", "MassYCandidate")
         self.analyzer.Define("MX", "MassLeadingTwoFatJets")
 
+        self.analyzer.AddCorrection(
+            Correction('triger_weight','cpp_modules/Trigger_SF.cc',["raw_nano/trigger_1p1_SFs.json", self.year], corrtype='corr'), {"pt":"leadingFatJetPt", "mass":"MX"}
+        ) 
         #Making weight columns
         self.analyzer.MakeWeightCols(name = "All")
         
@@ -476,6 +479,9 @@ class XHY4b_Analyzer:
         self.analyzer.Define("leadingFatJetEta", "FatJet_eta[0]")
         self.analyzer.Define("leadingFatJetMsoftdrop", f"FatJet_msoftdrop_{JME_syst}[0]")
         #Making weight columns
+        self.analyzer.AddCorrection(
+            Correction('triger_weight','cpp_modules/Trigger_SF.cc',["raw_nano/trigger_2p1_SFs.json", self.year], corrtype='corr'), {"pt":"leadingFatJetPt", "mass":"MX"}
+        ) 
         self.analyzer.MakeWeightCols(name = "All")
         
         print(f"DEBUG: { self.analyzer.GetActiveNode().DataFrame.Count().GetValue()}") 
@@ -658,6 +664,12 @@ class XHY4b_Analyzer:
         self.analyzer.Define("flag2p1", flagstring_2p1)
         self.analyzer.Cut("flag1p1_or_flag2p1", "flag1p1 || flag2p1")
         self.register_weight("flag1p1_or_flag2p1")
+        self.analyzer.AddCorrection(
+            Correction('triger_1p1_weight','cpp_modules/Trigger_SF.cc',["raw_nano/trigger_1p1_SFs.json", self.year], corrtype='corr'), {"pt":"leadingFatJetPt", "mass":"val1p1_MX"}
+        ) 
+        self.analyzer.AddCorrection(
+            Correction('triger_2p1_weight','cpp_modules/Trigger_SF.cc',["raw_nano/trigger_2p1_SFs.json", self.year], corrtype='corr'), {"pt":"leadingFatJetPt", "mass":"val2p1_MX"}
+        ) 
         
         weights_1p1 = []
         weights_2p1 = []

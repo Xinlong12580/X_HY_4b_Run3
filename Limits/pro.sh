@@ -1,8 +1,9 @@
 MX=$1
 MY=$2
 MX=3000
-MY=1000
-
+MY=600
+./clearworkspace.sh
+./make_json.sh 1p1
 python XYH.py --tf 1x1 --sig $MX-$MY --r_fail VB1 --r_pass VS2 --make --makeCard --wsp Control_MX-"$MX"_MY-"$MY"
 #python XYH.py --tf 1x1 --sig $MX-$MY --r_fail SB2 --r_pass SR2 --make --makeCard --wsp Loose_MX-"$MX"_MY-"$MY"
 

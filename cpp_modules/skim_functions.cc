@@ -17,21 +17,42 @@ int skimmingTwoAK8Jets(int nFatJet, RVec<float> FatJet_pt, RVec<float> FatJet_et
     }
 }
 
-// 2p1 mode. The Higgs could actually be the third or higher index FatJet, so may need to depricate the eta_mSD_cut here
+// 2p1 mode.
 int skimmingAK8JetwithTwoAK4Jets(int nFatJet, RVec<float> FatJet_pt, RVec<float> FatJet_eta, RVec<float> FatJet_msoftdrop, int nJet, RVec<float> Jet_pt, RVec<float> Jet_eta){
     if(nFatJet < 1 || nJet < 2){
         return 0;
     }
+    int pass = 0;
+    for (int i = 0; i < nFatJet; i++){
+        if (FatJet_pt[i] > 250 && FatJet_msoftdrop[i] > 70 && FatJet_eta[i] < 2.5){
+            pass = 1;
+            break;
+        }
+    }
+    if (pass == 1) {
+        pass = 0;
+        int count = 0;
+        for (int i = 0; i < nJet; i++){
+            if (Jet_pt[i] > 40 && Jet_eta[i] < 2.5){
+                count ++;
+            }
+            if (count == 2){
+                pass = 1;
+                break;
+            }
+        }
+    }
+    return pass;
+/*
     int pt_cut = FatJet_pt[0]>300 && Jet_pt[0]>50;
-    int ind_extra = std::min(nFatJet - 1, 1);
-    int eta_mSD_cut = (TMath::Abs(FatJet_eta[0])<2.5  && FatJet_msoftdrop[0]>30) || (TMath::Abs(FatJet_eta[ind_extra])<2.5  && FatJet_msoftdrop[ind_extra]>30) ;
     
-    if(pt_cut && eta_mSD_cut){
+    if(pt_cut){
         return 1;
     }
     else{
         return 0;
     }
+*/
 }
 
 //skimming

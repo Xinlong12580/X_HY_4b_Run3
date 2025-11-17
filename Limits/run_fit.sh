@@ -106,7 +106,8 @@ if [ $bfit = 1 ]; then
     # Check to see if the workspace with channel masks exists
     if [ ! -f "$wsm" ]; then 
         printf "RooWorkspace with channel masks does not exist, creating it now...\n"
-        (set -x; text2workspace.py $card --channel-masks -o $wsm)
+        #(set -x; text2workspace.py $card --channel-masks -o $wsm)
+        (set -x; text2workspace.py $card -o $wsm)
     fi
     echo "Performing blinded background-only fit"
     (set -x; combine -D data_obs -M MultiDimFit --saveWorkspace -m 125 -d $wsm -v $verbosity --cminDefaultMinimizerStrategy $strat --cminDefaultMinimizerTolerance $tol --X-rtd MINIMIZER_MaxCalls=400000 --setParameters r=0 --freezeParameters "r" -n Snapshot)

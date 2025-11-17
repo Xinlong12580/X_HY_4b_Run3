@@ -2,35 +2,35 @@
     "Hadron":{
         "__COMMENT__": "main trigger",
         "2022":[
-            "HLT_AK8PFJet425_SoftDropMass40"
+            "HLT_AK8PFJet420_MassSD30",
+            "HLT_AK8PFJet500",
+            "HLT_PFJet500",
+            "HLT_AK8DiPFJet250_250_MassSD50",
+            "HLT_PFHT1050",
+            "HLT_AK8PFHT800_TrimMass50"
         ],
+            
         "2022EE":[
-            "HLT_AK8PFJet425_SoftDropMass40"
+            "HLT_AK8PFJet420_MassSD30",
+            "HLT_AK8PFJet500",
+            "HLT_PFJet500",
+            "HLT_AK8DiPFJet250_250_MassSD50",
+            "HLT_PFHT1050",
+            "HLT_AK8PFHT800_TrimMass50"
         ],
         "2023":[
-            "HLT_AK8PFJet425_SoftDropMass40"
+            "HLT_AK8PFJet420_MassSD30",
+            "HLT_AK8PFJet500",
+            "HLT_PFJet500",
+            "HLT_AK8DiPFJet250_250_MassSD50",
+            "HLT_PFHT1050"
         ],
         "2023BPix":[
-            "HLT_AK8PFJet425_SoftDropMass40"
+            "HLT_AK8PFJet420_MassSD30",
+            "HLT_AK8PFJet500",
+            "HLT_PFJet500",
+            "HLT_AK8DiPFJet250_250_MassSD50",
+            "HLT_PFHT1050"
         ]
-    }, 
-    "Lepton":{
-        "__COMMENT__": "Auxilary Trigger",
-        "2022":[
-            "HLT_Ele32_WPTight_Gsf",
-            "HLT_IsoMu27"
-        ],
-        "2022EE":[
-            "HLT_Ele32_WPTight_Gsf",
-            "HLT_IsoMu27"
-        ],
-        "2023":[
-            "HLT_Ele32_WPTight_Gsf",
-            "HLT_IsoMu27"
-        ],
-        "2023BPix":[
-            "HLT_Ele32_WPTight_Gsf",
-            "HLT_IsoMu27"
-        ]
-    } 
+    }
 }
